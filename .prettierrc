@@ -1,9 +1,9 @@
 {
-  "trailingComma": "none",
-  "singleQuote": true,
-  "printWidth": 150,
   "tabWidth": 2,
-  "jsxBracketSameLine": false,
-  "arrowParens": "always",
-  "multilineImportStyle": "aligned"
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 80,
+  "useTabs": false,
+  "endOfLine": "auto"
 }

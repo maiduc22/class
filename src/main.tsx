@@ -11,8 +11,23 @@ import { RouterProvider } from 'react-router-dom';
 import { DatesProvider } from '@mantine/dates';
 import { I18nextProvider } from 'react-i18next';
 
-import { ArcElement, BarElement, CategoryScale, Chart, Legend, LinearScale, Tooltip } from 'chart.js';
-Chart.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart,
+  Legend,
+  LinearScale,
+  Tooltip
+} from 'chart.js';
+Chart.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';

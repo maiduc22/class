@@ -1,9 +1,12 @@
-import AuthLayout from '@/layouts/AuthLayout';
 import BaseLayout from '@/layouts/BaseLayout';
 
 import { ROUTER } from '@/configs/router';
-import { Navigate, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import ProtectedLayout from '@/layouts/ProtectedLayout';
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements
+} from 'react-router-dom';
 import Page404 from './Error/404';
 
 const router = createBrowserRouter(

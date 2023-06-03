@@ -8,7 +8,12 @@ interface OpenCustomConfirmModalProps {
   childrenText: string;
 }
 
-export const openCustomConfirmModal = ({ onConfirm, onCancel, childrenText, title }: OpenCustomConfirmModalProps) => {
+export const openCustomConfirmModal = ({
+  onConfirm,
+  onCancel,
+  childrenText,
+  title
+}: OpenCustomConfirmModalProps) => {
   modals.openConfirmModal({
     title,
     centered: true,

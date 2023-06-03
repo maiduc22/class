@@ -19,6 +19,7 @@ const logger = createLogger({
 
 const middlewares = composeWithDevTools(applyMiddleware(thunk, logger));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const store: Store<RootState, any> = createStore(reducer, middlewares);
 
 export type AppDispatch = typeof store.dispatch;

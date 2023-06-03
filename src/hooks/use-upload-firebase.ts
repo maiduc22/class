@@ -4,7 +4,11 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { storage } from '@/configs/firebase';
 
-export const useUploadFirebase = (): [boolean, string | undefined, (file: File, cb?: Callback) => void] => {
+export const useUploadFirebase = (): [
+  boolean,
+  string | undefined,
+  (file: File, cb?: Callback) => void
+] => {
   const [isLoading, setIsLoading] = useState(false);
   const [url, setUrl] = useState<string>();
 

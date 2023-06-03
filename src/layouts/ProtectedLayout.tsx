@@ -18,7 +18,7 @@ import {
   rem,
   useMantineTheme
 } from '@mantine/core';
-import { IconBuildingFactory2, IconDatabase, IconLogout, IconSubscript, IconTruckDelivery } from '@tabler/icons-react';
+import { IconLogout } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
@@ -67,10 +67,14 @@ const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
         width: '100%',
         padding: theme.spacing.xs,
         borderRadius: theme.radius.sm,
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+        color:
+          theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
         '&:hover': {
-          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[6]
+              : theme.colors.gray[0]
         }
       })}
     >
@@ -93,7 +97,11 @@ const User = () => {
     <Box
       sx={{
         paddingTop: theme.spacing.sm,
-        borderTop: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`
+        borderTop: `${rem(1)} solid ${
+          theme.colorScheme === 'dark'
+            ? theme.colors.dark[4]
+            : theme.colors.gray[2]
+        }`
       }}
     >
       <UnstyledButton
@@ -102,10 +110,14 @@ const User = () => {
           width: '100%',
           padding: theme.spacing.xs,
           borderRadius: theme.radius.sm,
-          color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+          color:
+            theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
           '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+            backgroundColor:
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[6]
+                : theme.colors.gray[0]
           }
         }}
       >
@@ -149,7 +161,12 @@ const ProtectedLayout = () => {
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
         navbar={
-          <Navbar p="md" hiddenBreakpoint="sm" hidden={true} width={{ sm: 200, lg: 300 }}>
+          <Navbar
+            p="md"
+            hiddenBreakpoint="sm"
+            hidden={true}
+            width={{ sm: 200, lg: 300 }}
+          >
             <Navbar.Section grow mt="0">
               <div>
                 {navLinks.map((link) => (
@@ -174,7 +191,12 @@ const ProtectedLayout = () => {
                 </Text>
               </Group>
               <Group>
-                <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
+                <Button
+                  onClick={handleLogout}
+                  variant="subtle"
+                  color="red"
+                  leftIcon={<IconLogout size={20} />}
+                >
                   Đăng xuất
                 </Button>
               </Group>
