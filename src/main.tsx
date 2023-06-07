@@ -41,6 +41,7 @@ import router from './pages/router';
 import store from './redux/store';
 
 import i18next from './locales/i18n';
+import { AuthProvider } from './contexts/AuthContext';
 dayjs.locale(i18next.language);
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -53,12 +54,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <I18nextProvider i18n={i18next}>
       <ReduxProvider store={store}>
         <MantineProvider theme={customTheme} withGlobalStyles withNormalizeCSS>
-          <ModalsProvider>
-            <DatesProvider settings={{ locale: 'vi', weekendDays: [0] }}>
-              <NotificationsProvider />
-              <RouterProvider router={router} />
-            </DatesProvider>
-          </ModalsProvider>
+          <AuthProvider>
+            <ModalsProvider>
+              <DatesProvider settings={{ locale: 'vi', weekendDays: [0] }}>
+                <NotificationsProvider />
+                <RouterProvider router={router} />
+              </DatesProvider>
+            </ModalsProvider>
+          </AuthProvider>
         </MantineProvider>
       </ReduxProvider>
     </I18nextProvider>

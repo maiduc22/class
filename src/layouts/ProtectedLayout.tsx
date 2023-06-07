@@ -21,6 +21,7 @@ import {
 import { IconLogout } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '@/hooks/context';
 
 interface NavLinkProps {
   icon: JSX.Element;
@@ -92,7 +93,6 @@ const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
 const User = () => {
   const theme = useMantineTheme();
 
-  const user = JSON.parse(localStorage.getItem('authUser') || '');
   return (
     <Box
       sx={{
@@ -125,10 +125,10 @@ const User = () => {
           <Avatar radius="xl" />
           <Box sx={{ flex: 1 }}>
             <Text size="sm" weight={500}>
-              {user.fullname}
+              ADMIN
             </Text>
             <Text color="dimmed" size="xs">
-              {user.role}
+              ADMIN
             </Text>
           </Box>
         </Group>
@@ -139,14 +139,14 @@ const User = () => {
 
 const ProtectedLayout = () => {
   const navigate = useNavigate();
-  // const { logout } = useAuthContext();
+  const { logout } = useAuthContext();
 
   const handleLogout = () => {
     navigate(ROUTER.LOGIN);
-    // logout();
+    logout();
   };
 
-  if (!localStorage.getItem('authUser')) {
+  if (!localStorage.getItem('token')) {
     return <Navigate to={ROUTER.LOGIN} />;
   }
 

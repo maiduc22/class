@@ -1,7 +1,7 @@
 export const HEADERS = {
   header: () => ({
-    accept: 'application/json',
-    'Content-Type': 'application/json; charset=UTF-8'
+    accept: '*/*',
+    'Content-Type': 'application/json'
   }),
   fileHeader: () => ({
     'Content-Type': 'multipart/form-data'

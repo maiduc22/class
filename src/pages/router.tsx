@@ -1,4 +1,5 @@
 import BaseLayout from '@/layouts/BaseLayout';
+import AuthLayout from '@/layouts/AuthLayout';
 
 import { ROUTER } from '@/configs/router';
 import ProtectedLayout from '@/layouts/ProtectedLayout';
@@ -8,14 +9,14 @@ import {
   createRoutesFromElements
 } from 'react-router-dom';
 import Page404 from './Error/404';
+import Login from './Login';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<BaseLayout />}>
-      {/* <Route element={<AuthLayout />}>
+      <Route element={<AuthLayout />}>
         <Route path={ROUTER.LOGIN} element={<Login />} />
-        <Route path={ROUTER.SIGNUP} element={<SignUp />} />
-      </Route> */}
+      </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
         <Route path="*" element={<Page404 />} />
       </Route>
