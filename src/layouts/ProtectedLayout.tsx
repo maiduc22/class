@@ -1,7 +1,7 @@
 import appIcon from '@/assets/imgs/hrm.png';
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
-// import { useAuthContext } from '@/hooks/context';
+
 import {
   Anchor,
   AppShell,
@@ -18,7 +18,7 @@ import {
   rem,
   useMantineTheme
 } from '@mantine/core';
-import { IconLogout } from '@tabler/icons-react';
+import { IconBrandAsana, IconLogout } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/context';
@@ -31,30 +31,12 @@ interface NavLinkProps {
 }
 
 const navLinks: NavLinkProps[] = [
-  // {
-  //   icon: <IconSubscript size="1rem" />,
-  //   color: 'yellow',
-  //   label: 'Quản Lý Công Thức Số Lượng',
-  //   to: ROUTER.PROPERTY
-  // },
-  // {
-  //   icon: <IconBuildingFactory2 size="1rem" />,
-  //   color: 'red',
-  //   label: 'Quản Lý Kho Hàng',
-  //   to: ROUTER.DRUGS
-  // },
-  // {
-  //   icon: <IconDatabase size="1rem" />,
-  //   color: 'teal',
-  //   label: 'Quản Lý Đơn Hàng',
-  //   to: ROUTER.ORDERS
-  // },
-  // {
-  //   icon: <IconTruckDelivery size="1rem" />,
-  //   color: 'grape',
-  //   label: 'Quản Lý Nhà Phân Phối',
-  //   to: ROUTER.SUPPLIERS
-  // }
+  {
+    icon: <IconBrandAsana size="1rem" />,
+    color: 'grape',
+    label: 'Quản Lý Phòng Ban',
+    to: ROUTER.DEPARTMENT
+  }
 ];
 
 const NavLink = ({ icon, color, label, to }: NavLinkProps) => {

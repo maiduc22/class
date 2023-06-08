@@ -1,4 +1,5 @@
 export const ROUTER = {
   BASE: '/',
-  LOGIN: '/login'
+  LOGIN: '/login',
+  DEPARTMENT: '/department'
 };

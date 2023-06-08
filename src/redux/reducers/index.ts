@@ -1,6 +1,9 @@
 import { Reducer, combineReducers } from 'redux';
+import departmentReducer from './department/department.reducer';
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  department: departmentReducer
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
 

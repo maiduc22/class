@@ -1,12 +1,13 @@
-export type SignUpPayload = {
-  username: string;
-  password: string;
-  fullName: string;
-};
-
 export type LoginPayload = {
   username: string;
   password: string;
 };
 
-export type ApiEndPointPayload = SignUpPayload | LoginPayload;
+export type CreateDepartmentPayload = {
+  name: string;
+  description: string;
+};
+
+export type UpdateDepartmentPayload = CreateDepartmentPayload;
+
+export type ApiEndPointPayload = LoginPayload | CreateDepartmentPayload;

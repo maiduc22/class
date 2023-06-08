@@ -45,7 +45,6 @@ function useAuthReducer(_state = initialState) {
       dispatch({
         type: AuthAction.LOGIN_SUCCESS
       });
-      console.log(response.data);
       saveToken(response.data.data);
       renderNotification('Đăng nhập thành công', NotiType.SUCCESS);
       cb?.onSuccess?.();

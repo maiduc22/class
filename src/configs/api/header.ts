@@ -9,6 +9,6 @@ export const HEADERS = {
   authHeader: () => ({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    Authorization: `${localStorage.getItem('token')}`
+    Authorization: `Bearer ${localStorage.getItem('token')}`
   })
 };

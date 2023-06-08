@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import Page404 from './Error/404';
 import Login from './Login';
+import Department from './Department';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
         <Route path={ROUTER.LOGIN} element={<Login />} />
       </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
+        <Route path={ROUTER.DEPARTMENT} element={<Department />} />
         <Route path="*" element={<Page404 />} />
       </Route>
     </Route>
