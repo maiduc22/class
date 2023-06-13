@@ -27,3 +27,31 @@ export enum IUserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
 }
+
+export const IUserStatusDict: Record<
+  IUserStatus,
+  { label: string; color: string }
+> = {
+  [IUserStatus.ACTIVE]: {
+    label: 'Đang hoạt động',
+    color: 'blue'
+  },
+  [IUserStatus.INACTIVE]: {
+    label: 'Đã dừng hoạt động',
+    color: 'orange'
+  }
+};
+
+export const IUserGenderDict: Record<
+  IUserGender,
+  { label: string; color: string }
+> = {
+  [IUserGender.FEMALE]: {
+    label: 'Nữ',
+    color: 'blue'
+  },
+  [IUserGender.MALE]: {
+    label: 'Nam',
+    color: 'orange'
+  }
+};

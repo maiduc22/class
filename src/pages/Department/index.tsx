@@ -65,7 +65,7 @@ const Department: React.FC = () => {
 
   return (
     <Stack>
-      <Text fw={'bold'} size={'lg'}>
+      <Text fw={600} size={'lg'}>
         Danh sách phòng ban
       </Text>
       <Group position={'apart'}>

@@ -2,6 +2,7 @@ import appIcon from '@/assets/imgs/hrm.png';
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
 
+import { useAuthContext } from '@/hooks/context';
 import {
   Anchor,
   AppShell,
@@ -18,10 +19,15 @@ import {
   rem,
   useMantineTheme
 } from '@mantine/core';
-import { IconBrandAsana, IconLogout } from '@tabler/icons-react';
+import {
+  IconBrandAsana,
+  IconLicense,
+  IconLogout,
+  IconShield,
+  IconUser
+} from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '@/hooks/context';
 
 interface NavLinkProps {
   icon: JSX.Element;
@@ -36,6 +42,24 @@ const navLinks: NavLinkProps[] = [
     color: 'grape',
     label: 'Quản Lý Phòng Ban',
     to: ROUTER.DEPARTMENT
+  },
+  {
+    icon: <IconUser size={'1rem'} />,
+    color: 'blue',
+    label: 'Quản Lý Nhân Sự',
+    to: ROUTER.USER
+  },
+  {
+    icon: <IconLicense size={'1rem'} />,
+    color: 'blue',
+    label: 'Quản Lý Chức Vụ',
+    to: ROUTER.ROLE
+  },
+  {
+    icon: <IconShield size={'1rem'} />,
+    color: 'blue',
+    label: 'Quản Lý Quyền',
+    to: ROUTER.PERMISSION
   }
 ];
 

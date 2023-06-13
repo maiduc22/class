@@ -6,6 +6,11 @@ export const API_URLS = {
       endPoint: '/authenticate',
       method: 'POST',
       headers: HEADERS.header()
+    }),
+    getAuthorities: () => ({
+      endPoint: '/me/authorities',
+      method: 'GET',
+      headers: HEADERS.authHeader()
     })
   },
   Department: {
@@ -27,6 +32,13 @@ export const API_URLS = {
     delete: (id: string) => ({
       endPoint: `/departments/${id}/delete`,
       method: 'POST',
+      headers: HEADERS.authHeader()
+    })
+  },
+  User: {
+    getAll: () => ({
+      endPoint: '/users',
+      method: 'GET',
       headers: HEADERS.authHeader()
     })
   }

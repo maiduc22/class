@@ -1,5 +1,8 @@
 export const ROUTER = {
   BASE: '/',
   LOGIN: '/login',
-  DEPARTMENT: '/department'
+  DEPARTMENT: '/department',
+  USER: '/user',
+  ROLE: '/role',
+  PERMISSION: '/permission'
 };

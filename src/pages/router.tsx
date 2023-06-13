@@ -11,6 +11,9 @@ import {
 import Page404 from './Error/404';
 import Login from './Login';
 import Department from './Department';
+import { User } from './User';
+import { Role } from './Role';
+import { Permission } from './Permission';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +23,9 @@ const router = createBrowserRouter(
       </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
         <Route path={ROUTER.DEPARTMENT} element={<Department />} />
+        <Route path={ROUTER.USER} element={<User />} />
+        <Route path={ROUTER.ROLE} element={<Role />} />
+        <Route path={ROUTER.PERMISSION} element={<Permission />} />
         <Route path="*" element={<Page404 />} />
       </Route>
     </Route>
