@@ -1,3 +1,5 @@
+import { IRoleProperty } from '@/types/models/IRole';
+
 export type LoginPayload = {
   username: string;
   password: string;
@@ -10,4 +12,16 @@ export type CreateDepartmentPayload = {
 
 export type UpdateDepartmentPayload = CreateDepartmentPayload;
 
-export type ApiEndPointPayload = LoginPayload | CreateDepartmentPayload;
+export type CreateRolePayload = {
+  name: string;
+  description: string;
+  isRoot: boolean;
+  properties: IRoleProperty[];
+};
+
+export type UpdateRolePayload = CreateRolePayload;
+
+export type ApiEndPointPayload =
+  | LoginPayload
+  | CreateDepartmentPayload
+  | CreateRolePayload;

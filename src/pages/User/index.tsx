@@ -51,8 +51,8 @@ export const User = () => {
       textAlignment: 'center',
       render: () => (
         <Group position="center">
-          <IconInfoCircle color="blue" cursor={'pointer'} size={'1rem'} />
-          <IconEditCircle color="blue" cursor={'pointer'} size={'1rem'} />
+          <IconInfoCircle cursor={'pointer'} size={'1rem'} />
+          <IconEditCircle cursor={'pointer'} size={'1rem'} />
         </Group>
       )
     }

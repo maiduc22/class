@@ -52,7 +52,7 @@ const navLinks: NavLinkProps[] = [
   {
     icon: <IconLicense size={'1rem'} />,
     color: 'blue',
-    label: 'Quản Lý Chức Vụ',
+    label: 'Quản Lý Vai Trò',
     to: ROUTER.ROLE
   },
   {

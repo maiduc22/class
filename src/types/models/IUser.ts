@@ -37,7 +37,7 @@ export const IUserStatusDict: Record<
     color: 'blue'
   },
   [IUserStatus.INACTIVE]: {
-    label: 'Đã dừng hoạt động',
+    label: 'Dừng hoạt động',
     color: 'orange'
   }
 };
