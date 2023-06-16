@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { RoleActions } from '@/redux/reducers/role/role.action';
 import { IRole, IRoleStatusDict } from '@/types/models/IRole';
@@ -12,13 +13,18 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import usePagination from '@/hooks/use-pagination';
-import { IconEdit, IconStatusChange, IconTrash } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import {
+  IconEdit,
+  IconFilePower,
+  IconStatusChange,
+  IconTrash
+} from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { modals } from '@mantine/modals';
 import { ModalAddRole } from './components/ModalAddRole';
-import { useDisclosure } from '@mantine/hooks';
+import { ModalAssignPermission } from './components/ModalAssignPermission';
 import { ModalUpdateRole } from './components/ModalUpdateRole';
 
 export const Role = () => {
@@ -32,6 +38,10 @@ export const Role = () => {
   const [
     openedUpdateModal,
     { close: closeUpdateModal, open: openUpdateModal }
+  ] = useDisclosure();
+  const [
+    openedAssignModal,
+    { close: closeAssignModal, open: openAssignModal }
   ] = useDisclosure();
 
   useLayoutEffect(() => {
@@ -82,6 +92,11 @@ export const Role = () => {
     openUpdateModal();
   };
 
+  const handleAssign = (role: IRole) => {
+    setSelectedRecord(role);
+    openAssignModal();
+  };
+
   const columns: DataTableColumn<IRole>[] = [
     { accessor: 'code', title: 'Mã' },
     { accessor: 'name', title: 'Tên' },
@@ -122,6 +137,13 @@ export const Role = () => {
                 cursor={'pointer'}
                 size={'1rem'}
                 onClick={() => handleDelete(role.id)}
+              />
+            </Tooltip>
+            <Tooltip label="Cập nhật quyền">
+              <IconFilePower
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() => handleAssign(role)}
               />
             </Tooltip>
           </Group>
@@ -171,6 +193,18 @@ export const Role = () => {
         onClose={closeUpdateModal}
       >
         <ModalUpdateRole close={closeUpdateModal} role={_selectedRecord} />
+      </Modal>
+
+      <Modal
+        centered
+        title={`Phân quyền cho vai trò ${_selectedRecord?.name}`}
+        opened={openedAssignModal}
+        onClose={closeAssignModal}
+      >
+        <ModalAssignPermission
+          close={closeAssignModal}
+          role={_selectedRecord}
+        />
       </Modal>
     </>
   );

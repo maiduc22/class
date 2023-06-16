@@ -28,6 +28,32 @@ const Department: React.FC = () => {
 
   useEffect(() => setRecords(departments), [departments]);
 
+  const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
+    useDisclosure();
+  const [
+    openedUpdateModal,
+    { open: openUpdateModal, close: closeUpdateModal }
+  ] = useDisclosure();
+
+  const hanldeUpdate = (department: IDepartment) => {
+    setSelectedRecord(department);
+    openUpdateModal();
+  };
+
+  const handleDelete = (department: IDepartment) => {
+    modals.openConfirmModal({
+      title: 'Xác nhận xoá phòng ban',
+      labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
+      onConfirm: () => {
+        dispatch(
+          DepartmentActions.deleteDepartment(department.id, {
+            onSuccess: () => dispatch(DepartmentActions.getAllDepartment())
+          })
+        );
+      }
+    });
+  };
+
   const columns: DataTableColumn<IDepartment>[] = [
     {
       accessor: 'code',
@@ -40,6 +66,27 @@ const Department: React.FC = () => {
     {
       accessor: 'description',
       title: 'Mô tả'
+    },
+    {
+      accessor: '',
+      title: '',
+      width: '100px',
+      render: (department: IDepartment) => {
+        return (
+          <Group position="center">
+            <IconEdit
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => hanldeUpdate(department)}
+            />
+            <IconTrash
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => handleDelete(department)}
+            />
+          </Group>
+        );
+      }
     }
   ];
 
@@ -55,13 +102,6 @@ const Department: React.FC = () => {
       pageSize: 10
     }
   });
-
-  const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
-    useDisclosure();
-  const [
-    openedUpdateModal,
-    { open: openUpdateModal, close: closeUpdateModal }
-  ] = useDisclosure();
 
   return (
     <Stack>
@@ -85,44 +125,6 @@ const Department: React.FC = () => {
         onPageChange={changePage}
         recordsPerPage={pageSize}
         paginationText={() => null}
-        rowContextMenu={{
-          trigger: 'click',
-          items: (record) => [
-            {
-              key: 'update',
-              color: 'blue',
-              icon: <IconEdit size={16} />,
-              title: 'Cập nhật thông tin',
-              onClick: () => {
-                setSelectedRecord(record);
-                openUpdateModal();
-              }
-            },
-            {
-              key: 'delete',
-              color: 'red',
-              icon: <IconTrash size={16} />,
-              title: 'Xoá',
-              onClick: () => {
-                modals.openConfirmModal({
-                  title: 'Xác nhận xoá phòng ban này',
-                  centered: true,
-                  confirmProps: { color: 'red' },
-                  labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
-                  onConfirm: () => {
-                    if (!record.id) return;
-                    dispatch(
-                      DepartmentActions.deleteDepartment(record.id, {
-                        onSuccess: () =>
-                          dispatch(DepartmentActions.getAllDepartment())
-                      })
-                    );
-                  }
-                });
-              }
-            }
-          ]
-        }}
       />
 
       <Modal

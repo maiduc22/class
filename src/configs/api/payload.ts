@@ -21,7 +21,12 @@ export type CreateRolePayload = {
 
 export type UpdateRolePayload = CreateRolePayload;
 
+export type AssignRolePermissionPayload = {
+  permissionIds: string[];
+};
+
 export type ApiEndPointPayload =
   | LoginPayload
   | CreateDepartmentPayload
-  | CreateRolePayload;
+  | CreateRolePayload
+  | AssignRolePermissionPayload;

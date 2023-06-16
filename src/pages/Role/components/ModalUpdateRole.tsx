@@ -19,7 +19,6 @@ interface Props {
 }
 
 export const ModalUpdateRole: React.FC<Props> = ({ close, role }) => {
-  console.log('🚀 ~ file: ModalUpdateRole.tsx:22 ~ role:', role);
   const dispatch = useAppDispatch();
   const form = useForm<UpdateRolePayload>({
     initialValues: {

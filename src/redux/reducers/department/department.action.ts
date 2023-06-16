@@ -82,8 +82,9 @@ const updateDepartment =
   };
 
 const deleteDepartment =
-  (id: string, cb?: Callback): DepartmentThunkAction =>
+  (id: string | undefined, cb?: Callback): DepartmentThunkAction =>
   async (dispatch: AppDispatch) => {
+    if (!id) return;
     dispatch({ type: DepartmentActionType.DEPARTMENT_ACTION_PENDING });
 
     const api = API_URLS.Department.delete(id);

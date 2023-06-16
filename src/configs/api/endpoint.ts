@@ -73,5 +73,12 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader()
     })
+  },
+  Permission: {
+    getAll: () => ({
+      endPoint: '/permissions',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
   }
 };

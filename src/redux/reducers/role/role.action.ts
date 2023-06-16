@@ -1,10 +1,14 @@
-import { AppDispatch } from '@/redux/store';
-import { RoleActionType, RoleThunkAction } from './role.types';
-import { API_URLS } from '@/configs/api/endpoint';
 import { useCallApi } from '@/configs/api';
-import { NotiType, renderNotification } from '@/utils/notifications';
+import { API_URLS } from '@/configs/api/endpoint';
+import {
+  AssignRolePermissionPayload,
+  CreateRolePayload,
+  UpdateRolePayload
+} from '@/configs/api/payload';
+import { AppDispatch } from '@/redux/store';
 import { Callback } from '@/types/others/callback';
-import { CreateRolePayload, UpdateRolePayload } from '@/configs/api/payload';
+import { NotiType, renderNotification } from '@/utils/notifications';
+import { RoleActionType, RoleThunkAction } from './role.types';
 
 const getAllRole = (): RoleThunkAction => async (dispatch: AppDispatch) => {
   dispatch({ type: RoleActionType.ROLE_ACTION_PENDING });
@@ -119,10 +123,46 @@ const updateRole =
     }
   };
 
+const assignPermission =
+  (
+    payload: AssignRolePermissionPayload,
+    id: string | undefined,
+    cb?: Callback
+  ): RoleThunkAction =>
+  async (dispatch: AppDispatch) => {
+    if (!id) return;
+
+    dispatch({
+      type: RoleActionType.ROLE_ACTION_PENDING
+    });
+
+    const api = API_URLS.Role.assignPermission(id);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: RoleActionType.ASSIGN_PERMISSION_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification(
+        'Cập nhật quyền cho vai trò thành công',
+        NotiType.SUCCESS
+      );
+    } else {
+      dispatch({ type: RoleActionType.ROLE_ACTION_FAILURE });
+      renderNotification(
+        'Đã có lỗi khi cập nhật quyền cho vai trò',
+        NotiType.ERROR
+      );
+    }
+  };
+
 export const RoleActions = {
   getAllRole,
   toggleStatus,
   deleteStatus,
   createRole,
-  updateRole
+  updateRole,
+  assignPermission
 };

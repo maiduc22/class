@@ -47,7 +47,7 @@ export const User = () => {
     },
     {
       accessor: '',
-      title: 'Hành động',
+      title: '',
       textAlignment: 'center',
       render: () => (
         <Group position="center">
