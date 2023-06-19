@@ -1,8 +1,10 @@
 import { CreateDepartmentPayload } from '@/configs/api/payload';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { RootState } from '@/redux/reducers';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
-import { Button, Group, Stack, TextInput } from '@mantine/core';
+import { Button, Group, Select, Stack, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
+import { useLayoutEffect } from 'react';
 
 interface Props {
   closeModal: () => void;
@@ -10,15 +12,27 @@ interface Props {
 
 const ModalCreateDepartment: React.FC<Props> = ({ closeModal }) => {
   const dispatch = useAppDispatch();
+  useLayoutEffect(() => {
+    dispatch(DepartmentActions.getAllDepartment);
+  });
+  const { departments } = useAppSelector(
+    (state: RootState) => state.department
+  );
+
   const form = useForm<CreateDepartmentPayload>({
     initialValues: {
       name: '',
-      description: ''
+      description: '',
+      parentId: ''
     },
     validate: {
       name: isNotEmpty('Không được để trống'),
       description: isNotEmpty('Không được để trống')
-    }
+    },
+    transformValues: (value) => ({
+      name: value.name,
+      description: value.description
+    })
   });
   return (
     <form
@@ -46,6 +60,15 @@ const ModalCreateDepartment: React.FC<Props> = ({ closeModal }) => {
           label="Mô tả"
           placeholder="Nhập mô tả"
           {...form.getInputProps('description')}
+        />
+        <Select
+          data={departments.map(({ name, id }) => ({
+            value: id,
+            label: name
+          }))}
+          label="Phòng ban cha"
+          placeholder="Chọn phòng ban cha"
+          {...form.getInputProps('parentId')}
         />
         <Group position={'right'}>
           <Button type={'submit'}>Tạo</Button>

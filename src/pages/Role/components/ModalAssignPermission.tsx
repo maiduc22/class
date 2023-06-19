@@ -7,6 +7,7 @@ import { useForm } from '@mantine/form';
 import React, { useState } from 'react';
 import { GroupPermissionCollapse } from './GroupPermissionCollapse';
 import { RoleActions } from '@/redux/reducers/role/role.action';
+import { NotiType, renderNotification } from '@/utils/notifications';
 
 interface Props {
   close: () => void;
@@ -16,28 +17,38 @@ interface Props {
 export const ModalAssignPermission: React.FC<Props> = ({ close, role }) => {
   const dispatch = useAppDispatch();
   const { permission } = useAppSelector((state: RootState) => state.permission);
+
   const form = useForm();
   const groupPermission = groupPermissionByResourceName(permission);
-  const [_permissionIDs, setPermissionIDs] = useState<string[]>([]);
+
+  const permissions = role?.permissions || [];
+  const [_permissionIDs, setPermissionIDs] = useState<string[]>(
+    permissions.map((permission) => permission.permissionId)
+  );
+  const [_togglePermissionIds, setTogglePermissionIds] = useState<string[]>([]);
 
   return (
     <form
       onSubmit={form.onSubmit(() => {
-        dispatch(
-          RoleActions.assignPermission(
-            { permissionIds: _permissionIDs },
-            role?.id,
-            {
-              onSuccess: () => {
-                dispatch(RoleActions.getAllRole());
-                close();
+        if (_togglePermissionIds.length > 0) {
+          dispatch(
+            RoleActions.assignPermission(
+              { permissionIds: _togglePermissionIds },
+              role?.id,
+              {
+                onSuccess: () => {
+                  dispatch(RoleActions.getAllRole());
+                  close();
+                }
               }
-            }
-          )
-        );
+            )
+          );
+        } else {
+          renderNotification('Bạn chưa thay đổi phân quyền', NotiType.ERROR);
+        }
       })}
     >
-      <ScrollArea h={250}>
+      <ScrollArea h={500}>
         <Stack>
           {groupPermission.map((group) => (
             <GroupPermissionCollapse
@@ -45,10 +56,13 @@ export const ModalAssignPermission: React.FC<Props> = ({ close, role }) => {
               groupPermission={group.permission}
               permissionIDs={_permissionIDs}
               setPermissionID={setPermissionIDs}
+              togglePermissionIds={_togglePermissionIds}
+              setTogglePermissionIds={setTogglePermissionIds}
             />
           ))}
         </Stack>
       </ScrollArea>
+
       <Group position="right" mt={'md'}>
         <Button type="submit">Cập nhật</Button>
       </Group>

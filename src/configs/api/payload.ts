@@ -1,13 +1,28 @@
 import { IRoleProperty } from '@/types/models/IRole';
+import { IUserGender } from '@/types/models/IUser';
 
 export type LoginPayload = {
   username: string;
   password: string;
 };
 
+export type RegisterPayload = {
+  username: string;
+  password: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  gender: IUserGender;
+  roleIds: string[];
+  description: string;
+  dayOfBirth: string | undefined;
+  avatar: string;
+};
+
 export type CreateDepartmentPayload = {
   name: string;
   description: string;
+  parentId?: string;
 };
 
 export type UpdateDepartmentPayload = CreateDepartmentPayload;
@@ -27,6 +42,7 @@ export type AssignRolePermissionPayload = {
 
 export type ApiEndPointPayload =
   | LoginPayload
+  | RegisterPayload
   | CreateDepartmentPayload
   | CreateRolePayload
   | AssignRolePermissionPayload;

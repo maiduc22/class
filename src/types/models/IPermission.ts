@@ -1,4 +1,5 @@
 import { BaseModel } from '.';
+
 export interface IPermission extends BaseModel {
   name: string;
   resourceName: string;

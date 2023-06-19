@@ -40,6 +40,11 @@ export const API_URLS = {
       endPoint: '/users',
       method: 'GET',
       headers: HEADERS.authHeader()
+    }),
+    create: () => ({
+      endPoint: `/register`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   Role: {

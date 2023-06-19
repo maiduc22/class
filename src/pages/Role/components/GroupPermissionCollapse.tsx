@@ -13,16 +13,19 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   groupName: string;
-  groupPermission: { id: string | undefined; name: string }[];
+  groupPermission: { permissionId: string | undefined; name: string }[];
   permissionIDs: string[];
   setPermissionID: Dispatch<SetStateAction<string[]>>;
+  togglePermissionIds: string[];
+  setTogglePermissionIds: Dispatch<SetStateAction<string[]>>;
 }
 
 export const GroupPermissionCollapse: React.FC<Props> = ({
   groupName,
   groupPermission,
   permissionIDs,
-  setPermissionID
+  setPermissionID,
+  setTogglePermissionIds
 }) => {
   const [opened, { toggle }] = useDisclosure(false);
 
@@ -35,6 +38,16 @@ export const GroupPermissionCollapse: React.FC<Props> = ({
     } else {
       setPermissionID((prevPermissions) => [...prevPermissions, id]);
     }
+    setTogglePermissionIds((prevPermissions) => {
+      const updatedPermissions = [...prevPermissions, id];
+      const filteredPermissions = updatedPermissions.filter((permissionID) => {
+        const count = updatedPermissions.filter(
+          (id) => id === permissionID
+        ).length;
+        return count % 2 !== 0;
+      });
+      return filteredPermissions;
+    });
   };
 
   return (
@@ -53,11 +66,11 @@ export const GroupPermissionCollapse: React.FC<Props> = ({
       <Collapse in={opened}>
         {groupPermission.map((permission) => (
           <Box px={'xs'}>
-            <Group key={permission.id} position="apart" my={'xs'}>
+            <Group key={permission.permissionId} position="apart" my={'xs'}>
               <Text>{permission.name}</Text>
               <Switch
-                onChange={() => handleSwitchChange(permission.id)}
-                checked={permissionIDs.includes(permission.id || '')}
+                onChange={() => handleSwitchChange(permission.permissionId)}
+                checked={permissionIDs.includes(permission.permissionId || '')}
               />
             </Group>
             <Divider mt={'xs'} />

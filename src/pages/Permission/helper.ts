@@ -6,7 +6,10 @@ export const groupPermissionByResourceName = (permissionArr: IPermission[]) => {
 
   const result = map(group, (permissionArr, resourceName) => ({
     resourceName: resourceName,
-    permission: permissionArr.map(({ id, name }) => ({ id: id, name: name }))
+    permission: permissionArr.map(({ id, name }) => ({
+      permissionId: id,
+      name: name
+    }))
   }));
 
   return result;

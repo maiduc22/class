@@ -68,6 +68,14 @@ const Department: React.FC = () => {
       title: 'Mô tả'
     },
     {
+      accessor: 'parentId',
+      title: 'Phòng ban cha',
+      render: (record: IDepartment) => {
+        const parent = departments.find((item) => item.id === record.parentId);
+        return <Text>{parent?.name}</Text>;
+      }
+    },
+    {
       accessor: '',
       title: '',
       width: '100px',

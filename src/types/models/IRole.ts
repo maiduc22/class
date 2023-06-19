@@ -1,4 +1,5 @@
 import { BaseModel } from '.';
+import { IPermission } from './IPermission';
 export interface IRole extends BaseModel {
   code: string;
   description: string;
@@ -6,8 +7,12 @@ export interface IRole extends BaseModel {
   name: string;
   status: IRoleStatus;
   property: IRoleProperty[];
+  permissions: IRolePermission[];
 }
 
+export interface IRolePermission extends IPermission {
+  permissionId: string;
+}
 enum IRoleStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'

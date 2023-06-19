@@ -1,8 +1,9 @@
 import { UpdateDepartmentPayload } from '@/configs/api/payload';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { RootState } from '@/redux/reducers';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { IDepartment } from '@/types/models/IDepartment';
-import { Button, Group, Stack, TextInput } from '@mantine/core';
+import { Button, Group, Select, Stack, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 
 interface Props {
@@ -12,14 +13,19 @@ interface Props {
 
 const ModalUpdateDepartment: React.FC<Props> = ({ closeModal, department }) => {
   const dispatch = useAppDispatch();
+  const { departments } = useAppSelector(
+    (state: RootState) => state.department
+  );
   const form = useForm<UpdateDepartmentPayload>({
     initialValues: {
       name: department?.name || '',
-      description: department?.description || ''
+      description: department?.description || '',
+      parentId: department?.parentId || ''
     },
     validate: {
       name: isNotEmpty('Không được để trống'),
-      description: isNotEmpty('Không được để trống')
+      description: isNotEmpty('Không được để trống'),
+      parentId: isNotEmpty('Không được để trống')
     }
   });
   return (
@@ -48,6 +54,15 @@ const ModalUpdateDepartment: React.FC<Props> = ({ closeModal, department }) => {
           label="Mô tả"
           placeholder="Nhập mô tả"
           {...form.getInputProps('description')}
+        />
+        <Select
+          data={departments.map(({ name, id }) => ({
+            value: id,
+            label: name
+          }))}
+          label="Phòng ban cha"
+          placeholder="Chọn phòng ban cha"
+          {...form.getInputProps('parentId')}
         />
         <Group position={'right'}>
           <Button type={'submit'}>Cập nhật</Button>

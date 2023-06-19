@@ -200,6 +200,7 @@ export const Role = () => {
         title={`Phân quyền cho vai trò ${_selectedRecord?.name}`}
         opened={openedAssignModal}
         onClose={closeAssignModal}
+        size={'xl'}
       >
         <ModalAssignPermission
           close={closeAssignModal}
