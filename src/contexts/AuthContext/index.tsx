@@ -8,9 +8,16 @@ import { AuthAction, AuthActionType } from './action';
 import { saveToken } from '@/utils/token';
 import { IUser } from '@/types/models/IUser';
 
+export interface Authorities {
+  userId: string;
+  isRoot: boolean;
+  grantedPermissions: string[];
+}
+
 const initialState = {
   isFetching: false,
-  user: null as IUser | null
+  user: null as IUser | null,
+  authorities: null as Authorities | null
 };
 
 type AuthState = typeof initialState;
@@ -23,6 +30,8 @@ function authReducer(state = initialState, action: AuthActionType): AuthState {
       return { ...state, isFetching: false };
     case AuthAction.LOGIN_SUCCESS:
       return { ...state, isFetching: false };
+    case AuthAction.GET_AUTHORITIES:
+      return { ...state, isFetching: false, authorities: action.payload };
     case AuthAction.LOGOUT:
       return state;
     default:
@@ -62,7 +71,27 @@ function useAuthReducer(_state = initialState) {
     renderNotification('Đăng xuất thành công', NotiType.SUCCESS);
   };
 
-  return { state, login, logout };
+  const getAuthorities = async (cb?: Callback) => {
+    dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
+
+    const api = API_URLS.Auth.getAuthorities();
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: AuthAction.GET_AUTHORITIES,
+        payload: response.data.data
+      });
+      cb?.onSuccess?.();
+    } else {
+      dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
+      cb?.onError?.();
+    }
+  };
+
+  return { state, login, logout, getAuthorities };
 }
 
 export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
@@ -71,6 +100,9 @@ export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
     // TODO: Implement login functionality
   },
   logout: () => {
+    // TODO: Implement logout functionality
+  },
+  getAuthorities: async () => {
     // TODO: Implement logout functionality
   }
 });

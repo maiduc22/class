@@ -13,7 +13,7 @@ export interface IRole extends BaseModel {
 export interface IRolePermission extends IPermission {
   permissionId: string;
 }
-enum IRoleStatus {
+export enum IRoleStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
 }

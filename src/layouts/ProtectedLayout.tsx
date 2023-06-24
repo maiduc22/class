@@ -3,6 +3,11 @@ import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
+import { useAppDispatch } from '@/hooks/redux';
+import { DepartmentActions } from '@/redux/reducers/department/department.action';
+import { PermissionActions } from '@/redux/reducers/permission/permission.action';
+import { RoleActions } from '@/redux/reducers/role/role.action';
+import { isGrantedPermission } from '@/utils/permissions';
 import {
   Anchor,
   AppShell,
@@ -26,7 +31,7 @@ import {
   IconShield,
   IconUser
 } from '@tabler/icons-react';
-import { Suspense } from 'react';
+import { Suspense, useLayoutEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -34,34 +39,8 @@ interface NavLinkProps {
   color: string;
   label: string;
   to: string;
+  auth: boolean;
 }
-
-const navLinks: NavLinkProps[] = [
-  {
-    icon: <IconBrandAsana size="1rem" />,
-    color: 'grape',
-    label: 'Quản Lý Phòng Ban',
-    to: ROUTER.DEPARTMENT
-  },
-  {
-    icon: <IconUser size={'1rem'} />,
-    color: 'blue',
-    label: 'Quản Lý Nhân Sự',
-    to: ROUTER.USER
-  },
-  {
-    icon: <IconLicense size={'1rem'} />,
-    color: 'blue',
-    label: 'Quản Lý Vai Trò',
-    to: ROUTER.ROLE
-  },
-  {
-    icon: <IconShield size={'1rem'} />,
-    color: 'blue',
-    label: 'Quản Lý Quyền',
-    to: ROUTER.PERMISSION
-  }
-];
 
 const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
   const navigate = useNavigate();
@@ -145,7 +124,10 @@ const User = () => {
 
 const ProtectedLayout = () => {
   const navigate = useNavigate();
-  const { logout } = useAuthContext();
+  const { logout, state, getAuthorities } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     navigate(ROUTER.LOGIN);
@@ -156,6 +138,46 @@ const ProtectedLayout = () => {
     return <Navigate to={ROUTER.LOGIN} />;
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useLayoutEffect(() => {
+    getAuthorities();
+    setAuthorities(authorities);
+    dispatch(RoleActions.getAllRole());
+    dispatch(PermissionActions.getAllPermission());
+    dispatch(DepartmentActions.getAllDepartment());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const navLinks: NavLinkProps[] = [
+    {
+      icon: <IconBrandAsana size="1rem" />,
+      color: 'grape',
+      label: 'Quản Lý Phòng Ban',
+      to: ROUTER.DEPARTMENT,
+      auth: isGrantedPermission(_authorities, 'department', 'view')
+    },
+    {
+      icon: <IconUser size={'1rem'} />,
+      color: 'blue',
+      label: 'Quản Lý Nhân Sự',
+      to: ROUTER.USER,
+      auth: isGrantedPermission(_authorities, 'department', 'view')
+    },
+    {
+      icon: <IconLicense size={'1rem'} />,
+      color: 'blue',
+      label: 'Quản Lý Vai Trò',
+      to: ROUTER.ROLE,
+      auth: isGrantedPermission(_authorities, 'department', 'view')
+    },
+    {
+      icon: <IconShield size={'1rem'} />,
+      color: 'blue',
+      label: 'Quản Lý Quyền',
+      to: ROUTER.PERMISSION,
+      auth: isGrantedPermission(_authorities, 'department', 'view')
+    }
+  ];
   return (
     <>
       <AppShell
@@ -175,9 +197,11 @@ const ProtectedLayout = () => {
           >
             <Navbar.Section grow mt="0">
               <div>
-                {navLinks.map((link) => (
-                  <NavLink {...link} key={link.label} />
-                ))}
+                {navLinks
+                  .filter((link) => link.auth === true)
+                  .map((link) => (
+                    <NavLink {...link} key={link.label} />
+                  ))}
               </div>
             </Navbar.Section>
             <Navbar.Section>

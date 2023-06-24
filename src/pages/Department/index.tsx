@@ -6,7 +6,7 @@ import { IDepartment } from '@/types/models/IDepartment';
 import { Button, Group, Input, Modal, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconInfoCircle, IconTrash } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import ModalCreateDepartment from './components/ModalCreateDepartment';
@@ -78,7 +78,6 @@ const Department: React.FC = () => {
     {
       accessor: '',
       title: '',
-      width: '100px',
       render: (department: IDepartment) => {
         return (
           <Group position="center">
@@ -92,6 +91,7 @@ const Department: React.FC = () => {
               size={'1rem'}
               onClick={() => handleDelete(department)}
             />
+            <IconInfoCircle cursor={'pointer'} size={'1rem'} />
           </Group>
         );
       }

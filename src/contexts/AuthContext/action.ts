@@ -1,9 +1,12 @@
+import { Authorities } from '.';
+
 export enum AuthAction {
   AUTH_ACTION_PENDING = 'AUTH_ACTION_PENDING',
   AUTH_ACTION_FAILURE = 'AUTH_ACTION_FAILURE',
 
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
-  LOGOUT = 'LOGOUT'
+  LOGOUT = 'LOGOUT',
+  GET_AUTHORITIES = 'GET_AUTHORITIES'
 }
 
 interface AuthActionPending {
@@ -22,8 +25,14 @@ interface Logout {
   type: AuthAction.LOGOUT;
 }
 
+interface GetAuthorities {
+  type: AuthAction.GET_AUTHORITIES;
+  payload: Authorities;
+}
+
 export type AuthActionType =
   | Logout
   | AuthActionPending
   | AuthActionFailure
-  | LoginSuccess;
+  | LoginSuccess
+  | GetAuthorities;

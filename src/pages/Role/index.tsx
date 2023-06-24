@@ -1,8 +1,9 @@
+import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { RoleActions } from '@/redux/reducers/role/role.action';
-import { IRole, IRoleStatusDict } from '@/types/models/IRole';
+import { IRole, IRoleStatus, IRoleStatusDict } from '@/types/models/IRole';
 import {
   Badge,
   Button,
@@ -17,17 +18,18 @@ import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import {
   IconEdit,
-  IconFilePower,
+  IconInfoCircle,
   IconStatusChange,
   IconTrash
 } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ModalAddRole } from './components/ModalAddRole';
-import { ModalAssignPermission } from './components/ModalAssignPermission';
 import { ModalUpdateRole } from './components/ModalUpdateRole';
 
 export const Role = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { roles } = useAppSelector((state: RootState) => state.role);
   const [_records, setRecords] = useState(roles);
@@ -39,10 +41,10 @@ export const Role = () => {
     openedUpdateModal,
     { close: closeUpdateModal, open: openUpdateModal }
   ] = useDisclosure();
-  const [
-    openedAssignModal,
-    { close: closeAssignModal, open: openAssignModal }
-  ] = useDisclosure();
+  // const [
+  //   openedAssignModal,
+  //   { close: closeAssignModal, open: openAssignModal }
+  // ] = useDisclosure();
 
   useLayoutEffect(() => {
     dispatch(RoleActions.getAllRole());
@@ -92,11 +94,6 @@ export const Role = () => {
     openUpdateModal();
   };
 
-  const handleAssign = (role: IRole) => {
-    setSelectedRecord(role);
-    openAssignModal();
-  };
-
   const columns: DataTableColumn<IRole>[] = [
     { accessor: 'code', title: 'Mã' },
     { accessor: 'name', title: 'Tên' },
@@ -118,6 +115,13 @@ export const Role = () => {
       render: (role: IRole) => {
         return (
           <Group position="center">
+            <Tooltip label="Chi tiết">
+              <IconInfoCircle
+                size={'1rem'}
+                cursor={'pointer'}
+                onClick={() => navigate(`${ROUTER.ROLE}/${role.id}`)}
+              />
+            </Tooltip>
             <Tooltip label="Thay đổi trạng thái">
               <IconStatusChange
                 size={'1rem'}
@@ -125,27 +129,24 @@ export const Role = () => {
                 onClick={() => handleToggleStatus(role.id)}
               />
             </Tooltip>
-            <Tooltip label="Cập nhật">
-              <IconEdit
-                size={'1rem'}
-                cursor={'pointer'}
-                onClick={() => handleUpdate(role)}
-              />
-            </Tooltip>
-            <Tooltip label="Xoá">
-              <IconTrash
-                cursor={'pointer'}
-                size={'1rem'}
-                onClick={() => handleDelete(role.id)}
-              />
-            </Tooltip>
-            <Tooltip label="Cập nhật quyền">
-              <IconFilePower
-                cursor={'pointer'}
-                size={'1rem'}
-                onClick={() => handleAssign(role)}
-              />
-            </Tooltip>
+            {role.status === IRoleStatus.ACTIVE ? (
+              <Group>
+                <Tooltip label="Cập nhật">
+                  <IconEdit
+                    size={'1rem'}
+                    cursor={'pointer'}
+                    onClick={() => handleUpdate(role)}
+                  />
+                </Tooltip>
+                <Tooltip label="Xoá">
+                  <IconTrash
+                    cursor={'pointer'}
+                    size={'1rem'}
+                    onClick={() => handleDelete(role.id)}
+                  />
+                </Tooltip>
+              </Group>
+            ) : null}
           </Group>
         );
       }
@@ -195,7 +196,7 @@ export const Role = () => {
         <ModalUpdateRole close={closeUpdateModal} role={_selectedRecord} />
       </Modal>
 
-      <Modal
+      {/* <Modal
         centered
         title={`Phân quyền cho vai trò ${_selectedRecord?.name}`}
         opened={openedAssignModal}
@@ -206,7 +207,7 @@ export const Role = () => {
           close={closeAssignModal}
           role={_selectedRecord}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };

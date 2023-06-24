@@ -14,6 +14,9 @@ import Department from './Department';
 import { User } from './User';
 import { Role } from './Role';
 import { Permission } from './Permission';
+import { UserDetails } from './UserDetails';
+import { DepartmentDetails } from './DepartmentDetails';
+import { RoleDetails } from './RoleDetails';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,8 +26,14 @@ const router = createBrowserRouter(
       </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
         <Route path={ROUTER.DEPARTMENT} element={<Department />} />
+        <Route
+          path={ROUTER.DEPARTMENT_DETAILS}
+          element={<DepartmentDetails />}
+        />
         <Route path={ROUTER.USER} element={<User />} />
+        <Route path={ROUTER.USER_DETAILS} element={<UserDetails />} />
         <Route path={ROUTER.ROLE} element={<Role />} />
+        <Route path={ROUTER.ROLE_DETAILS} element={<RoleDetails />} />
         <Route path={ROUTER.PERMISSION} element={<Permission />} />
         <Route path="*" element={<Page404 />} />
       </Route>
