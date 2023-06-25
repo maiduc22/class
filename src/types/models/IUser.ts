@@ -1,19 +1,23 @@
 import { BaseModel } from '.';
+import { IRole } from './IRole';
 
 export interface IUser extends BaseModel {
   username: string;
-  role: IUserRole;
-  fullname: string;
+  fullName: string;
   password: string;
-  avatar?: string;
+  avatar: string;
   dob: Date;
-  description?: string;
-  email?: string;
-  employeeCode?: string;
+  dayOfBirth: Date;
+  description: string;
+  email: string;
+  employeeCode: string;
   gender: IUserGender;
   phoneNumber: string;
   status: IUserStatus;
   title: string;
+  avatarFileId?: string;
+  departmentId: string;
+  roles: IRole[];
 }
 
 export enum IUserRole {}

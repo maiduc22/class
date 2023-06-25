@@ -17,6 +17,7 @@ import { Permission } from './Permission';
 import { UserDetails } from './UserDetails';
 import { DepartmentDetails } from './DepartmentDetails';
 import { RoleDetails } from './RoleDetails';
+import { Profile } from './Profile';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
         <Route path={ROUTER.LOGIN} element={<Login />} />
       </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
+        <Route path={ROUTER.PROFILE} element={<Profile />} />
         <Route path={ROUTER.DEPARTMENT} element={<Department />} />
         <Route
           path={ROUTER.DEPARTMENT_DETAILS}

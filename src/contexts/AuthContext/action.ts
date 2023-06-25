@@ -1,3 +1,4 @@
+import { IUser } from '@/types/models/IUser';
 import { Authorities } from '.';
 
 export enum AuthAction {
@@ -6,7 +7,9 @@ export enum AuthAction {
 
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
   LOGOUT = 'LOGOUT',
-  GET_AUTHORITIES = 'GET_AUTHORITIES'
+  GET_AUTHORITIES = 'GET_AUTHORITIES',
+  GET_PROFILE = 'GET_PROFILE',
+  UPDATE_PROFILE = 'UPDATE_PROFILE'
 }
 
 interface AuthActionPending {
@@ -30,9 +33,20 @@ interface GetAuthorities {
   payload: Authorities;
 }
 
+interface GetProfile {
+  type: AuthAction.GET_PROFILE;
+  payload: IUser;
+}
+
+interface UpdateProfile {
+  type: AuthAction.UPDATE_PROFILE;
+}
+
 export type AuthActionType =
   | Logout
   | AuthActionPending
   | AuthActionFailure
   | LoginSuccess
-  | GetAuthorities;
+  | GetAuthorities
+  | GetProfile
+  | UpdateProfile;

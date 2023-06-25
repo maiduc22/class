@@ -2,7 +2,6 @@ import { RegisterPayload } from '@/configs/api/payload';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { RootState } from '@/redux/reducers';
-import { RoleActions } from '@/redux/reducers/role/role.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUserGender, IUserGenderDict } from '@/types/models/IUser';
 import {
@@ -12,6 +11,7 @@ import {
   Image,
   MultiSelect,
   ScrollArea,
+  Select,
   Stack,
   Text,
   TextInput,
@@ -22,22 +22,24 @@ import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 
-export const ModalAddUser = () => {
+interface Props {
+  closeModal: () => void;
+}
+
+export const ModalAddUser = ({ closeModal }: Props) => {
   const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
   const [previewImage, setPreviewImage] = useState<FileWithPath>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoadingUpload, url, handleUploadImageOnFirebase] =
     useUploadFirebase();
 
-  const dispatch = useAppDispatch();
-
-  useLayoutEffect(() => {
-    dispatch(RoleActions.getAllRole());
-  }, [dispatch]);
-
   const { roles } = useAppSelector((state: RootState) => state.role);
+  const { departments } = useAppSelector(
+    (state: RootState) => state.department
+  );
   const [selectedGender, setSelectedGender] = useState<IUserGender>(
     IUserGender.MALE
   );
@@ -53,7 +55,8 @@ export const ModalAddUser = () => {
       roleIds: [],
       description: '',
       dayOfBirth: undefined,
-      avatar: ''
+      avatar: '',
+      departmentId: ''
     },
     validate: {
       username: isNotEmpty('Tên đăng nhập không được bỏ trống'),
@@ -75,7 +78,10 @@ export const ModalAddUser = () => {
       onSubmit={form.onSubmit((values) =>
         dispatch(
           UserActions.createUser(values, {
-            onSuccess: () => dispatch(UserActions.getAllUser())
+            onSuccess: () => {
+              dispatch(UserActions.getAllUser());
+              closeModal();
+            }
           })
         )
       )}
@@ -142,6 +148,16 @@ export const ModalAddUser = () => {
             label="Vai trò"
             placeholder="Chọn vai trò"
             {...form.getInputProps('roleIds')}
+          />
+
+          <Select
+            data={departments.map(({ name, id }) => ({
+              value: id,
+              label: name
+            }))}
+            label="Phòng ban"
+            placeholder="Chọn phòng ban"
+            {...form.getInputProps('departmentId')}
           />
 
           <Stack spacing={0}>

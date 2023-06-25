@@ -34,7 +34,8 @@ export const UserDetails = () => {
       roleIds: [],
       description: '',
       dayOfBirth: undefined,
-      avatar: ''
+      avatar: '',
+      departmentId: ''
     },
     validate: {
       username: isNotEmpty('Tên đăng nhập không được bỏ trống'),

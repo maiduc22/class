@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import appIcon from '@/assets/imgs/hrm.png';
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
@@ -7,6 +8,7 @@ import { useAppDispatch } from '@/hooks/redux';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { PermissionActions } from '@/redux/reducers/permission/permission.action';
 import { RoleActions } from '@/redux/reducers/role/role.action';
+import { IUser } from '@/types/models/IUser';
 import { isGrantedPermission } from '@/utils/permissions';
 import {
   Anchor,
@@ -31,7 +33,7 @@ import {
   IconShield,
   IconUser
 } from '@tabler/icons-react';
-import { Suspense, useLayoutEffect, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -75,9 +77,13 @@ const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
   );
 };
 
-const User = () => {
-  const theme = useMantineTheme();
+interface UserProps {
+  profile: IUser | null;
+}
 
+const User = ({ profile }: UserProps) => {
+  const theme = useMantineTheme();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -88,6 +94,7 @@ const User = () => {
             : theme.colors.gray[2]
         }`
       }}
+      onClick={() => navigate(`${ROUTER.PROFILE}`)}
     >
       <UnstyledButton
         sx={{
@@ -110,10 +117,10 @@ const User = () => {
           <Avatar radius="xl" />
           <Box sx={{ flex: 1 }}>
             <Text size="sm" weight={500}>
-              ADMIN
+              {profile?.fullName}
             </Text>
             <Text color="dimmed" size="xs">
-              ADMIN
+              {profile?.employeeCode}
             </Text>
           </Box>
         </Group>
@@ -124,8 +131,8 @@ const User = () => {
 
 const ProtectedLayout = () => {
   const navigate = useNavigate();
-  const { logout, state, getAuthorities } = useAuthContext();
-  const { authorities } = state;
+  const { logout, state, getAuthorities, getProfile } = useAuthContext();
+  const { authorities, profile } = state;
   const [_authorities, setAuthorities] = useState(authorities);
   const dispatch = useAppDispatch();
 
@@ -138,15 +145,18 @@ const ProtectedLayout = () => {
     return <Navigate to={ROUTER.LOGIN} />;
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
     getAuthorities();
-    setAuthorities(authorities);
+    getProfile();
     dispatch(RoleActions.getAllRole());
     dispatch(PermissionActions.getAllPermission());
     dispatch(DepartmentActions.getAllDepartment());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
 
   const navLinks: NavLinkProps[] = [
     {
@@ -205,7 +215,7 @@ const ProtectedLayout = () => {
               </div>
             </Navbar.Section>
             <Navbar.Section>
-              <User />
+              <User profile={profile} />
             </Navbar.Section>
           </Navbar>
         }

@@ -37,7 +37,9 @@ const Login = () => {
           <form
             onSubmit={form.onSubmit((values) => {
               login(values, {
-                onSuccess: () => navigate(ROUTER.BASE)
+                onSuccess: () => {
+                  navigate(ROUTER.BASE);
+                }
               });
             })}
           >

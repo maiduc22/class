@@ -6,6 +6,18 @@ export type LoginPayload = {
   password: string;
 };
 
+export type ChangeProfilePayload = {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  gender: IUserGender;
+  description: string;
+  dayOfBirth: Date | undefined;
+  avatarFileId: string;
+  roleIds: string[];
+  departmentId: string;
+};
+
 export type RegisterPayload = {
   username: string;
   password: string;
@@ -14,6 +26,7 @@ export type RegisterPayload = {
   phoneNumber: string;
   gender: IUserGender;
   roleIds: string[];
+  departmentId: string;
   description: string;
   dayOfBirth: string | undefined;
   avatar: string;
@@ -45,4 +58,5 @@ export type ApiEndPointPayload =
   | RegisterPayload
   | CreateDepartmentPayload
   | CreateRolePayload
-  | AssignRolePermissionPayload;
+  | AssignRolePermissionPayload
+  | ChangeProfilePayload;

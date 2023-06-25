@@ -109,7 +109,7 @@ export const User = () => {
         onClose={closeAddModal}
         size={'lg'}
       >
-        <ModalAddUser />
+        <ModalAddUser closeModal={closeAddModal} />
       </Modal>
     </>
   );

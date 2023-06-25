@@ -46,8 +46,8 @@ interface OpenUploadModalProps {
     file: File,
     cb?: Callback<unknown, unknown> | undefined
   ) => void;
-  onClose?: () => void;
 }
+
 const openUploadModal = ({
   title,
   previewImage,
@@ -56,19 +56,31 @@ const openUploadModal = ({
   fieldValue,
   handleUploadImageOnFirebase
 }: OpenUploadModalProps) => {
+  const confirmUpload = () => {
+    if (previewImage) {
+      handleUploadImageOnFirebase(previewImage, {
+        onSuccess: (downloadUrl) => {
+          form.setFieldValue(fieldValue, downloadUrl);
+        }
+      });
+    }
+    modals.closeAll();
+    setPreviewImage(undefined); // Reset preview image
+  };
+
   modals.open({
     title,
     centered: true,
     children: (
-      <Stack spacing={0}>
+      <Stack>
         <Dropzone
           onDrop={(files) => {
             setPreviewImage(files[0]);
-            handleUploadImageOnFirebase(files[0], {
-              onSuccess: (downloadUrl) => {
-                form.setFieldValue(fieldValue, downloadUrl);
-              }
-            });
+            // handleUploadImageOnFirebase(files[0], {
+            //   onSuccess: (downloadUrl) => {
+            //     form.setFieldValue(fieldValue, downloadUrl);
+            //   }
+            // });
           }}
           onReject={(files) => console.log('rejected files', files)}
           maxSize={3 * 1024 ** 2}
@@ -125,18 +137,12 @@ const openUploadModal = ({
             onClick={() => {
               modals.closeAll();
               setPreviewImage(undefined); // Reset preview image
-              form.resetDirty();
             }}
           >
             Huỷ
           </Button>
-          <Button
-            onClick={() => {
-              modals.closeAll();
-            }}
-          >
-            Xác nhận
-          </Button>
+          <Button onClick={confirmUpload}>Xác nhận</Button> // Add Confirm
+          button
         </Group>
       </Stack>
     )

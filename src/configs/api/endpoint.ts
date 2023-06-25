@@ -11,6 +11,16 @@ export const API_URLS = {
       endPoint: '/me/authorities',
       method: 'GET',
       headers: HEADERS.authHeader()
+    }),
+    getProfile: () => ({
+      endPoint: '/me',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    changeProfile: (id: string) => ({
+      endPoint: `/me/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   Department: {
