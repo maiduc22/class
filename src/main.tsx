@@ -37,7 +37,7 @@ import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import router from './pages/router';
+import router from './routers/router';
 import store from './redux/store';
 
 import i18next from './locales/i18n';
@@ -58,7 +58,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <ModalsProvider>
               <DatesProvider settings={{ locale: 'vi', weekendDays: [0] }}>
                 <NotificationsProvider />
-                <RouterProvider router={router} />
+                <RouterProvider router={router()} />
               </DatesProvider>
             </ModalsProvider>
           </AuthProvider>

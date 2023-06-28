@@ -1,4 +1,5 @@
 export const ROUTER = {
+  UNAUTHORIZE: '/unauthorize',
   BASE: '/',
   LOGIN: '/login',
   PROFILE: '/profile',
@@ -9,5 +10,6 @@ export const ROUTER = {
   ROLE: '/role',
   ROLE_DETAILS: '/role/:id',
   PERMISSION: '/permission',
-  TIME_OFF: '/time-off'
+  TIME_OFF: '/my-time-off',
+  REQUEST: '/request'
 };

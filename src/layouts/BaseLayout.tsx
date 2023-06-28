@@ -3,6 +3,7 @@ import { Navigate, useOutlet } from 'react-router-dom';
 
 const BaseLayout = () => {
   const outlet = useOutlet();
+
   const user = 'dfdf';
 
   if (!user) {

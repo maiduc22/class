@@ -1,13 +1,25 @@
+import { ROUTER } from '@/configs/router';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { PermissionActions } from '@/redux/reducers/permission/permission.action';
 import { IPermission } from '@/types/models/IPermission';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import { Stack, Text } from '@mantine/core';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 export const Permission = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const dispatch = useAppDispatch();
   const { permission } = useAppSelector((state: RootState) => state.permission);
 
@@ -50,6 +62,11 @@ export const Permission = () => {
       title: 'Scope'
     }
   ];
+
+  if (!isGrantedPermission(_authorities, RESOURCES.PERMISSION, SCOPES.VIEW)) {
+    return <Navigate to={ROUTER.UNAUTHORIZE} />;
+  }
+
   return (
     <Stack>
       <Text fw={600} size={'lg'}>

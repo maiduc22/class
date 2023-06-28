@@ -12,3 +12,17 @@ export const isGrantedPermission = (
     return permission.grantedPermissions.includes(permissionKey);
   }
 };
+
+export enum RESOURCES {
+  DEPARTMENT = 'department',
+  USER = 'user',
+  ROLE = 'role',
+  PERMISSION = 'permission'
+}
+
+export enum SCOPES {
+  VIEW = 'view',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  CREATE = 'create'
+}

@@ -1,5 +1,7 @@
 import { RequestTimeoffPayload } from '@/configs/api/payload';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import usePagination from '@/hooks/use-pagination';
+import { RootState } from '@/redux/reducers';
 import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import {
   IRequest,
@@ -42,33 +44,90 @@ import {
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const MyRequests = () => {
   const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
+  const { myRequests } = useAppSelector((state: RootState) => state.timeoff);
+  const [_myRequest, setMyRequest] = useState<IRequest[]>(myRequests);
+
+  const [_startDate, setStartDate] = useState<DateValue | null>(null);
+  const [_endDate, setEndDate] = useState<DateValue | null>(null);
+  const [_requestType, setRequestType] = useState<IRequestType>(
+    IRequestType.ALL
+  );
+  const [_requestStatus, setRequestStatus] = useState<IRequestStatus>(
+    IRequestStatus.ALL
+  );
+
+  const getMyRequests = useCallback(() => {
+    dispatch(TimeoffActions.getMyRequest());
+  }, [dispatch]);
+
+  useEffect(() => {
+    getMyRequests();
+  }, [getMyRequests]);
+
+  useEffect(() => setMyRequest(myRequests), [myRequests]);
+
+  useEffect(() => {
+    const filteredData = myRequests.filter((request: IRequest) => {
+      const isDateInRange =
+        (!_startDate || dayjs(request.dateFrom).toDate() >= _startDate) &&
+        (!_endDate || dayjs(request.dateTo).toDate() <= _endDate);
+
+      const isTypeMatched =
+        _requestType === IRequestType.ALL || request.type === _requestType;
+
+      const isStatusMatched =
+        _requestStatus === IRequestStatus.ALL ||
+        request.status === _requestStatus;
+
+      return isDateInRange && isTypeMatched && isStatusMatched;
+    });
+    setMyRequest(filteredData);
+  }, [myRequests, _startDate, _endDate, _requestType, _requestStatus]);
+
+  const {
+    data: records,
+    page,
+    pageSize,
+    changePage
+  } = usePagination({
+    data: _myRequest,
+    defaultPaging: {
+      page: 1,
+      pageSize: 5
+    }
+  });
+
   const columns: DataTableColumn<IRequest>[] = [
     {
-      accessor: 'from',
+      accessor: 'dateFrom',
       title: 'Từ'
     },
     {
-      accessor: 'to',
+      accessor: 'dateTo',
       title: 'Tới'
     },
     {
-      accessor: 'total',
-      title: 'Tổng thời gian'
+      accessor: 'dayOff',
+      title: 'Tổng'
     },
     {
       accessor: 'type',
-      title: 'Loại'
+      title: 'Loại',
+      render: ({ type }) => {
+        return <Text>{IRequestTypeDict[type].label}</Text>;
+      }
     },
     {
-      accessor: 'achivement',
+      accessor: 'fileId',
       title: 'Đính kèm'
     },
     {
-      accessor: '',
+      accessor: 'status',
       title: 'Trạng thái',
       render: (record) => {
         return (
@@ -80,10 +139,10 @@ export const MyRequests = () => {
     },
     {
       accessor: '',
-      render: () => {
+      render: (record) => {
         return (
           <Group>
-            <IconFileUpload size={'1rem'} />
+            {record.fileId ? null : <IconFileUpload size={'1rem'} />}
             <IconDotsDiagonal size={'1rem'} />
           </Group>
         );
@@ -98,7 +157,7 @@ export const MyRequests = () => {
   return (
     <>
       <Card withBorder p={'lg'} shadow={'xs'}>
-        <Group spacing={'xs'} mb={'md'}>
+        <Group spacing={'xs'} mb={'lg'}>
           <IconArticle
             size={'2rem'}
             style={{
@@ -108,20 +167,37 @@ export const MyRequests = () => {
             }}
             color="white"
           />
-          <Text fw={600} fz={'xl'}>
+          <Text fw={600} fz={'lg'}>
             Yêu cầu cá nhân
           </Text>
         </Group>
 
-        <Group align="end" position="apart">
+        <Group align="end" position="apart" mb={'lg'}>
           <Group>
+            <DateInput
+              clearable
+              label="Từ"
+              rightSection={<IconCalendar size="0.9rem" color="blue" />}
+              value={_startDate}
+              onChange={setStartDate}
+            />
+            <DateInput
+              clearable
+              label="Đến"
+              rightSection={<IconCalendar size="0.9rem" color="blue" />}
+              value={_endDate}
+              onChange={setEndDate}
+            />
             <Select
-              label="Loại yêu cầu"
+              label="Loại"
               data={TypeSelectData.map((type) => ({
                 value: type,
                 label: IRequestTypeDict[type].label
               }))}
-              defaultValue={IRequestType.ALL}
+              value={_requestType}
+              onChange={(value: string | null) =>
+                setRequestType(value as IRequestType)
+              }
               rightSection={<IconChevronDown size="1rem" color="blue" />}
               styles={{ rightSection: { pointerEvents: 'none' } }}
               w={'150px'}
@@ -132,17 +208,12 @@ export const MyRequests = () => {
                 value: status,
                 label: IRequestStatusDict[status].label
               }))}
-              defaultValue={IRequestType.ALL}
+              value={_requestStatus}
+              onChange={(value: string | null) =>
+                setRequestStatus(value as IRequestStatus)
+              }
               rightSection={<IconChevronDown size="1rem" color="blue" />}
               styles={{ rightSection: { pointerEvents: 'none' } }}
-            />
-            <DateInput
-              label="Từ ngày"
-              rightSection={<IconCalendar size="0.9rem" color="blue" />}
-            />
-            <DateInput
-              label="Từ ngày"
-              rightSection={<IconCalendar size="0.9rem" color="blue" />}
             />
           </Group>
           <Button leftIcon={<IconNewSection size={'1rem'} />} onClick={open}>
@@ -150,7 +221,18 @@ export const MyRequests = () => {
           </Button>
         </Group>
 
-        <DataTable minHeight={200} striped highlightOnHover columns={columns} />
+        <DataTable
+          minHeight={300}
+          striped
+          highlightOnHover
+          columns={columns}
+          records={records}
+          totalRecords={_myRequest?.length}
+          page={page}
+          onPageChange={changePage}
+          recordsPerPage={pageSize}
+          paginationText={() => null}
+        />
       </Card>
 
       <Modal
@@ -312,6 +394,7 @@ export const ModalAddRequest = ({ close }: Props) => {
         { ...values, dayoff: calculateDayoff() },
         {
           onSuccess: () => {
+            dispatch(TimeoffActions.getMyRequest());
             close();
           }
         }

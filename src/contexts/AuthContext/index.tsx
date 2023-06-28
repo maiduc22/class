@@ -5,7 +5,7 @@ import { API_URLS } from '@/configs/api/endpoint';
 import { ChangeProfilePayload, LoginPayload } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 import { NotiType, renderNotification } from '@/utils/notifications';
-import { createContext, useReducer } from 'react';
+import { createContext, useCallback, useReducer } from 'react';
 import { AuthAction, AuthActionType } from './action';
 import { saveToken } from '@/utils/token';
 import { IUser } from '@/types/models/IUser';
@@ -87,14 +87,13 @@ function useAuthReducer(_state = initialState) {
         type: AuthAction.GET_AUTHORITIES,
         payload: response.data.data
       });
-      cb?.onSuccess?.();
+      cb?.onSuccess?.(response.data.data);
     } else {
       dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
       cb?.onError?.();
     }
   };
-
-  const getProfile = async (cb?: Callback) => {
+  const getProfile = useCallback(async (cb?: Callback) => {
     dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
 
     const api = API_URLS.Auth.getProfile();
@@ -107,12 +106,12 @@ function useAuthReducer(_state = initialState) {
         payload: response.data.data
       });
 
-      cb?.onSuccess?.();
+      cb?.onSuccess?.(response.data.data);
     } else {
       dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
       cb?.onError?.();
     }
-  };
+  }, []);
 
   const updateProfile = async (
     payload: ChangeProfilePayload,

@@ -6,11 +6,10 @@ import { ROUTER } from '@/configs/router';
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
-import { PermissionActions } from '@/redux/reducers/permission/permission.action';
 import { RoleActions } from '@/redux/reducers/role/role.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
-import { isGrantedPermission } from '@/utils/permissions';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Anchor,
   AppShell,
@@ -29,6 +28,7 @@ import {
 } from '@mantine/core';
 import {
   IconBrandAsana,
+  IconGitPullRequest,
   IconLicense,
   IconLogout,
   IconShield,
@@ -150,7 +150,6 @@ const ProtectedLayout = () => {
     getAuthorities();
     getProfile();
     dispatch(RoleActions.getAllRole());
-    dispatch(PermissionActions.getAllPermission());
     dispatch(DepartmentActions.getAllDepartment());
     dispatch(UserActions.getAllUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,28 +165,35 @@ const ProtectedLayout = () => {
       color: 'grape',
       label: 'Quản Lý Phòng Ban',
       to: ROUTER.DEPARTMENT,
-      auth: isGrantedPermission(_authorities, 'department', 'view')
+      auth: isGrantedPermission(_authorities, RESOURCES.DEPARTMENT, SCOPES.VIEW)
     },
     {
       icon: <IconUser size={'1rem'} />,
       color: 'blue',
       label: 'Quản Lý Nhân Sự',
       to: ROUTER.USER,
-      auth: isGrantedPermission(_authorities, 'department', 'view')
+      auth: isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.VIEW)
     },
     {
       icon: <IconLicense size={'1rem'} />,
-      color: 'blue',
+      color: 'yellow',
       label: 'Quản Lý Vai Trò',
       to: ROUTER.ROLE,
-      auth: isGrantedPermission(_authorities, 'department', 'view')
+      auth: isGrantedPermission(_authorities, RESOURCES.ROLE, SCOPES.VIEW)
     },
     {
       icon: <IconShield size={'1rem'} />,
-      color: 'blue',
+      color: 'red',
       label: 'Quản Lý Quyền',
       to: ROUTER.PERMISSION,
-      auth: isGrantedPermission(_authorities, 'department', 'view')
+      auth: isGrantedPermission(_authorities, RESOURCES.PERMISSION, SCOPES.VIEW)
+    },
+    {
+      icon: <IconGitPullRequest size={'1rem'} />,
+      color: 'green',
+      label: 'Quản Lý Xin Nghỉ Phép',
+      to: ROUTER.REQUEST,
+      auth: true
     }
   ];
   return (

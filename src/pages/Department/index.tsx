@@ -1,8 +1,12 @@
+import CustomLoader from '@/components/custom/CustomLoader';
+import { ROUTER } from '@/configs/router';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { IDepartment } from '@/types/models/IDepartment';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Button,
   Group,
@@ -12,26 +16,52 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconEdit, IconInfoCircle, IconTrash } from '@tabler/icons-react';
+import { IconInfoCircle, IconTrash } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import ModalCreateDepartment from './components/ModalCreateDepartment';
-import ModalUpdateDepartment from './components/ModalUpdateDepartment';
-import { useNavigate } from 'react-router-dom';
-import { ROUTER } from '@/configs/router';
 
 const Department: React.FC = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { departments } = useAppSelector(
     (state: RootState) => state.department
   );
   const [_records, setRecords] = useState(departments);
-  const [_selectedRecord, setSelectedRecord] = useState<IDepartment | null>(
-    null
-  );
+  // const [_selectedRecord, setSelectedRecord] = useState<IDepartment | null>(
+  //   null
+  // );
+
+  const [_query, setQuery] = useState('');
+  const [debounceQuery] = useDebouncedValue(_query, 200);
+
+  useEffect(() => {
+    setRecords(
+      departments.filter((department) => {
+        if (debounceQuery !== '') {
+          if (
+            department.name.includes(debounceQuery) ||
+            department.code.includes(debounceQuery)
+          ) {
+            return true;
+          }
+        } else {
+          return true;
+        }
+      })
+    );
+  }, [departments, debounceQuery]);
 
   useLayoutEffect(() => {
     dispatch(DepartmentActions.getAllDepartment());
@@ -41,15 +71,15 @@ const Department: React.FC = () => {
 
   const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
     useDisclosure();
-  const [
-    openedUpdateModal,
-    { open: openUpdateModal, close: closeUpdateModal }
-  ] = useDisclosure();
+  // const [
+  //   openedUpdateModal,
+  //   { open: openUpdateModal, close: closeUpdateModal }
+  // ] = useDisclosure();
 
-  const hanldeUpdate = (department: IDepartment) => {
-    setSelectedRecord(department);
-    openUpdateModal();
-  };
+  // const hanldeUpdate = (department: IDepartment) => {
+  //   setSelectedRecord(department);
+  //   openUpdateModal();
+  // };
 
   const handleDelete = (department: IDepartment) => {
     modals.openConfirmModal({
@@ -92,18 +122,24 @@ const Department: React.FC = () => {
       render: (department: IDepartment) => {
         return (
           <Group position="center">
-            <IconEdit
+            {/* <IconEdit
               cursor={'pointer'}
               size={'1rem'}
               onClick={() => hanldeUpdate(department)}
-            />
-            <Tooltip label="Xoá phòng ban">
-              <IconTrash
-                cursor={'pointer'}
-                size={'1rem'}
-                onClick={() => handleDelete(department)}
-              />
-            </Tooltip>
+            /> */}
+            {isGrantedPermission(
+              _authorities,
+              RESOURCES.DEPARTMENT,
+              SCOPES.DELETE
+            ) ? (
+              <Tooltip label="Xoá phòng ban">
+                <IconTrash
+                  cursor={'pointer'}
+                  size={'1rem'}
+                  onClick={() => handleDelete(department)}
+                />
+              </Tooltip>
+            ) : null}
             <Tooltip label="Xem chi tiết">
               <IconInfoCircle
                 cursor={'pointer'}
@@ -132,14 +168,34 @@ const Department: React.FC = () => {
     }
   });
 
+  if (!_authorities) {
+    return <CustomLoader />;
+  }
+
+  if (!isGrantedPermission(_authorities, RESOURCES.DEPARTMENT, SCOPES.VIEW)) {
+    return <Navigate to={ROUTER.UNAUTHORIZE} />;
+  }
+
   return (
     <Stack>
       <Text fw={600} size={'lg'}>
         Danh sách phòng ban
       </Text>
       <Group position={'apart'}>
-        <Input placeholder="Tìm kiếm theo tên"></Input>
-        <Button onClick={openAddModal}>Thêm mới</Button>
+        <Input
+          placeholder="Tìm kiếm phòng ban theo tên hoặc mã"
+          miw={300}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+        />
+        {isGrantedPermission(
+          _authorities,
+          RESOURCES.DEPARTMENT,
+          SCOPES.CREATE
+        ) && (
+          <Button onClick={openAddModal} hidden>
+            Thêm mới
+          </Button>
+        )}
       </Group>
       <DataTable
         minHeight={200}
@@ -165,7 +221,7 @@ const Department: React.FC = () => {
         <ModalCreateDepartment closeModal={closeAddModal} />
       </Modal>
 
-      <Modal
+      {/* <Modal
         centered
         opened={openedUpdateModal}
         onClose={closeUpdateModal}
@@ -175,7 +231,7 @@ const Department: React.FC = () => {
           closeModal={closeUpdateModal}
           department={_selectedRecord}
         />
-      </Modal>
+      </Modal> */}
     </Stack>
   );
 };

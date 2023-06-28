@@ -14,14 +14,25 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { ModalAddUser } from './components/ModalAddUser';
+import { useAuthContext } from '@/hooks/context';
+import CustomLoader from '@/components/custom/CustomLoader';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 
 export const User = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -32,8 +43,31 @@ export const User = () => {
   const { users } = useAppSelector((state: RootState) => state.user);
 
   const [_records, setRecords] = useState(users);
+  const [_query, setQuery] = useState('');
+  const [debounceQuery] = useDebouncedValue(_query, 200);
 
-  useEffect(() => setRecords(users), [users]);
+  useEffect(
+    () =>
+      setRecords(
+        users.filter((user) => {
+          if (debounceQuery !== '') {
+            if (
+              user.fullName
+                .toLowerCase()
+                .includes(debounceQuery.toLowerCase()) ||
+              user.employeeCode
+                .toLowerCase()
+                .includes(debounceQuery.toLowerCase())
+            ) {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        })
+      ),
+    [users, debounceQuery]
+  );
 
   const [openedAddModal, { open: openAddModal, close: closeAddModal }] =
     useDisclosure();
@@ -94,6 +128,14 @@ export const User = () => {
     }
   });
 
+  if (!_authorities) {
+    return <CustomLoader />;
+  }
+
+  if (!isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.VIEW)) {
+    return <Navigate to={ROUTER.UNAUTHORIZE} />;
+  }
+
   return (
     <>
       <Stack>
@@ -101,8 +143,14 @@ export const User = () => {
           Danh sách nhân sự
         </Text>
         <Group position="apart">
-          <Input placeholder="Tìm kiếm theo tên" />
-          <Button onClick={openAddModal}>Thêm nhân sự</Button>
+          <Input
+            placeholder="Tìm kiếm theo tên hoặc mã nhân sư"
+            miw={300}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+          />
+          {isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.CREATE) ? (
+            <Button onClick={openAddModal}>Thêm nhân sự</Button>
+          ) : null}
         </Group>
         <DataTable
           minHeight={200}

@@ -34,8 +34,24 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalAdduser } from './components/ModalAddUser';
+import { useAuthContext } from '@/hooks/context';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 
 export const DepartmentDetails = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
+  const isGrantedUpdatePermission = isGrantedPermission(
+    _authorities,
+    RESOURCES.DEPARTMENT,
+    SCOPES.UPDATE
+  );
+
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { departments } = useAppSelector(
@@ -215,20 +231,22 @@ export const DepartmentDetails = () => {
         <Text fw={600} size={'lg'}>
           Thông tin phòng ban
         </Text>
-        <Group>
-          {_isEditing ? (
-            <Button onClick={handleCancel} variant="outline">
-              Huỷ
+        {isGrantedUpdatePermission && (
+          <Group>
+            {_isEditing ? (
+              <Button onClick={handleCancel} variant="outline">
+                Huỷ
+              </Button>
+            ) : null}
+            <Button
+              leftIcon={<IconEdit size={'1rem'} />}
+              type={'submit'}
+              form={`update-department-form-${_department?.id}`}
+            >
+              {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
             </Button>
-          ) : null}
-          <Button
-            leftIcon={<IconEdit size={'1rem'} />}
-            type={'submit'}
-            form={`update-department-form-${_department?.id}`}
-          >
-            {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
-          </Button>
-        </Group>
+          </Group>
+        )}
       </Group>
       {!_department || !allDepartments ? (
         <CustomLoader />
@@ -291,9 +309,15 @@ export const DepartmentDetails = () => {
         <Text fw={600} size={'lg'}>
           Danh sách nhân sự
         </Text>
-        <Button leftIcon={<IconUserPlus size={'1rem'} />} onClick={open}>
-          Thêm nhân sự
-        </Button>
+        {isGrantedUpdatePermission && (
+          <Button
+            hidden={true}
+            leftIcon={<IconUserPlus size={'1rem'} />}
+            onClick={open}
+          >
+            Thêm nhân sự
+          </Button>
+        )}
       </Group>
       <DataTable
         minHeight={200}

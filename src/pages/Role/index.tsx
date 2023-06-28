@@ -14,7 +14,7 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedState, useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import {
   IconBrandPowershell,
@@ -24,11 +24,23 @@ import {
 } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { ModalAddRole } from './components/ModalAddRole';
 import { ModalAssignPermission } from './components/ModalAssignPermission';
+import { useAuthContext } from '@/hooks/context';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
+import CustomLoader from '@/components/custom/CustomLoader';
 
 export const Role = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  console.log('🚀 ~ file: index.tsx:36 ~ Role ~ authorities:', authorities);
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { roles } = useAppSelector((state: RootState) => state.role);
@@ -50,7 +62,25 @@ export const Role = () => {
     dispatch(RoleActions.getAllRole());
   }, [dispatch]);
 
-  useEffect(() => setRecords(roles), [roles]);
+  const [query, setQuery] = useState('');
+  const [debounceQuery] = useDebouncedState(query, 200);
+
+  useEffect(() => {
+    setRecords(
+      roles.filter((role) => {
+        if (debounceQuery !== '') {
+          if (
+            role.name.includes(debounceQuery) ||
+            role.code.includes(debounceQuery)
+          ) {
+            return true;
+          }
+        } else {
+          return true;
+        }
+      })
+    );
+  }, [roles, debounceQuery]);
 
   const {
     data: records,
@@ -127,28 +157,46 @@ export const Role = () => {
                 onClick={() => navigate(`${ROUTER.ROLE}/${role.id}`)}
               />
             </Tooltip>
-            <Tooltip label="Thay đổi trạng thái">
-              <IconStatusChange
-                size={'1rem'}
-                cursor={'pointer'}
-                onClick={() => handleToggleStatus(role.id)}
-              />
-            </Tooltip>
+            {isGrantedPermission(
+              _authorities,
+              RESOURCES.ROLE,
+              SCOPES.UPDATE
+            ) && (
+              <Tooltip label="Thay đổi trạng thái">
+                <IconStatusChange
+                  size={'1rem'}
+                  cursor={'pointer'}
+                  onClick={() => handleToggleStatus(role.id)}
+                />
+              </Tooltip>
+            )}
             {role.status === IRoleStatus.ACTIVE ? (
               <Group>
-                <Tooltip label="Xoá">
-                  <IconTrash
-                    cursor={'pointer'}
-                    size={'1rem'}
-                    onClick={() => handleDelete(role.id)}
-                  />
-                </Tooltip>
-                <Tooltip label="Cập nhật phân quyền">
-                  <IconBrandPowershell
-                    size={'1rem'}
-                    onClick={() => handleAssign(role)}
-                  />
-                </Tooltip>
+                {isGrantedPermission(
+                  _authorities,
+                  RESOURCES.ROLE,
+                  SCOPES.DELETE
+                ) && (
+                  <Tooltip label="Xoá">
+                    <IconTrash
+                      cursor={'pointer'}
+                      size={'1rem'}
+                      onClick={() => handleDelete(role.id)}
+                    />
+                  </Tooltip>
+                )}
+                {isGrantedPermission(
+                  _authorities,
+                  RESOURCES.PERMISSION,
+                  SCOPES.VIEW
+                ) && (
+                  <Tooltip label="Cập nhật phân quyền">
+                    <IconBrandPowershell
+                      size={'1rem'}
+                      onClick={() => handleAssign(role)}
+                    />
+                  </Tooltip>
+                )}
               </Group>
             ) : null}
           </Group>
@@ -157,6 +205,14 @@ export const Role = () => {
     }
   ];
 
+  if (!_authorities) {
+    return <CustomLoader />;
+  }
+
+  if (!isGrantedPermission(_authorities, RESOURCES.ROLE, SCOPES.VIEW)) {
+    return <Navigate to={ROUTER.UNAUTHORIZE} />;
+  }
+
   return (
     <>
       <Stack>
@@ -164,8 +220,14 @@ export const Role = () => {
           Danh sách vai trò
         </Text>
         <Group position="apart">
-          <Input placeholder="Tìm theo tên" />
-          <Button onClick={openAddModal}>Thêm mới</Button>
+          <Input
+            placeholder="Tìm theo tên vai trò hoặc mã"
+            miw={300}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+          />
+          {isGrantedPermission(_authorities, RESOURCES.ROLE, SCOPES.CREATE) && (
+            <Button onClick={openAddModal}>Thêm mới</Button>
+          )}
         </Group>
         <DataTable
           minHeight={200}

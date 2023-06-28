@@ -1,10 +1,12 @@
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ChangeProfilePayload } from '@/configs/api/payload';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { RootState } from '@/redux/reducers';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserGender, IUserGenderDict } from '@/types/models/IUser';
 import { NotiType, renderNotification } from '@/utils/notifications';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Avatar,
   Box,
@@ -29,6 +31,13 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const UserDetails = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [_user, setUser] = useState<IUser>();
@@ -42,6 +51,7 @@ export const UserDetails = () => {
       roleIds: isNotEmpty('Chưa lựa chọn vai trò')
     }
   });
+
   useEffect(() => {
     dispatch(
       UserActions.getUserById(id, {
@@ -142,20 +152,22 @@ export const UserDetails = () => {
         <Text fw={600} size={'lg'}>
           Thông tin nhân sự
         </Text>
-        <Group position="center">
-          {_isEditing ? (
-            <Button onClick={handleCancel} variant="outline">
-              Huỷ
+        {isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.UPDATE) ? (
+          <Group position="center">
+            {_isEditing ? (
+              <Button onClick={handleCancel} variant="outline">
+                Huỷ
+              </Button>
+            ) : null}
+            <Button
+              leftIcon={<IconEdit size={'1rem'} />}
+              type={'submit'}
+              form={`form-update-profile-${_user?.id}`}
+            >
+              {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
             </Button>
-          ) : null}
-          <Button
-            leftIcon={<IconEdit size={'1rem'} />}
-            type={'submit'}
-            form={`form-update-profile-${_user?.id}`}
-          >
-            {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
-          </Button>
-        </Group>
+          </Group>
+        ) : null}
       </Group>
       {!_user ? (
         <CustomLoader />

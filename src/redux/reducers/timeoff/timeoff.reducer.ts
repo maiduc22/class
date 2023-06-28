@@ -7,7 +7,8 @@ import {
 
 const initialState: TimeoffState = {
   isFetching: false,
-  requests: []
+  allRequests: [],
+  myRequests: []
 };
 
 const timeoffReducer: Reducer<TimeoffState, TimeoffAction> = (
@@ -17,7 +18,12 @@ const timeoffReducer: Reducer<TimeoffState, TimeoffAction> = (
   switch (action.type) {
     case TimeoffActionType.TIMEOFF_ACTION_PENDING:
       return { ...state, isFetching: true };
+    case TimeoffActionType.GET_ALL_REQUEST_SUCCESS:
+      return { ...state, isFetching: false, allRequests: action.payload };
+    case TimeoffActionType.GET_MY_REQUEST_SUCCESS:
+      return { ...state, isFetching: false, myRequests: action.payload };
     case TimeoffActionType.TIMEOFF_ACTION_FAILURE:
+    case TimeoffActionType.GET_BALANCE_HISTORY_SUCCESS:
     case TimeoffActionType.REQUEST_TIMEOFF_SUCCESS:
       return { ...state, isFetching: false };
     default:

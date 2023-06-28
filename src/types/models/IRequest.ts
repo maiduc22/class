@@ -1,19 +1,21 @@
 import { BaseModel } from '.';
 
 export interface IRequest extends BaseModel {
-  from: string;
-  to: string;
-  total: number;
+  dateFrom: string;
+  dateTo: string;
   type: IRequestType;
   status: IRequestStatus;
   note?: string;
-  attachmentUrl?: string;
+  fileId?: string;
+  dayoff: number;
+  start?: number;
+  end?: number;
 }
 
 export enum IRequestType {
   ALL = 'ALL',
   ANNUAL = 'ANNUAL',
-  UNPAID = 'UNPAID',
+  UNPAID_TIME_OFF = 'UNPAID_TIME_OFF',
   WEDDING = 'WEDDING'
 }
 
@@ -58,7 +60,7 @@ export const IRequestTypeDict: Record<IRequestType, { label: string }> = {
   [IRequestType.ANNUAL]: {
     label: 'Nghỉ phép năm'
   },
-  [IRequestType.UNPAID]: {
+  [IRequestType.UNPAID_TIME_OFF]: {
     label: 'Nghỉ không lương'
   },
   [IRequestType.WEDDING]: {

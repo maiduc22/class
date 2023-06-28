@@ -141,6 +141,21 @@ export const API_URLS = {
       endPoint: 'time-off/request',
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    getMyRequest: () => ({
+      endPoint: 'time-off/my-request',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getBalanceHistory: () => ({
+      endPoint: 'time-off/balance',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getAllRequest: () => ({
+      endPoint: 'time-off',
+      method: 'GET',
+      headers: HEADERS.authHeader()
     })
   }
 };

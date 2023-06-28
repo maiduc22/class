@@ -1,4 +1,4 @@
-import { ApiEndPointPayload } from '@/configs/api/payload';
+import { ChangeProfilePayload } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 import { Button, Group, Image, ScrollArea, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
@@ -34,8 +34,8 @@ const openCustomConfirmModal = ({
 interface OpenUploadModalProps {
   title: string;
   form: UseFormReturnType<
-    ApiEndPointPayload,
-    (values: ApiEndPointPayload) => ApiEndPointPayload
+    ChangeProfilePayload,
+    (values: ChangeProfilePayload) => ChangeProfilePayload
   >;
   fieldValue: string;
   previewImage: FileWithPath | undefined;

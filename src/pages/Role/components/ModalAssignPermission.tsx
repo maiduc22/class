@@ -4,10 +4,11 @@ import { RootState } from '@/redux/reducers';
 import { IRole } from '@/types/models/IRole';
 import { Button, Group, ScrollArea, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { GroupPermissionCollapse } from './GroupPermissionCollapse';
 import { RoleActions } from '@/redux/reducers/role/role.action';
 import { NotiType, renderNotification } from '@/utils/notifications';
+import { PermissionActions } from '@/redux/reducers/permission/permission.action';
 
 interface Props {
   close: () => void;
@@ -16,6 +17,11 @@ interface Props {
 
 export const ModalAssignPermission: React.FC<Props> = ({ close, role }) => {
   const dispatch = useAppDispatch();
+
+  useLayoutEffect(() => {
+    dispatch(PermissionActions.getAllPermission());
+  }, [dispatch]);
+
   const { permission } = useAppSelector((state: RootState) => state.permission);
 
   const form = useForm();
