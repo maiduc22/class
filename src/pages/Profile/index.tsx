@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ChangeProfilePayload } from '@/configs/api/payload';
 import { useAuthContext } from '@/hooks/context';
@@ -24,7 +23,7 @@ import { FileWithPath } from '@mantine/dropzone';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Profile = () => {
   const { state, updateProfile, getProfile } = useAuthContext();
@@ -41,7 +40,7 @@ export const Profile = () => {
           phoneNumber: data.phoneNumber,
           gender: data.gender,
           description: data.description,
-          dayOfBirth: dayjs(data.dayOfBirth).toDate(),
+          dayOfBirth: data.dayOfBirth,
           avatarFileId: data.avatarFileId,
           roleIds: data.roles.map(({ id }) => id),
           departmentId: data.departmentId
@@ -164,7 +163,13 @@ export const Profile = () => {
                     label="Ngày sinh"
                     placeholder="Nhập ngày sinh"
                     disabled={!_isEditing}
-                    {...form.getInputProps('dayOfBirth')}
+                    value={dayjs(form.values.dayOfBirth).toDate()}
+                    onChange={(value) => {
+                      form.setValues({
+                        ...form.values,
+                        dayOfBirth: dayjs(value).format('YYYY-MM-DD').toString()
+                      });
+                    }}
                   />
                   <Group position="left" mt={'sm'}>
                     <Text fw={600} fz="sm">

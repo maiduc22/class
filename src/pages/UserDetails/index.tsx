@@ -56,7 +56,6 @@ export const UserDetails = () => {
     dispatch(
       UserActions.getUserById(id, {
         onSuccess: (data: IUser) => {
-          console.log(data);
           setUser({
             ...data,
             roleIds: data.roles.map(({ id }) => id)

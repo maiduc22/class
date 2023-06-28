@@ -143,7 +143,7 @@ export const UpcomingEvents = () => {
     );
   };
   return (
-    <Card withBorder w={'100%'} p={'xl'}>
+    <Card withBorder w={'100%'} p={'xl'} shadow={'xs'}>
       {renderHeader()}
       {renderCells()}
       <Group spacing={'xl'} mt={'xl'}>
