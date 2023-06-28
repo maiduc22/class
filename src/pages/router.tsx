@@ -1,5 +1,5 @@
-import BaseLayout from '@/layouts/BaseLayout';
 import AuthLayout from '@/layouts/AuthLayout';
+import BaseLayout from '@/layouts/BaseLayout';
 
 import { ROUTER } from '@/configs/router';
 import ProtectedLayout from '@/layouts/ProtectedLayout';
@@ -8,16 +8,18 @@ import {
   createBrowserRouter,
   createRoutesFromElements
 } from 'react-router-dom';
-import Page404 from './Error/404';
-import Login from './Login';
 import Department from './Department';
-import { User } from './User';
-import { Role } from './Role';
-import { Permission } from './Permission';
-import { UserDetails } from './UserDetails';
 import { DepartmentDetails } from './DepartmentDetails';
-import { RoleDetails } from './RoleDetails';
+import Page404 from './Error/404';
+import { Home } from './Home';
+import Login from './Login';
+import { Permission } from './Permission';
 import { Profile } from './Profile';
+import { Role } from './Role';
+import { RoleDetails } from './RoleDetails';
+import { User } from './User';
+import { UserDetails } from './UserDetails';
+import { TimeOff } from './TimeOff';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +28,9 @@ const router = createBrowserRouter(
         <Route path={ROUTER.LOGIN} element={<Login />} />
       </Route>
       <Route path={ROUTER.BASE} element={<ProtectedLayout />}>
+        <Route path={ROUTER.BASE} element={<Home />} />
         <Route path={ROUTER.PROFILE} element={<Profile />} />
+        <Route path={ROUTER.TIME_OFF} element={<TimeOff />} />
         <Route path={ROUTER.DEPARTMENT} element={<Department />} />
         <Route
           path={ROUTER.DEPARTMENT_DETAILS}
@@ -37,6 +41,7 @@ const router = createBrowserRouter(
         <Route path={ROUTER.ROLE} element={<Role />} />
         <Route path={ROUTER.ROLE_DETAILS} element={<RoleDetails />} />
         <Route path={ROUTER.PERMISSION} element={<Permission />} />
+
         <Route path="*" element={<Page404 />} />
       </Route>
     </Route>

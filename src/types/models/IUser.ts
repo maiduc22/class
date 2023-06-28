@@ -6,8 +6,8 @@ export interface IUser extends BaseModel {
   fullName: string;
   password: string;
   avatar: string;
-  dob: Date;
-  dayOfBirth: Date;
+  dob: string;
+  dayOfBirth: string;
   description: string;
   email: string;
   employeeCode: string;
@@ -18,6 +18,7 @@ export interface IUser extends BaseModel {
   avatarFileId?: string;
   departmentId: string;
   roles: IRole[];
+  roleIds: string[];
 }
 
 export enum IUserRole {}

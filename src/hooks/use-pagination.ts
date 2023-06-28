@@ -22,10 +22,10 @@ const usePagination = <T = unknown>({
 
   const offset = useMemo(() => (paging.page - 1) * paging.pageSize, [paging]);
   const data = useMemo(() => {
-    if (!_data.length) return [];
+    if (!_data?.length) return [];
     const start = offset;
     let end = offset + paging.pageSize;
-    if (start >= _data.length) {
+    if (start >= _data?.length) {
       end = -1;
     }
     return _data.slice(start, end);

@@ -25,7 +25,7 @@ export const ModalUpdateRole: React.FC<Props> = ({ close, role }) => {
       name: role?.name || '',
       description: role?.name || '',
       isRoot: role?.isRoot || false,
-      properties: role?.property || []
+      properties: role?.properties || []
     },
     validate: {
       name: isNotEmpty('Bạn cần nhập tên'),

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeProfilePayload } from '@/configs/api/payload';
 import { useAuthContext } from '@/hooks/context';
+import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { IUserGender, IUserGenderDict } from '@/types/models/IUser';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import {
@@ -16,6 +18,7 @@ import {
   TextInput
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import { FileWithPath } from '@mantine/dropzone';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -24,6 +27,9 @@ import { useState } from 'react';
 export const Profile = () => {
   const { state, updateProfile, getProfile } = useAuthContext();
   const { profile } = state;
+  const [previewImage, setPreviewImage] = useState<FileWithPath>();
+  const [isLoadingUpload, url, handleUploadImageOnFirebase] =
+    useUploadFirebase();
 
   const form = useForm<ChangeProfilePayload>({
     initialValues: {
@@ -83,11 +89,17 @@ export const Profile = () => {
                   src={form.values.avatarFileId}
                 />
                 <IconEdit
+                  size={'1.8rem'}
                   style={{
                     position: 'absolute',
-                    bottom: 0,
-                    right: 0
+                    bottom: -5,
+                    right: -5,
+                    background: 'white',
+                    borderRadius: '50%',
+                    border: '2px solid blue',
+                    padding: '3px'
                   }}
+                  color="blue"
                   cursor={'pointer'}
                 />
               </Box>

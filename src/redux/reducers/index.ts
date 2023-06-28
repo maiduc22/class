@@ -3,12 +3,14 @@ import departmentReducer from './department/department.reducer';
 import userReducer from './user/user.reducer';
 import roleReducer from './role/role.reducer';
 import permissionReducer from './permission/permission.reducer';
+import timeoffReducer from './timeoff/timeoff.reducer';
 
 const rootReducer = combineReducers({
   department: departmentReducer,
   user: userReducer,
   role: roleReducer,
-  permission: permissionReducer
+  permission: permissionReducer,
+  timeoff: timeoffReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

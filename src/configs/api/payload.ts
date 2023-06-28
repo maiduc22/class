@@ -12,7 +12,7 @@ export type ChangeProfilePayload = {
   phoneNumber: string;
   gender: IUserGender;
   description: string;
-  dayOfBirth: Date | undefined;
+  dayOfBirth: string;
   avatarFileId: string;
   roleIds: string[];
   departmentId: string;
@@ -53,10 +53,23 @@ export type AssignRolePermissionPayload = {
   permissionIds: string[];
 };
 
+export type RequestTimeoffPayload = {
+  type: string;
+  note?: string;
+  dateFrom: string;
+  dateTo: string;
+  start?: number;
+  end?: number;
+  dayoff: number;
+  fileId?: string;
+};
+
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
   | CreateDepartmentPayload
   | CreateRolePayload
   | AssignRolePermissionPayload
-  | ChangeProfilePayload;
+  | ChangeProfilePayload
+  | string[]
+  | RequestTimeoffPayload;

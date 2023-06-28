@@ -158,11 +158,82 @@ const assignPermission =
     }
   };
 
+const getDetailsRole =
+  (id: string | undefined, cb?: Callback): RoleThunkAction =>
+  async (dispatch: AppDispatch) => {
+    if (!id) return;
+    dispatch({ type: RoleActionType.ROLE_ACTION_PENDING });
+
+    const api = API_URLS.Role.getDetails(id);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      dispatch({ type: RoleActionType.GET_DETAILS_ROLE_SUCCESS });
+      cb?.onSuccess?.(response.data.data);
+    } else {
+      dispatch({ type: RoleActionType.ROLE_ACTION_FAILURE });
+      renderNotification(
+        'Lấy thông tin chi tiết vai trò thất bại',
+        NotiType.ERROR
+      );
+    }
+  };
+
+const addUser =
+  (id: string | undefined, payload: string[], cb?: Callback): RoleThunkAction =>
+  async (dispatch: AppDispatch) => {
+    if (!id) return;
+    dispatch({ type: RoleActionType.ROLE_ACTION_PENDING });
+
+    const api = API_URLS.Role.addUser(id);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+    if (!error && response?.status === 200) {
+      dispatch({ type: RoleActionType.ADD_USER_SUCCESS });
+      renderNotification(
+        'Thêm nhân sự theo vai trò thành công',
+        NotiType.SUCCESS
+      );
+      cb?.onSuccess?.();
+    } else {
+      dispatch({ type: RoleActionType.ROLE_ACTION_FAILURE });
+      renderNotification('Thêm nhân sự vào phòng ban thất bại', NotiType.ERROR);
+    }
+  };
+
+const removeUser =
+  (
+    userId: string | undefined,
+    roleId: string | undefined,
+    cb?: Callback
+  ): RoleThunkAction =>
+  async (dispatch: AppDispatch) => {
+    if (!userId || !roleId) return;
+    dispatch({ type: RoleActionType.ROLE_ACTION_PENDING });
+
+    const api = API_URLS.Role.removeUser(roleId, userId);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      dispatch({ type: RoleActionType.REMOVE_USER_SUCCESS });
+      renderNotification(
+        'Xoá nhân sự khỏi vai trò thành công',
+        NotiType.SUCCESS
+      );
+      cb?.onSuccess?.();
+    } else {
+      dispatch({ type: RoleActionType.ROLE_ACTION_FAILURE });
+      renderNotification('Xoá nhân sự khỏi vai trò thất bại', NotiType.ERROR);
+    }
+  };
 export const RoleActions = {
   getAllRole,
   toggleStatus,
   deleteStatus,
   createRole,
   updateRole,
-  assignPermission
+  assignPermission,
+  removeUser,
+  addUser,
+  getDetailsRole
 };

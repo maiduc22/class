@@ -43,6 +43,21 @@ export const API_URLS = {
       endPoint: `/departments/${id}/delete`,
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    getDetails: (id: string) => ({
+      endPoint: `/departments/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    addUser: (id: string) => ({
+      endPoint: `/departments/${id}/add-user`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    removeUser: (id: string, userId: string) => ({
+      endPoint: `/departments/${id}/delete-user/?userId=${userId}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   User: {
@@ -53,6 +68,16 @@ export const API_URLS = {
     }),
     create: () => ({
       endPoint: `/register`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    getUserById: (id: string) => ({
+      endPoint: `/users/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    updateUser: (id: string) => ({
+      endPoint: `/users/${id}`,
       method: 'POST',
       headers: HEADERS.authHeader()
     })
@@ -87,12 +112,34 @@ export const API_URLS = {
       endPoint: `roles/${id}/assign-permission`,
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    getDetails: (id: string) => ({
+      endPoint: `/roles/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    addUser: (id: string) => ({
+      endPoint: `/roles/${id}/add-user`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    removeUser: (id: string, userId: string) => ({
+      endPoint: `/roles/${id}/delete-user/?userId=${userId}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   Permission: {
     getAll: () => ({
       endPoint: '/permissions',
       method: 'GET',
+      headers: HEADERS.authHeader()
+    })
+  },
+  TimeOff: {
+    request: () => ({
+      endPoint: 'time-off/request',
+      method: 'POST',
       headers: HEADERS.authHeader()
     })
   }

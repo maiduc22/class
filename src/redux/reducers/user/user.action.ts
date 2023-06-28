@@ -3,7 +3,7 @@ import { UserActionType, UserThunkAction } from './user.types';
 import { API_URLS } from '@/configs/api/endpoint';
 import { useCallApi } from '@/configs/api';
 import { NotiType, renderNotification } from '@/utils/notifications';
-import { RegisterPayload } from '@/configs/api/payload';
+import { ChangeProfilePayload, RegisterPayload } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 
 const getAllUser = (): UserThunkAction => async (dispatch: AppDispatch) => {
@@ -49,4 +49,55 @@ const createUser =
     }
   };
 
-export const UserActions = { getAllUser, createUser };
+const updateUser =
+  (payload: ChangeProfilePayload, id: string | undefined, cb?: Callback) =>
+  async (dispatch: AppDispatch) => {
+    if (!id) return;
+    dispatch({
+      type: UserActionType.USER_ACTION_PENDING
+    });
+
+    const api = API_URLS.User.updateUser(id);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: UserActionType.UPDATE_USER_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification(
+        'Cập nhật thông tin nhân sự thành công',
+        NotiType.SUCCESS
+      );
+    } else {
+      dispatch({ type: UserActionType.USER_ACTION_FAILURE });
+      renderNotification('Cập nhật thông tin nhân sự thất bại', NotiType.ERROR);
+    }
+  };
+
+const getUserById =
+  (id: string | undefined, cb?: Callback) => async (dispatch: AppDispatch) => {
+    if (!id) return;
+    dispatch({
+      type: UserActionType.USER_ACTION_PENDING
+    });
+
+    const api = API_URLS.User.getUserById(id);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      const { data } = response.data;
+      console.log('🚀 ~ file: user.action.ts:90 ~ data:', data);
+      dispatch({
+        type: UserActionType.UPDATE_USER_SUCCESS
+      });
+      cb?.onSuccess?.(data);
+    } else {
+      dispatch({ type: UserActionType.USER_ACTION_FAILURE });
+      renderNotification(
+        'Lấy thông tin chi tiết nhân sự thất bại',
+        NotiType.ERROR
+      );
+    }
+  };
+export const UserActions = { getAllUser, createUser, updateUser, getUserById };

@@ -1,17 +1,29 @@
+import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserGenderDict, IUserStatusDict } from '@/types/models/IUser';
-import { Badge, Button, Group, Input, Modal, Stack, Text } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  Group,
+  Input,
+  Modal,
+  Stack,
+  Text,
+  Tooltip
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconEditCircle, IconInfoCircle } from '@tabler/icons-react';
+import { IconInfoCircle } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ModalAddUser } from './components/ModalAddUser';
 
 export const User = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     dispatch(UserActions.getAllUser());
@@ -54,10 +66,16 @@ export const User = () => {
       accessor: '',
       title: '',
       textAlignment: 'center',
-      render: () => (
+      width: '100px',
+      render: ({ id }) => (
         <Group position="center">
-          <IconInfoCircle cursor={'pointer'} size={'1rem'} />
-          <IconEditCircle cursor={'pointer'} size={'1rem'} />
+          <Tooltip label="Xem thông tin chi tiết">
+            <IconInfoCircle
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => navigate(`${ROUTER.USER}/${id}`)}
+            />
+          </Tooltip>
         </Group>
       )
     }

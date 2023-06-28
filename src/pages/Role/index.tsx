@@ -17,7 +17,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import {
-  IconEdit,
+  IconBrandPowershell,
   IconInfoCircle,
   IconStatusChange,
   IconTrash
@@ -26,7 +26,7 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModalAddRole } from './components/ModalAddRole';
-import { ModalUpdateRole } from './components/ModalUpdateRole';
+import { ModalAssignPermission } from './components/ModalAssignPermission';
 
 export const Role = () => {
   const navigate = useNavigate();
@@ -37,14 +37,14 @@ export const Role = () => {
 
   const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
     useDisclosure();
-  const [
-    openedUpdateModal,
-    { close: closeUpdateModal, open: openUpdateModal }
-  ] = useDisclosure();
   // const [
-  //   openedAssignModal,
-  //   { close: closeAssignModal, open: openAssignModal }
+  //   openedUpdateModal,
+  //   { close: closeUpdateModal, open: openUpdateModal }
   // ] = useDisclosure();
+  const [
+    openedAssignModal,
+    { close: closeAssignModal, open: openAssignModal }
+  ] = useDisclosure();
 
   useLayoutEffect(() => {
     dispatch(RoleActions.getAllRole());
@@ -89,9 +89,14 @@ export const Role = () => {
     );
   };
 
-  const handleUpdate = (role: IRole) => {
+  // const handleUpdate = (role: IRole) => {
+  //   setSelectedRecord(role);
+  //   openUpdateModal();
+  // };
+
+  const handleAssign = (role: IRole) => {
     setSelectedRecord(role);
-    openUpdateModal();
+    openAssignModal();
   };
 
   const columns: DataTableColumn<IRole>[] = [
@@ -131,18 +136,17 @@ export const Role = () => {
             </Tooltip>
             {role.status === IRoleStatus.ACTIVE ? (
               <Group>
-                <Tooltip label="Cập nhật">
-                  <IconEdit
-                    size={'1rem'}
-                    cursor={'pointer'}
-                    onClick={() => handleUpdate(role)}
-                  />
-                </Tooltip>
                 <Tooltip label="Xoá">
                   <IconTrash
                     cursor={'pointer'}
                     size={'1rem'}
                     onClick={() => handleDelete(role.id)}
+                  />
+                </Tooltip>
+                <Tooltip label="Cập nhật phân quyền">
+                  <IconBrandPowershell
+                    size={'1rem'}
+                    onClick={() => handleAssign(role)}
                   />
                 </Tooltip>
               </Group>
@@ -189,15 +193,6 @@ export const Role = () => {
 
       <Modal
         centered
-        title="Cập nhật vai trò"
-        opened={openedUpdateModal}
-        onClose={closeUpdateModal}
-      >
-        <ModalUpdateRole close={closeUpdateModal} role={_selectedRecord} />
-      </Modal>
-
-      {/* <Modal
-        centered
         title={`Phân quyền cho vai trò ${_selectedRecord?.name}`}
         opened={openedAssignModal}
         onClose={closeAssignModal}
@@ -207,7 +202,7 @@ export const Role = () => {
           close={closeAssignModal}
           role={_selectedRecord}
         />
-      </Modal> */}
+      </Modal>
     </>
   );
 };

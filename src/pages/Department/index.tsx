@@ -3,7 +3,15 @@ import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { IDepartment } from '@/types/models/IDepartment';
-import { Button, Group, Input, Modal, Stack, Text } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Input,
+  Modal,
+  Stack,
+  Text,
+  Tooltip
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconEdit, IconInfoCircle, IconTrash } from '@tabler/icons-react';
@@ -11,8 +19,11 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import ModalCreateDepartment from './components/ModalCreateDepartment';
 import ModalUpdateDepartment from './components/ModalUpdateDepartment';
+import { useNavigate } from 'react-router-dom';
+import { ROUTER } from '@/configs/router';
 
 const Department: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { departments } = useAppSelector(
     (state: RootState) => state.department
@@ -86,12 +97,22 @@ const Department: React.FC = () => {
               size={'1rem'}
               onClick={() => hanldeUpdate(department)}
             />
-            <IconTrash
-              cursor={'pointer'}
-              size={'1rem'}
-              onClick={() => handleDelete(department)}
-            />
-            <IconInfoCircle cursor={'pointer'} size={'1rem'} />
+            <Tooltip label="Xoá phòng ban">
+              <IconTrash
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() => handleDelete(department)}
+              />
+            </Tooltip>
+            <Tooltip label="Xem chi tiết">
+              <IconInfoCircle
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() =>
+                  navigate(`${ROUTER.DEPARTMENT}/${department.id}`)
+                }
+              />
+            </Tooltip>
           </Group>
         );
       }
@@ -128,7 +149,7 @@ const Department: React.FC = () => {
         highlightOnHover
         columns={columns}
         records={records}
-        totalRecords={_records.length}
+        totalRecords={_records?.length}
         page={page}
         onPageChange={changePage}
         recordsPerPage={pageSize}

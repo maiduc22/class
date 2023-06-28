@@ -8,6 +8,18 @@ dependencies:
   '@emotion/react':
     specifier: ^11.11.0
     version: 11.11.0(@types/react@18.0.37)(react@18.2.0)
+  '@fullcalendar/daygrid':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
+  '@fullcalendar/interaction':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
+  '@fullcalendar/react':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0)
+  '@fullcalendar/timegrid':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
   '@mantine/core':
     specifier: ^6.0.13
     version: 6.0.13(@emotion/react@11.11.0)(@mantine/hooks@6.0.13)(@types/react@18.0.37)(react-dom@18.2.0)(react@18.2.0)
@@ -41,6 +53,9 @@ dependencies:
   chart.js:
     specifier: ^4.3.0
     version: 4.3.0
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   dayjs:
     specifier: ^1.11.8
     version: 1.11.8
@@ -65,6 +80,9 @@ dependencies:
   react:
     specifier: ^18.2.0
     version: 18.2.0
+  react-awesome-calendar:
+    specifier: ^1.0.14
+    version: 1.0.14(react-dom@18.2.0)(react@18.2.0)
   react-chartjs-2:
     specifier: ^5.2.0
     version: 5.2.0(chart.js@4.3.0)(react@18.2.0)
@@ -1170,6 +1188,49 @@ packages:
       tabbable: 6.1.2
     dev: false
 
+  /@fullcalendar/core@6.1.8:
+    resolution: {integrity: sha512-i8JBIvZCWGO9dsMEDcx9bnsQZ9PtGSJdOXGgWbhLaGq2iq41OBdp9g9gM4b/Otv2oK8bL5Gl6CsMmb/HkDtA6Q==}
+    dependencies:
+      preact: 10.12.1
+    dev: false
+
+  /@fullcalendar/daygrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-kCZxQFKb9Vqa3CZRX0v7rMSJ2mlTt4gDpyLfiNJKxUAq7W51uKurPaFZWicaXy1ESHVBxKNlbx5uNjBpyu50JQ==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+    dev: false
+
+  /@fullcalendar/interaction@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-r6W4E9ohaA87M2uPSlmpE2WT7Fzu7LN0u2pE6D/tThruCEaAPbN8Pw5+sqclsuyTIL09mg0eSJm/ggJekTabSA==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+    dev: false
+
+  /@fullcalendar/react@6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-E8GQSQyZHkjpwxQW5Vci7iZgN7f33ntuRcvfGii4Fn35t9VHGz2SEyKAWXpVf38elcKTZKVgajU9ipStd+1LEg==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+      react: ^16.7.0 || ^17 || ^18
+      react-dom: ^16.7.0 || ^17 || ^18
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@fullcalendar/timegrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-3+3KHHCoNcaLs/gQt004hAqICbY5+WAffrZ0ePv+80HFB1OVh8BQ5XXLHSOUbTvXdgtUTcfBHuw9fhO31kt5gA==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+      '@fullcalendar/daygrid': 6.1.8(@fullcalendar/core@6.1.8)
+    dev: false
+
   /@grpc/grpc-js@1.7.3:
     resolution: {integrity: sha512-H9l79u4kJ2PVSxUNA08HMYAnUBLj9v6KjYQ7SQ71hOZcEXhShE/y5iQCesP8+6/Ik/7i2O0a10bPquIcYfufog==}
     engines: {node: ^8.13.0 || >=10.10.0}
@@ -2084,6 +2145,10 @@ packages:
       '@kurkle/color': 0.3.2
     dev: false
 
+  /classnames@2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
+
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
@@ -2273,6 +2338,13 @@ packages:
   /cycle@1.0.3:
     resolution: {integrity: sha512-TVF6svNzeQCOpjCqsy0/CSy8VgObG3wXusJ73xW2GbG5rGx7lC8zxDSURicsXI2UsGdi2L0QNRCi745/wUDvsA==}
     engines: {node: '>=0.4.0'}
+    dev: false
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.3
     dev: false
 
   /dayjs@1.11.8:
@@ -3706,6 +3778,10 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /preact@10.12.1:
+    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
+    dev: false
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -3796,6 +3872,17 @@ packages:
     dependencies:
       bytes: 1.0.0
       iconv-lite: 0.4.4
+    dev: false
+
+  /react-awesome-calendar@1.0.14(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-AlwFVoECJo7H9z4anVYrb21HVnrEE1iHtoh9V0Emi0dFKf5PGARzQX/8z/lPAB3cuwM/5rME81KqhU5ruiMVxQ==}
+    peerDependencies:
+      react: ^16.7.0
+      react-dom: ^16.7.0
+    dependencies:
+      classnames: 2.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-chartjs-2@5.2.0(chart.js@4.3.0)(react@18.2.0):

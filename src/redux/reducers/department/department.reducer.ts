@@ -24,6 +24,9 @@ const departmentReducer: Reducer<DepartmentState, DepartmentAction> = (
     case DepartmentActionType.CREATE_DEPARTMENT_SUCCESS:
     case DepartmentActionType.UPDATE_DEPARTMENT_SUCCESS:
     case DepartmentActionType.DELETE_DEPARTMENT_SUCCESS:
+    case DepartmentActionType.GET_DETAILS_DEPARTMENT_SUCCESS:
+    case DepartmentActionType.ADD_USER_SUCCESS:
+    case DepartmentActionType.REMOVE_USER_SUCCESS:
       return { ...state, isFetching: false };
     default:
       return state;

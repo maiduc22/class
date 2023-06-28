@@ -8,5 +8,6 @@ export const ROUTER = {
   USER_DETAILS: '/user/:id',
   ROLE: '/role',
   ROLE_DETAILS: '/role/:id',
-  PERMISSION: '/permission'
+  PERMISSION: '/permission',
+  TIME_OFF: '/time-off'
 };

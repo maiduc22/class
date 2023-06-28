@@ -14,7 +14,10 @@ export enum DepartmentActionType {
   GET_ALL_DEPARTMENT_SUCCESS = 'GET_ALL_DEPARTMENT_ACTION_SUCCESS',
   CREATE_DEPARTMENT_SUCCESS = 'CREATE_DEPARTMENT_SUCCESS',
   UPDATE_DEPARTMENT_SUCCESS = 'UPDATE_DEPARTMENT_SUCCESS',
-  DELETE_DEPARTMENT_SUCCESS = 'DELETE_DEPARTMENT_SUCCESS'
+  DELETE_DEPARTMENT_SUCCESS = 'DELETE_DEPARTMENT_SUCCESS',
+  GET_DETAILS_DEPARTMENT_SUCCESS = 'GET_DETAILS_DEPARTMENT_SUCCESS',
+  ADD_USER_SUCCESS = 'ADD_USER_SUCCESS',
+  REMOVE_USER_SUCCESS = 'REMOVE_USER_SUCCESS'
 }
 
 export interface DepartmentActionPending {
@@ -41,6 +44,15 @@ export interface UpdateDepartmentSuccess {
 export interface DeleteDepartmentSuccess {
   type: DepartmentActionType.DELETE_DEPARTMENT_SUCCESS;
 }
+export interface GetDetailsDepartmentSuccess {
+  type: DepartmentActionType.GET_DETAILS_DEPARTMENT_SUCCESS;
+}
+export interface AddUserSuccess {
+  type: DepartmentActionType.ADD_USER_SUCCESS;
+}
+export interface RemoveUserSuccess {
+  type: DepartmentActionType.REMOVE_USER_SUCCESS;
+}
 
 export type DepartmentAction =
   | DepartmentActionPending
@@ -48,7 +60,10 @@ export type DepartmentAction =
   | GetAllDepartmentSuccess
   | CreateDepartmentSuccess
   | UpdateDepartmentSuccess
-  | DeleteDepartmentSuccess;
+  | DeleteDepartmentSuccess
+  | GetDetailsDepartmentSuccess
+  | AddUserSuccess
+  | RemoveUserSuccess;
 
 export type DepartmentThunkAction = ThunkAction<
   void,

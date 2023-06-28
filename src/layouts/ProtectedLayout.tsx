@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/hooks/redux';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { PermissionActions } from '@/redux/reducers/permission/permission.action';
 import { RoleActions } from '@/redux/reducers/role/role.action';
+import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
 import { isGrantedPermission } from '@/utils/permissions';
 import {
@@ -151,6 +152,7 @@ const ProtectedLayout = () => {
     dispatch(RoleActions.getAllRole());
     dispatch(PermissionActions.getAllPermission());
     dispatch(DepartmentActions.getAllDepartment());
+    dispatch(UserActions.getAllUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -203,7 +205,7 @@ const ProtectedLayout = () => {
             p="md"
             hiddenBreakpoint="sm"
             hidden={true}
-            width={{ sm: 200, lg: 300 }}
+            width={{ sm: 200, lg: 280 }}
           >
             <Navbar.Section grow mt="0">
               <div>

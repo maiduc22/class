@@ -1,13 +1,16 @@
 import { BaseModel } from '.';
 import { IPermission } from './IPermission';
+import { IUser } from './IUser';
+
 export interface IRole extends BaseModel {
   code: string;
   description: string;
   isRoot: boolean;
   name: string;
   status: IRoleStatus;
-  property: IRoleProperty[];
+  properties: IRoleProperty[];
   permissions: IRolePermission[];
+  users: IUser[];
 }
 
 export interface IRolePermission extends IPermission {
