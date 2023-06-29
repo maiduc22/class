@@ -60,7 +60,7 @@ export type RequestTimeoffPayload = {
   dateTo: string;
   start?: number;
   end?: number;
-  dayoff: number;
+  dayOff: number;
   fileId?: string;
 };
 

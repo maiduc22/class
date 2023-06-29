@@ -80,6 +80,9 @@ dependencies:
   react:
     specifier: ^18.2.0
     version: 18.2.0
+  react-avatar-edit:
+    specifier: ^1.2.0
+    version: 1.2.0(react@18.2.0)
   react-awesome-calendar:
     specifier: ^1.0.14
     version: 1.0.14(react-dom@18.2.0)(react@18.2.0)
@@ -2051,6 +2054,10 @@ packages:
     resolution: {integrity: sha512-BoCcDt8zBGShn6DawAGQw37s9SSs+fEjiZWDzyB+841PbOogcR2X7LGlM4sR3Zsiq/zoyl8MFWDfN6oDSlveBQ==}
     dev: false
 
+  /blueimp-load-image@5.16.0:
+    resolution: {integrity: sha512-3DUSVdOtlfNRk7moRZuTwDmA3NnG8KIJuLcq3c0J7/BIr6X3Vb/EpX3kUH1joxUhmoVF4uCpDfz7wHkz8pQajA==}
+    dev: false
+
   /body-parser@1.5.0:
     resolution: {integrity: sha512-UJfZike68QN1mdo0mA+Z0y+0qi10oxOrCPw2CZpP73O/LIfEWHDy9SHhwsME1mdk1WmnltBLddUkfBpuKPH4Ng==}
     engines: {node: '>= 0.8'}
@@ -2742,6 +2749,10 @@ packages:
       strip-final-newline: 3.0.0
     dev: true
 
+  /exif-js@2.3.0:
+    resolution: {integrity: sha512-1Og9pAzG2FZRVlaavH8bB8BTeHcjMdJhKmeQITkX+uLRCD0xPtKAdZ2clZmQdJ56p9adXtJ8+jwrGp/4505lYg==}
+    dev: false
+
   /express@4.6.1:
     resolution: {integrity: sha512-nG9Y8xfzgrW/9XCr5sv+KDbtY8mZPN9HO3GziltaubpvleI+1RyHxAKvYjmFih3HkQIaPXW9ozxMHBDNf3UXng==}
     engines: {node: '>= 0.10.0'}
@@ -3302,6 +3313,10 @@ packages:
   /klona@2.0.6:
     resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
     engines: {node: '>= 8'}
+    dev: false
+
+  /konva@8.4.3:
+    resolution: {integrity: sha512-ARqdgAbdNIougRlOKvkQwHlGhXPRBV4KvhCP+qoPpGoVQwwiJe4Hkdu4HHdRPb9rGUp04jDTAxBzEwBsE272pg==}
     dev: false
 
   /levn@0.4.1:
@@ -3872,6 +3887,17 @@ packages:
     dependencies:
       bytes: 1.0.0
       iconv-lite: 0.4.4
+    dev: false
+
+  /react-avatar-edit@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-xTn/hC8KOTFvMagkAiLNq2yWTosCL88ZX34/CTb7dyadGSR27tc56JYBeYcLojTn2y/Hin8azT9aNVvQytAQ/w==}
+    peerDependencies:
+      react: ^16.x || ^17 || ^18
+    dependencies:
+      blueimp-load-image: 5.16.0
+      exif-js: 2.3.0
+      konva: 8.4.3
+      react: 18.2.0
     dev: false
 
   /react-awesome-calendar@1.0.14(react-dom@18.2.0)(react@18.2.0):

@@ -1,3 +1,6 @@
+import CustomLoader from '@/components/custom/CustomLoader';
+import { ROUTER } from '@/configs/router';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
@@ -9,6 +12,7 @@ import {
   IRequestType,
   IRequestTypeDict
 } from '@/types/models/IRequest';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import { Badge, Group, Select, Stack, Text } from '@mantine/core';
 import { DateInput, DateValue } from '@mantine/dates';
 import {
@@ -20,8 +24,17 @@ import {
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useCallback, useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 export const Requests = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const dispatch = useAppDispatch();
   const { allRequests } = useAppSelector((state: RootState) => state.timeoff);
   const [_allRequest, setAllRequest] = useState<IRequest[]>(allRequests);
@@ -126,6 +139,14 @@ export const Requests = () => {
 
   const TypeSelectData = Object.values(IRequestType);
   const StatusSelectData = Object.values(IRequestStatus);
+
+  if (!_authorities) {
+    return <CustomLoader />;
+  }
+
+  if (!isGrantedPermission(_authorities, RESOURCES.TIMEOFF, SCOPES.VIEW)) {
+    return <Navigate to={ROUTER.UNAUTHORIZE} />;
+  }
 
   return (
     <Stack spacing={'md'}>

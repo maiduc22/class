@@ -17,7 +17,8 @@ export enum RESOURCES {
   DEPARTMENT = 'department',
   USER = 'user',
   ROLE = 'role',
-  PERMISSION = 'permission'
+  PERMISSION = 'permission',
+  TIMEOFF = 'timeoff'
 }
 
 export enum SCOPES {

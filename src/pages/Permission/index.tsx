@@ -1,3 +1,4 @@
+import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -62,6 +63,10 @@ export const Permission = () => {
       title: 'Scope'
     }
   ];
+
+  if (!_authorities) {
+    return <CustomLoader />;
+  }
 
   if (!isGrantedPermission(_authorities, RESOURCES.PERMISSION, SCOPES.VIEW)) {
     return <Navigate to={ROUTER.UNAUTHORIZE} />;

@@ -5,9 +5,7 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
-import { DepartmentActions } from '@/redux/reducers/department/department.action';
-import { RoleActions } from '@/redux/reducers/role/role.action';
-import { UserActions } from '@/redux/reducers/user/user.action';
+import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import { IUser } from '@/types/models/IUser';
 import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
@@ -149,9 +147,10 @@ const ProtectedLayout = () => {
   useLayoutEffect(() => {
     getAuthorities();
     getProfile();
-    dispatch(RoleActions.getAllRole());
-    dispatch(DepartmentActions.getAllDepartment());
-    dispatch(UserActions.getAllUser());
+    dispatch(TimeoffActions.getMyRequest());
+    // dispatch(RoleActions.getAllRole());
+    // dispatch(DepartmentActions.getAllDepartment());
+    // dispatch(UserActions.getAllUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -193,7 +192,7 @@ const ProtectedLayout = () => {
       color: 'green',
       label: 'Quản Lý Xin Nghỉ Phép',
       to: ROUTER.REQUEST,
-      auth: true
+      auth: isGrantedPermission(_authorities, RESOURCES.TIMEOFF, SCOPES.VIEW)
     }
   ];
   return (

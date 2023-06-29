@@ -268,7 +268,7 @@ export const ModalAddRequest = ({ close }: Props) => {
       fileId: '',
       start: 0,
       end: 0,
-      dayoff: 0
+      dayOff: 0
     },
     validate: {
       type: isNotEmpty('Vui lòng lựa chọn loại yêu cầu'),
@@ -391,7 +391,7 @@ export const ModalAddRequest = ({ close }: Props) => {
   const handleSubmit = (values: RequestTimeoffPayload) => {
     dispatch(
       TimeoffActions.requestTimeoff(
-        { ...values, dayoff: calculateDayoff() },
+        { ...values, dayOff: calculateDayoff() },
         {
           onSuccess: () => {
             dispatch(TimeoffActions.getMyRequest());

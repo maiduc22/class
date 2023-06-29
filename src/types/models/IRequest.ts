@@ -7,7 +7,7 @@ export interface IRequest extends BaseModel {
   status: IRequestStatus;
   note?: string;
   fileId?: string;
-  dayoff: number;
+  dayOff: number;
   start?: number;
   end?: number;
 }
@@ -58,7 +58,7 @@ export const IRequestTypeDict: Record<IRequestType, { label: string }> = {
     label: 'Tất cả'
   },
   [IRequestType.ANNUAL]: {
-    label: 'Nghỉ phép năm'
+    label: 'Nghỉ có lương'
   },
   [IRequestType.UNPAID_TIME_OFF]: {
     label: 'Nghỉ không lương'

@@ -1,9 +1,7 @@
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ChangeProfilePayload } from '@/configs/api/payload';
 import { useAuthContext } from '@/hooks/context';
-import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { IUser, IUserGender, IUserGenderDict } from '@/types/models/IUser';
-import { Modals } from '@/utils/modals';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import {
   Avatar,
@@ -19,7 +17,6 @@ import {
   TextInput
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { FileWithPath } from '@mantine/dropzone';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -50,9 +47,9 @@ export const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getProfile]);
 
-  const [previewImage, setPreviewImage] = useState<FileWithPath>();
-  const [isLoadingUpload, url, handleUploadImageOnFirebase] =
-    useUploadFirebase();
+  // const [previewImage, setPreviewImage] = useState<FileWithPath>();
+  // const [isLoadingUpload, url, handleUploadImageOnFirebase] =
+  //   useUploadFirebase();
 
   const form = useForm<ChangeProfilePayload>({
     validate: {
@@ -115,18 +112,18 @@ export const Profile = () => {
                       }}
                       color="blue"
                       cursor={'pointer'}
-                      onClick={() => {
-                        Modals.openUploadModal({
-                          title: 'Thay đổi ảnh đại diện',
-                          form,
-                          fieldValue: 'avatarFiledId',
-                          previewImage,
-                          setPreviewImage,
-                          isLoadingUpload,
-                          url,
-                          handleUploadImageOnFirebase
-                        });
-                      }}
+                      // onClick={() => {
+                      //   Modals.openUploadModal({
+                      //     title: 'Thay đổi ảnh đại diện',
+                      //     form,
+                      //     fieldValue: 'avatarFiledId',
+                      //     previewImage,
+                      //     setPreviewImage,
+                      //     isLoadingUpload,
+                      //     url,
+                      //     handleUploadImageOnFirebase
+                      //   });
+                      // }}
                     />
                   </Box>
                 </Center>
