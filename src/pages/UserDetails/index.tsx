@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { RootState } from '@/redux/reducers';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserGender, IUserGenderDict } from '@/types/models/IUser';
+import { Modals } from '@/utils/modals';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
@@ -24,10 +25,11 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
 import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const UserDetails = () => {
@@ -52,7 +54,7 @@ export const UserDetails = () => {
     }
   });
 
-  useEffect(() => {
+  const getUserDetails = useCallback(() => {
     dispatch(
       UserActions.getUserById(id, {
         onSuccess: (data: IUser) => {
@@ -75,6 +77,11 @@ export const UserDetails = () => {
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    getUserDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
@@ -145,6 +152,19 @@ export const UserDetails = () => {
     }
   };
 
+  const [opened, { close, open }] = useDisclosure();
+
+  const afterUpload = (url: string) => {
+    dispatch(
+      UserActions.updateUser({ ...form.values, avatarFileId: url }, _user?.id, {
+        onSuccess: () => {
+          getUserDetails();
+        },
+        onError: () => form.reset()
+      })
+    );
+  };
+
   return (
     <>
       <Group position="apart" mb={'xl'}>
@@ -171,140 +191,155 @@ export const UserDetails = () => {
       {!_user ? (
         <CustomLoader />
       ) : (
-        <form
-          id={`form-update-profile-${_user?.id}`}
-          onSubmit={form.onSubmit((values) => handleSubmit(values))}
-        >
-          <Grid gutter={5} gutterXs="md" gutterMd="xl" gutterXl={50}>
-            <Col span={3}>
-              <Stack w={'100%'}>
-                <Text align="left" color="dimmed">
-                  Ảnh đại diện
-                </Text>
-                <Center>
-                  <Box sx={{ position: 'relative' }}>
-                    <Avatar
-                      size={250}
-                      w={'100%'}
-                      color="cyan"
-                      radius="xl"
-                      src={_user?.avatarFileId}
-                    />
-                    <IconEdit
-                      style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 0
-                      }}
-                      cursor={'pointer'}
-                    />
-                  </Box>
-                </Center>
-              </Stack>
-            </Col>
-            <Col span={4}>
-              <Stack spacing={'md'}>
-                <Text align="left" color="dimmed">
-                  Thông tin cá nhân
-                </Text>
-                <TextInput
-                  label="Họ tên"
-                  placeholder="Nhập họ tên"
-                  disabled={!_isEditing}
-                  size={'sm'}
-                  {...form.getInputProps('fullName')}
-                />
-
-                <TextInput
-                  label="Email"
-                  placeholder="Nhập email"
-                  disabled={!_isEditing}
-                  size={'sm'}
-                  {...form.getInputProps('email')}
-                />
-                <TextInput
-                  label="Số điện thoại"
-                  placeholder="Nhập số điện thoại"
-                  disabled={!_isEditing}
-                  {...form.getInputProps('phoneNumber')}
-                />
-                <DatePickerInput
-                  label="Ngày sinh"
-                  placeholder="Nhập ngày sinh"
-                  disabled={!_isEditing}
-                  value={dayjs(form.values.dayOfBirth).toDate()}
-                  onChange={(value) => {
-                    form.setValues({
-                      ...form.values,
-                      dayOfBirth: dayjs(value).format('YYYY-MM-DD').toString()
-                    });
-                  }}
-                />
-                <Group position="left">
-                  <Text fw={600} fz="sm">
-                    Giới tính
+        <>
+          <form
+            id={`form-update-profile-${_user?.id}`}
+            onSubmit={form.onSubmit((values) => handleSubmit(values))}
+          >
+            <Grid gutter={5} gutterXs="md" gutterMd="xl" gutterXl={50}>
+              <Col span={3}>
+                <Stack w={'100%'}>
+                  <Text align="left" color="dimmed">
+                    Ảnh đại diện
                   </Text>
-                  <Checkbox
+                  <Center>
+                    <Box sx={{ position: 'relative' }}>
+                      <Avatar
+                        size={250}
+                        w={'100%'}
+                        color="cyan"
+                        radius="xl"
+                        src={_user?.avatarFileId}
+                      />
+                      <IconEdit
+                        style={{
+                          position: 'absolute',
+                          bottom: -5,
+                          right: -5,
+                          background: 'white',
+                          borderRadius: '50%',
+                          border: '2px solid blue',
+                          padding: '3px'
+                        }}
+                        cursor={'pointer'}
+                        onClick={() => {
+                          open();
+                        }}
+                      />
+                    </Box>
+                  </Center>
+                </Stack>
+              </Col>
+              <Col span={4}>
+                <Stack spacing={'md'}>
+                  <Text align="left" color="dimmed">
+                    Thông tin cá nhân
+                  </Text>
+                  <TextInput
+                    label="Họ tên"
+                    placeholder="Nhập họ tên"
                     disabled={!_isEditing}
-                    label={IUserGenderDict[IUserGender.MALE].label}
-                    checked={form.values.gender === IUserGender.MALE}
-                    onChange={() =>
+                    size={'sm'}
+                    {...form.getInputProps('fullName')}
+                  />
+
+                  <TextInput
+                    label="Email"
+                    placeholder="Nhập email"
+                    disabled={!_isEditing}
+                    size={'sm'}
+                    {...form.getInputProps('email')}
+                  />
+                  <TextInput
+                    label="Số điện thoại"
+                    placeholder="Nhập số điện thoại"
+                    disabled={!_isEditing}
+                    {...form.getInputProps('phoneNumber')}
+                  />
+                  <DatePickerInput
+                    label="Ngày sinh"
+                    placeholder="Nhập ngày sinh"
+                    disabled={!_isEditing}
+                    value={dayjs(form.values.dayOfBirth).toDate()}
+                    onChange={(value) => {
                       form.setValues({
                         ...form.values,
-                        gender: IUserGender.MALE
-                      })
-                    }
+                        dayOfBirth: dayjs(value).format('YYYY-MM-DD').toString()
+                      });
+                    }}
                   />
-                  <Checkbox
+                  <Group position="left">
+                    <Text fw={600} fz="sm">
+                      Giới tính
+                    </Text>
+                    <Checkbox
+                      disabled={!_isEditing}
+                      label={IUserGenderDict[IUserGender.MALE].label}
+                      checked={form.values.gender === IUserGender.MALE}
+                      onChange={() =>
+                        form.setValues({
+                          ...form.values,
+                          gender: IUserGender.MALE
+                        })
+                      }
+                    />
+                    <Checkbox
+                      disabled={!_isEditing}
+                      label={IUserGenderDict[IUserGender.FEMALE].label}
+                      checked={form.values.gender === IUserGender.FEMALE}
+                      onChange={() =>
+                        form.setValues({
+                          ...form.values,
+                          gender: IUserGender.FEMALE
+                        })
+                      }
+                    />
+                  </Group>
+                  <TextInput
+                    label="Mô tả"
+                    placeholder="Nhập mô tả"
                     disabled={!_isEditing}
-                    label={IUserGenderDict[IUserGender.FEMALE].label}
-                    checked={form.values.gender === IUserGender.FEMALE}
-                    onChange={() =>
-                      form.setValues({
-                        ...form.values,
-                        gender: IUserGender.FEMALE
-                      })
-                    }
+                    size={'sm'}
+                    {...form.getInputProps('description')}
                   />
-                </Group>
-                <TextInput
-                  label="Mô tả"
-                  placeholder="Nhập mô tả"
-                  disabled={!_isEditing}
-                  size={'sm'}
-                  {...form.getInputProps('description')}
-                />
-              </Stack>
-            </Col>
-            <Col span={5} pos={'relative'}>
-              <Stack>
-                <Text align="left" color="dimmed">
-                  Vị trí, chức vụ
-                </Text>
-                <Select
-                  disabled={!_isEditing}
-                  data={departments.map(({ name, id }) => ({
-                    value: id,
-                    label: name
-                  }))}
-                  label="Phòng ban"
-                  placeholder="Chọn phòng ban"
-                  {...form.getInputProps('departmentId')}
-                />
-                <MultiSelect
-                  disabled={!_isEditing}
-                  data={roles.map(({ name, id }) => ({
-                    value: id,
-                    label: name
-                  }))}
-                  label="Vai trò"
-                  placeholder="Chọn vai trò"
-                  {...form.getInputProps('roleIds')}
-                />
-              </Stack>
-            </Col>
-          </Grid>
-        </form>
+                </Stack>
+              </Col>
+              <Col span={5} pos={'relative'}>
+                <Stack>
+                  <Text align="left" color="dimmed">
+                    Vị trí, chức vụ
+                  </Text>
+                  <Select
+                    disabled={!_isEditing}
+                    data={departments.map(({ name, id }) => ({
+                      value: id,
+                      label: name
+                    }))}
+                    label="Phòng ban"
+                    placeholder="Chọn phòng ban"
+                    {...form.getInputProps('departmentId')}
+                  />
+                  <MultiSelect
+                    disabled={!_isEditing}
+                    data={roles.map(({ name, id }) => ({
+                      value: id,
+                      label: name
+                    }))}
+                    label="Vai trò"
+                    placeholder="Chọn vai trò"
+                    {...form.getInputProps('roleIds')}
+                  />
+                </Stack>
+              </Col>
+            </Grid>
+            <Modals.OpenUploadModal
+              title="Cập nhật ảnh đại diện"
+              opened={opened}
+              onClose={close}
+              afterUpload={afterUpload}
+            />
+          </form>
+        </>
       )}
     </>
   );

@@ -2,6 +2,7 @@ import CustomLoader from '@/components/custom/CustomLoader';
 import { ChangeProfilePayload } from '@/configs/api/payload';
 import { useAuthContext } from '@/hooks/context';
 import { IUser, IUserGender, IUserGenderDict } from '@/types/models/IUser';
+import { Modals } from '@/utils/modals';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import {
   Avatar,
@@ -18,6 +19,7 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
 import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -66,6 +68,17 @@ export const Profile = () => {
     setIsEditing(false);
   };
 
+  const afterUpload = (url: string) => {
+    updateProfile({ ...form.values, avatarFileId: url }, profile?.id, {
+      onSuccess: () => {
+        form.values.avatarFileId = url;
+        console.log(url);
+        getProfile();
+      },
+      onError: () => form.reset()
+    });
+  };
+
   const handleSubmit = (values: ChangeProfilePayload) => {
     if (!form.isDirty()) {
       renderNotification('Bạn chưa thay đổi thông tin gì', NotiType.ERROR);
@@ -77,152 +90,156 @@ export const Profile = () => {
       setIsEditing(false);
     }
   };
+
+  const [opened, { close, open }] = useDisclosure();
   return (
     <>
       {_profile ? (
-        <Stack>
-          <Text fw={600} size={'lg'}>
-            Thông tin cá nhân
-          </Text>
-          <Grid>
-            <Col span={6}>
-              <Stack w={'100%'}>
-                <Text align="left" color="dimmed">
-                  Ảnh đại diện
-                </Text>
-                <Center>
-                  <Box sx={{ position: 'relative' }}>
-                    <Avatar
-                      size={250}
-                      w={'100%'}
-                      color="blue"
-                      radius="xl"
-                      src={form.values.avatarFileId}
+        <>
+          <Stack>
+            <Text fw={600} size={'lg'}>
+              Thông tin cá nhân
+            </Text>
+            <Grid>
+              <Col span={6}>
+                <Stack w={'100%'}>
+                  <Text align="left" color="dimmed">
+                    Ảnh đại diện
+                  </Text>
+                  <Center>
+                    <Box sx={{ position: 'relative' }}>
+                      <Avatar
+                        size={250}
+                        w={'100%'}
+                        color="blue"
+                        radius="xl"
+                        src={form.values.avatarFileId}
+                      />
+                      <IconEdit
+                        size={'1.8rem'}
+                        style={{
+                          position: 'absolute',
+                          bottom: -5,
+                          right: -5,
+                          background: 'white',
+                          borderRadius: '50%',
+                          border: '2px solid blue',
+                          padding: '3px'
+                        }}
+                        color="blue"
+                        cursor={'pointer'}
+                        onClick={() => {
+                          open();
+                        }}
+                      />
+                    </Box>
+                  </Center>
+                </Stack>
+              </Col>
+              <Col span={6}>
+                <Stack spacing={'md'}>
+                  <Text align="left" color="dimmed">
+                    Thông tin cá nhân
+                  </Text>
+                  <form>
+                    <TextInput
+                      label="Họ tên"
+                      placeholder="Nhập họ tên"
+                      disabled={!_isEditing}
+                      size={'sm'}
+                      {...form.getInputProps('fullName')}
                     />
-                    <IconEdit
-                      size={'1.8rem'}
-                      style={{
-                        position: 'absolute',
-                        bottom: -5,
-                        right: -5,
-                        background: 'white',
-                        borderRadius: '50%',
-                        border: '2px solid blue',
-                        padding: '3px'
+                    <TextInput
+                      label="Số điện thoại"
+                      placeholder="Nhập số điện thoại"
+                      disabled={!_isEditing}
+                      size={'sm'}
+                      {...form.getInputProps('phoneNumber')}
+                    />
+                    <TextInput
+                      label="Email"
+                      placeholder="Nhập email"
+                      disabled={!_isEditing}
+                      size={'sm'}
+                      {...form.getInputProps('email')}
+                    />
+                    <DatePickerInput
+                      label="Ngày sinh"
+                      placeholder="Nhập ngày sinh"
+                      disabled={!_isEditing}
+                      value={dayjs(form.values.dayOfBirth).toDate()}
+                      onChange={(value) => {
+                        form.setValues({
+                          ...form.values,
+                          dayOfBirth: dayjs(value)
+                            .format('YYYY-MM-DD')
+                            .toString()
+                        });
                       }}
-                      color="blue"
-                      cursor={'pointer'}
-                      // onClick={() => {
-                      //   Modals.openUploadModal({
-                      //     title: 'Thay đổi ảnh đại diện',
-                      //     form,
-                      //     fieldValue: 'avatarFiledId',
-                      //     previewImage,
-                      //     setPreviewImage,
-                      //     isLoadingUpload,
-                      //     url,
-                      //     handleUploadImageOnFirebase
-                      //   });
-                      // }}
                     />
-                  </Box>
-                </Center>
-              </Stack>
-            </Col>
-            <Col span={6}>
-              <Stack spacing={'md'}>
-                <Text align="left" color="dimmed">
-                  Thông tin cá nhân
-                </Text>
-                <form>
-                  <TextInput
-                    label="Họ tên"
-                    placeholder="Nhập họ tên"
-                    disabled={!_isEditing}
-                    size={'sm'}
-                    {...form.getInputProps('fullName')}
-                  />
-                  <TextInput
-                    label="Số điện thoại"
-                    placeholder="Nhập số điện thoại"
-                    disabled={!_isEditing}
-                    size={'sm'}
-                    {...form.getInputProps('phoneNumber')}
-                  />
-                  <TextInput
-                    label="Email"
-                    placeholder="Nhập email"
-                    disabled={!_isEditing}
-                    size={'sm'}
-                    {...form.getInputProps('email')}
-                  />
-                  <DatePickerInput
-                    label="Ngày sinh"
-                    placeholder="Nhập ngày sinh"
-                    disabled={!_isEditing}
-                    value={dayjs(form.values.dayOfBirth).toDate()}
-                    onChange={(value) => {
-                      form.setValues({
-                        ...form.values,
-                        dayOfBirth: dayjs(value).format('YYYY-MM-DD').toString()
-                      });
-                    }}
-                  />
-                  <Group position="left" mt={'sm'}>
-                    <Text fw={600} fz="sm">
-                      Giới tính
-                    </Text>
-                    <Checkbox
+                    <Group position="left" mt={'sm'}>
+                      <Text fw={600} fz="sm">
+                        Giới tính
+                      </Text>
+                      <Checkbox
+                        disabled={!_isEditing}
+                        label={IUserGenderDict[IUserGender.MALE].label}
+                        checked={form.values.gender === IUserGender.MALE}
+                        onChange={() =>
+                          form.setValues({
+                            ...form.values,
+                            gender: IUserGender.MALE
+                          })
+                        }
+                      />
+                      <Checkbox
+                        disabled={!_isEditing}
+                        label={IUserGenderDict[IUserGender.FEMALE].label}
+                        checked={form.values.gender === IUserGender.FEMALE}
+                        onChange={() =>
+                          form.setValues({
+                            ...form.values,
+                            gender: IUserGender.FEMALE
+                          })
+                        }
+                      />
+                    </Group>
+                    <TextInput
+                      label="Mô tả"
+                      placeholder="Nhập mô tả"
                       disabled={!_isEditing}
-                      label={IUserGenderDict[IUserGender.MALE].label}
-                      checked={form.values.gender === IUserGender.MALE}
-                      onChange={() =>
-                        form.setValues({
-                          ...form.values,
-                          gender: IUserGender.MALE
-                        })
-                      }
+                      {...form.getInputProps('description')}
                     />
-                    <Checkbox
-                      disabled={!_isEditing}
-                      label={IUserGenderDict[IUserGender.FEMALE].label}
-                      checked={form.values.gender === IUserGender.FEMALE}
-                      onChange={() =>
-                        form.setValues({
-                          ...form.values,
-                          gender: IUserGender.FEMALE
-                        })
-                      }
-                    />
-                  </Group>
-                  <TextInput
-                    label="Mô tả"
-                    placeholder="Nhập mô tả"
-                    disabled={!_isEditing}
-                    {...form.getInputProps('description')}
-                  />
-                </form>
-              </Stack>
-            </Col>
-          </Grid>
-          <Group position="right" mt={100}>
-            {_isEditing ? (
-              <Button onClick={handleCancel} variant="outline">
-                Huỷ
+                  </form>
+                </Stack>
+              </Col>
+            </Grid>
+            <Group position="right" mt={100}>
+              {_isEditing ? (
+                <Button onClick={handleCancel} variant="outline">
+                  Huỷ
+                </Button>
+              ) : null}
+              <Button
+                leftIcon={<IconEdit size={'1rem'} />}
+                onClick={
+                  _isEditing
+                    ? () => handleSubmit(form.values)
+                    : () => setIsEditing(true)
+                }
+              >
+                {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
               </Button>
-            ) : null}
-            <Button
-              leftIcon={<IconEdit size={'1rem'} />}
-              onClick={
-                _isEditing
-                  ? () => handleSubmit(form.values)
-                  : () => setIsEditing(true)
-              }
-            >
-              {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
-            </Button>
-          </Group>
-        </Stack>
+            </Group>
+          </Stack>
+
+          <Modals.OpenUploadModal
+            title="Cập nhật ảnh đại diện"
+            opened={opened}
+            onClose={close}
+            afterUpload={afterUpload}
+          />
+        </>
       ) : (
         <CustomLoader />
       )}

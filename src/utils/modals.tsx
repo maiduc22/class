@@ -1,11 +1,10 @@
-import { ChangeProfilePayload } from '@/configs/api/payload';
-import { Callback } from '@/types/others/callback';
-import { Button, Group, Image, ScrollArea, Stack, Text } from '@mantine/core';
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { UseFormReturnType } from '@mantine/form';
+import { Button, Center, Group, Modal, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
-import { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
+import Avatar from 'react-avatar-edit';
+import { NotiType, renderNotification } from './notifications';
+import { useUploadFirebase } from '@/hooks/use-upload-firebase';
+import { FileWithPath } from '@mantine/dropzone';
 
 interface OpenCustomConfirmModalProps {
   onConfirm: () => void;
@@ -33,119 +32,87 @@ const openCustomConfirmModal = ({
 
 interface OpenUploadModalProps {
   title: string;
-  form: UseFormReturnType<
-    ChangeProfilePayload,
-    (values: ChangeProfilePayload) => ChangeProfilePayload
-  >;
-  fieldValue: string;
-  previewImage: FileWithPath | undefined;
-  setPreviewImage: Dispatch<SetStateAction<FileWithPath | undefined>>;
-  isLoadingUpload: boolean;
-  url: string | undefined;
-  handleUploadImageOnFirebase: (
-    file: File,
-    cb?: Callback<unknown, unknown> | undefined
-  ) => void;
+  opened: boolean;
+  onClose: () => void;
+  afterUpload: (url: string) => void;
 }
 
-const openUploadModal = ({
+const OpenUploadModal = ({
   title,
-  previewImage,
-  setPreviewImage,
-  form,
-  fieldValue,
-  handleUploadImageOnFirebase
+  opened,
+  onClose,
+  afterUpload
 }: OpenUploadModalProps) => {
-  const confirmUpload = () => {
-    if (previewImage) {
-      handleUploadImageOnFirebase(previewImage, {
-        onSuccess: (downloadUrl) => {
-          form.setFieldValue(fieldValue, downloadUrl);
-        }
-      });
-    }
-    modals.closeAll();
-    setPreviewImage(undefined); // Reset preview image
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [preview, setPreview] = useState<string>('');
+  const [file, setFile] = useState<FileWithPath | null>(null);
+
+  const handleClose = () => {
+    setPreview('');
   };
 
-  modals.open({
-    title,
-    centered: true,
-    children: (
-      <Stack>
-        <Dropzone
-          onDrop={(files) => {
-            setPreviewImage(files[0]);
-            // handleUploadImageOnFirebase(files[0], {
-            //   onSuccess: (downloadUrl) => {
-            //     form.setFieldValue(fieldValue, downloadUrl);
-            //   }
-            // });
-          }}
-          onReject={(files) => console.log('rejected files', files)}
-          maxSize={3 * 1024 ** 2}
-          accept={IMAGE_MIME_TYPE}
-          multiple={false}
-          {...form.getInputProps(`image`)}
-        >
-          <Group
-            position="center"
-            spacing="xs"
-            style={{ pointerEvents: 'none' }}
-          >
-            <Dropzone.Accept>
-              <IconUpload
-                size="2rem"
-                stroke={1.5}
-                // color={theme.colors[theme.primaryColor][6]}
-              />
-            </Dropzone.Accept>
-            <Dropzone.Reject>
-              <IconX size="2rem" stroke={1.5} />
-            </Dropzone.Reject>
+  const handleCrop = (preview: string) => {
+    setPreview(preview);
+  };
 
-            {previewImage ? (
-              <ScrollArea h={300} w={300}>
-                <Image
-                  src={URL.createObjectURL(previewImage)}
-                  imageProps={{
-                    onLoad: () =>
-                      URL.revokeObjectURL(URL.createObjectURL(previewImage))
-                  }}
-                />
-              </ScrollArea>
-            ) : (
-              <>
-                <Dropzone.Idle>
-                  <IconPhoto size="3.2rem" stroke={1.5} />
-                </Dropzone.Idle>
-                <Stack spacing={0} align="center">
-                  <Text size="sm" inline>
-                    Kéo thả hoặc nhấn để chọn file ảnh
-                  </Text>
-                  <Text size="xs" color="dimmed" inline mt={7}>
-                    Chọn 1 ảnh duy nhất, kích cỡ không quá 5MB
-                  </Text>
-                </Stack>
-              </>
-            )}
+  const handleBeforeFileLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0].size > 2 * 1024 * 1024) {
+      renderNotification('Kích thước file quá lớn', NotiType.ERROR);
+      event.target.value = '';
+    }
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoadingUpload, url, handleUploadImageOnFirebase] =
+    useUploadFirebase();
+
+  const handleUpload = () => {
+    if (!file) return;
+    handleUploadImageOnFirebase(file, {
+      onSuccess: (url) => {
+        if (!isLoadingUpload) {
+          afterUpload(url);
+          onClose();
+          setFile(null);
+        }
+      }
+    });
+  };
+  return (
+    <Modal title={title} centered opened={opened} onClose={onClose}>
+      <Center>
+        <Stack>
+          <Avatar
+            label="Nhấn để tải ảnh lên"
+            width={390}
+            height={295}
+            onClose={handleClose}
+            onCrop={(preview: string) => handleCrop(preview)}
+            onBeforeFileLoad={(e) => handleBeforeFileLoad(e)}
+          />
+          <Group position="right">
+            <Button
+              variant="outline"
+              onClick={() => {
+                onClose();
+              }}
+            >
+              Huỷ
+            </Button>
+            <Button
+              loading={isLoadingUpload}
+              disabled={file ? false : true}
+              onClick={handleUpload}
+            >
+              Lưu
+            </Button>
           </Group>
-        </Dropzone>
-        <Group>
-          <Button
-            variant="outline"
-            onClick={() => {
-              modals.closeAll();
-              setPreviewImage(undefined); // Reset preview image
-            }}
-          >
-            Huỷ
-          </Button>
-          <Button onClick={confirmUpload}>Xác nhận</Button> // Add Confirm
-          button
-        </Group>
-      </Stack>
-    )
-  });
+        </Stack>
+      </Center>
+    </Modal>
+  );
 };
-export const Modals = { openCustomConfirmModal, openUploadModal };
+export const Modals = { openCustomConfirmModal, OpenUploadModal };
