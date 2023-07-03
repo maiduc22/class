@@ -111,23 +111,11 @@ export const UserDetails = () => {
     for (const field of fieldsToCheck) {
       if (field == 'roleIds') {
         if (!_.isEqual(form.values[field], _user?.[field])) {
-          console.log(
-            '🚀 ~ file: index.tsx:97 ~ isDirty ~ field:',
-            field,
-            _user?.[field],
-            form.values[field]
-          );
           return true;
         }
       }
       if (field !== 'roleIds') {
         if (form.values[field] !== _user?.[field]) {
-          console.log(
-            '🚀 ~ file: index.tsx:97 ~ isDirty ~ field:',
-            field,
-            _user?.[field],
-            form.values[field]
-          );
           return true;
         }
       }

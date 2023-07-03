@@ -2,8 +2,21 @@ import { useAppDispatch } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import { IBalance } from '@/types/models/IBalance';
-import { IRequestType, IRequestTypeDict } from '@/types/models/IRequest';
-import { Card, Group, Select, Text, useMantineTheme } from '@mantine/core';
+import {
+  IRequest,
+  IRequestType,
+  IRequestTypeDict
+} from '@/types/models/IRequest';
+import {
+  Card,
+  Col,
+  Grid,
+  Group,
+  Select,
+  Stack,
+  Text,
+  useMantineTheme
+} from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import {
   IconArticle,
@@ -12,7 +25,7 @@ import {
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 export const BalanceHistory = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +73,22 @@ export const BalanceHistory = () => {
     setFilteredBalanceHistory(filteredData);
   }, [_balanceHistory, startDate, endDate, requestType]);
 
+  const [_remainTimeoffDays, setRemainTimeoffDays] = useState<IRequest[]>();
+
+  const getRemainTimeoffDays = useCallback(() => {
+    dispatch(
+      TimeoffActions.getMyTimeoff({
+        onSuccess: (data: IRequest[]) => {
+          setRemainTimeoffDays(data);
+        }
+      })
+    );
+  }, [dispatch]);
+
+  useLayoutEffect(() => {
+    getRemainTimeoffDays();
+  }, [getRemainTimeoffDays]);
+
   const columns: DataTableColumn<IBalance>[] = [
     {
       accessor: 'date',
@@ -100,67 +129,83 @@ export const BalanceHistory = () => {
     }
   });
   return (
-    <Card withBorder p={'lg'} shadow={'xs'}>
-      <Group mb={'lg'}>
-        <IconArticle
-          size={'2rem'}
-          style={{
-            background: `${theme.colors.blue[7]}`,
-            borderRadius: '50%',
-            padding: '5px'
-          }}
-          color="white"
-        />
-        <Text fw={600} fz={'lg'}>
-          Lịch sử số dư
-        </Text>
-      </Group>
+    <>
+      <Grid gutter={'xl'} my={'sm'}>
+        {_remainTimeoffDays?.map((item) => (
+          <Col span={'auto'}>
+            <Card withBorder p={'lg'} shadow={'xs'} bg={'gray.1'}>
+              <Stack spacing={0}>
+                <Text fw={'bold'}>{IRequestTypeDict[item.type].label}</Text>
+                <Text color="dimmed" fz={'sm'}>
+                  {item.total} ngày{' '}
+                </Text>
+              </Stack>
+            </Card>
+          </Col>
+        ))}
+      </Grid>
+      <Card withBorder p={'lg'} shadow={'xs'} bg={'gray.1'}>
+        <Group mb={'lg'}>
+          <IconArticle
+            size={'2rem'}
+            style={{
+              background: `${theme.colors.blue[7]}`,
+              borderRadius: '50%',
+              padding: '5px'
+            }}
+            color="white"
+          />
+          <Text fw={600} fz={'lg'}>
+            Lịch sử số dư
+          </Text>
+        </Group>
 
-      <Group mb={'lg'}>
-        <DateInput
-          clearable
-          label="Từ"
-          value={startDate}
-          onChange={setStartDate}
-          rightSection={<IconCalendar size="0.9rem" color="blue" />}
-        />
+        <Group mb={'lg'}>
+          <DateInput
+            clearable
+            label="Từ"
+            value={startDate}
+            onChange={setStartDate}
+            rightSection={<IconCalendar size="0.9rem" color="blue" />}
+          />
 
-        <DateInput
-          clearable
-          label="Đến"
-          value={endDate}
-          onChange={setEndDate}
-          rightSection={<IconCalendar size="0.9rem" color="blue" />}
-        />
+          <DateInput
+            clearable
+            label="Đến"
+            value={endDate}
+            onChange={setEndDate}
+            rightSection={<IconCalendar size="0.9rem" color="blue" />}
+          />
 
-        <Select
-          label="Loại"
-          value={requestType}
-          onChange={(value: string | null) =>
-            setRequestType(value as IRequestType)
-          }
-          data={Object.values(IRequestType).map((type) => ({
-            value: type,
-            label: IRequestTypeDict[type].label
-          }))}
-          rightSection={<IconChevronDown size="1rem" color="blue" />}
-          styles={{ rightSection: { pointerEvents: 'none' } }}
-          w={'150px'}
-        />
-      </Group>
+          <Select
+            label="Loại"
+            value={requestType}
+            onChange={(value: string | null) =>
+              setRequestType(value as IRequestType)
+            }
+            data={Object.values(IRequestType).map((type) => ({
+              value: type,
+              label: IRequestTypeDict[type].label
+            }))}
+            rightSection={<IconChevronDown size="1rem" color="blue" />}
+            styles={{ rightSection: { pointerEvents: 'none' } }}
+            w={'150px'}
+          />
+        </Group>
 
-      <DataTable
-        minHeight={200}
-        striped
-        highlightOnHover
-        columns={columns}
-        records={records}
-        totalRecords={_filteredBalanceHistory?.length}
-        page={page}
-        onPageChange={changePage}
-        recordsPerPage={pageSize}
-        paginationText={() => null}
-      />
-    </Card>
+        <DataTable
+          minHeight={200}
+          striped
+          highlightOnHover
+          columns={columns}
+          records={records}
+          totalRecords={_filteredBalanceHistory?.length}
+          page={page}
+          onPageChange={changePage}
+          recordsPerPage={pageSize}
+          paginationText={() => null}
+        />
+      </Card>
+    </>
   );
 };

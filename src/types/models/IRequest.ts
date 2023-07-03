@@ -10,6 +10,7 @@ export interface IRequest extends BaseModel {
   dayOff: number;
   start?: number;
   end?: number;
+  total?: number;
 }
 
 export enum IRequestType {

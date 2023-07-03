@@ -87,10 +87,7 @@ const getUserById =
     const { response, error } = await useCallApi({ ...api });
     if (!error && response?.status === 200) {
       const { data } = response.data;
-      console.log('🚀 ~ file: user.action.ts:90 ~ data:', data);
-      dispatch({
-        type: UserActionType.UPDATE_USER_SUCCESS
-      });
+
       cb?.onSuccess?.(data);
     } else {
       dispatch({ type: UserActionType.USER_ACTION_FAILURE });

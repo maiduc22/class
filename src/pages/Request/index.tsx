@@ -13,14 +13,23 @@ import {
   IRequestTypeDict
 } from '@/types/models/IRequest';
 import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
-import { Badge, Group, Select, Stack, Text } from '@mantine/core';
+import {
+  Badge,
+  Center,
+  Group,
+  Select,
+  Stack,
+  Text,
+  Tooltip
+} from '@mantine/core';
 import { DateInput, DateValue } from '@mantine/dates';
 import {
+  IconBarrierBlock,
   IconCalendar,
   IconChevronDown,
-  IconDotsDiagonal,
-  IconFileUpload
+  IconFileLike
 } from '@tabler/icons-react';
+
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useCallback, useEffect, useState } from 'react';
@@ -76,6 +85,17 @@ export const Requests = () => {
     setAllRequest(filteredData);
   }, [allRequests, _startDate, _endDate, _requestType, _requestStatus]);
 
+  const handleChangeRequestStatus = (
+    id: string | undefined,
+    status: IRequestStatus
+  ) => {
+    dispatch(
+      TimeoffActions.changeStatus(id, status, {
+        onSuccess: () => dispatch(TimeoffActions.getAllRequest())
+      })
+    );
+  };
+
   const {
     data: records,
     page,
@@ -127,12 +147,36 @@ export const Requests = () => {
     {
       accessor: '',
       render: (record) => {
-        return (
-          <Group>
-            {record.fileId ? null : <IconFileUpload size={'1rem'} />}
-            <IconDotsDiagonal size={'1rem'} />
-          </Group>
-        );
+        return record.status == IRequestStatus.PENDING ? (
+          <Center>
+            <Group align="center">
+              <Tooltip label="Chấp thuận">
+                <IconFileLike
+                  cursor={'pointer'}
+                  size={'1.2rem'}
+                  onClick={() =>
+                    handleChangeRequestStatus(
+                      record.id,
+                      IRequestStatus.APPROVED
+                    )
+                  }
+                />
+              </Tooltip>
+              <Tooltip label="Từ chối">
+                <IconBarrierBlock
+                  cursor={'pointer'}
+                  size={'1.2rem'}
+                  onClick={() =>
+                    handleChangeRequestStatus(
+                      record.id,
+                      IRequestStatus.REJECTED
+                    )
+                  }
+                />
+              </Tooltip>
+            </Group>
+          </Center>
+        ) : null;
       }
     }
   ];

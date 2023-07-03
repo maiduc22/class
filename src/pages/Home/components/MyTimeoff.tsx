@@ -35,8 +35,8 @@ export const MyTimeOff = () => {
       myRequests.filter((request) => {
         const today = new Date();
         const from = dayjs(request.dateFrom).toDate();
-        const to = dayjs(request.dateTo).toDate();
-        if (from <= today && today <= to) {
+        // const to = dayjs(request.dateTo).toDate();
+        if (today <= from) {
           return true;
         }
       })
@@ -70,7 +70,7 @@ export const MyTimeOff = () => {
           </Text>
         </Group>
         <Grid>
-          {_todayRequests.map((request) => (
+          {_todayRequests.slice(0, 3).map((request) => (
             <Col span={12}>
               <CustomCard request={request} />
             </Col>
@@ -79,7 +79,9 @@ export const MyTimeOff = () => {
         <Center>
           <Group align="center" spacing={0}>
             <Center>
-              <Text align="center">Bạn còn 10 ngày nghỉ có lương.</Text>
+              {/* <Text align="center">
+                {`Bạn còn ${_remainTimeoffDays} ngày nghỉ có lương.`}
+              </Text> */}
               <Text
                 onClick={() => navigate(ROUTER.TIME_OFF)}
                 style={{ cursor: 'pointer' }}

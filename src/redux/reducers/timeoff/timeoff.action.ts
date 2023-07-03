@@ -5,6 +5,7 @@ import { TimeoffActionType } from './timeoff.types';
 import { API_URLS } from '@/configs/api/endpoint';
 import { useCallApi } from '@/configs/api';
 import { NotiType, renderNotification } from '@/utils/notifications';
+import { IRequestStatus } from '@/types/models/IRequest';
 
 const requestTimeoff =
   (payload: RequestTimeoffPayload, cb?: Callback) =>
@@ -98,12 +99,64 @@ const getBalanceHistory = (cb?: Callback) => async (dispatch: AppDispatch) => {
     dispatch({
       type: TimeoffActionType.TIMEOFF_ACTION_FAILURE
     });
+    renderNotification('Lấy lịch sử số dư thất bại', NotiType.ERROR);
   }
 };
+
+const getMyTimeoff = (cb?: Callback) => async (dispatch: AppDispatch) => {
+  dispatch({ type: TimeoffActionType.TIMEOFF_ACTION_PENDING });
+
+  const api = API_URLS.TimeOff.getMyTimeoff();
+
+  const { response, error } = await useCallApi({ ...api });
+  if (!error && response?.status === 200) {
+    dispatch({
+      type: TimeoffActionType.GET_MY_TIMEOFF_SUCCESS
+    });
+    cb?.onSuccess?.(response.data.data);
+  } else {
+    dispatch({
+      type: TimeoffActionType.TIMEOFF_ACTION_FAILURE
+    });
+    renderNotification('Lấy số ngày nghỉ còn lại thất bại', NotiType.ERROR);
+  }
+};
+
+const changeStatus =
+  (id: string | undefined, status: IRequestStatus, cb?: Callback) =>
+  async (dispatch: AppDispatch) => {
+    if (!id) return;
+
+    dispatch({ type: TimeoffActionType.TIMEOFF_ACTION_PENDING });
+
+    const api = API_URLS.TimeOff.changeStatus(id, status);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: TimeoffActionType.CHANGE_REQUEST_STATUS
+      });
+      cb?.onSuccess?.();
+      renderNotification(
+        'Thay đổi trạng thái yêu cầu thành công',
+        NotiType.SUCCESS
+      );
+    } else {
+      dispatch({
+        type: TimeoffActionType.TIMEOFF_ACTION_FAILURE
+      });
+      renderNotification(
+        'Thay đổi trạng thái yêu cầu thất bại',
+        NotiType.ERROR
+      );
+    }
+  };
 
 export const TimeoffActions = {
   requestTimeoff,
   getAllRequest,
   getBalanceHistory,
-  getMyRequest
+  getMyRequest,
+  changeStatus,
+  getMyTimeoff
 };

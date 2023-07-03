@@ -14,7 +14,9 @@ export enum TimeoffActionType {
   REQUEST_TIMEOFF_SUCCESS = 'REQUEST_TIMEOFF_SUCCESS',
   GET_MY_REQUEST_SUCCESS = 'GET_MY_REQUEST_SUCCESS',
   GET_ALL_REQUEST_SUCCESS = ' GET_ALL_REQUEST_SUCCESS',
-  GET_BALANCE_HISTORY_SUCCESS = 'GET_BALANCE_HISTORY_SUCCESS'
+  GET_BALANCE_HISTORY_SUCCESS = 'GET_BALANCE_HISTORY_SUCCESS',
+  GET_MY_TIMEOFF_SUCCESS = 'GET_MY_TIMEOFF_SUCCESS',
+  CHANGE_REQUEST_STATUS = 'CHANGE_REQUEST_STATUS'
 }
 
 export interface TimeoffActionPending {
@@ -43,13 +45,23 @@ export interface GetBalanceHistorySuccess {
   type: TimeoffActionType.GET_BALANCE_HISTORY_SUCCESS;
 }
 
+export interface GetMyTimeOffSuccess {
+  type: TimeoffActionType.GET_MY_TIMEOFF_SUCCESS;
+}
+
+export interface ChangeRequestStatusSuccess {
+  type: TimeoffActionType.CHANGE_REQUEST_STATUS;
+}
+
 export type TimeoffAction =
   | TimeoffActionPending
   | TimeoffActionFailure
   | RequestTimeoffSuccess
   | GetAllRequestSuccess
   | GetBalanceHistorySuccess
-  | GetMyRequestSuccess;
+  | GetMyRequestSuccess
+  | GetMyTimeOffSuccess
+  | ChangeRequestStatusSuccess;
 
 export type TimeoffThunkAction = ThunkAction<
   void,

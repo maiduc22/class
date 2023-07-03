@@ -25,6 +25,7 @@ import {
   Stack,
   Text,
   Textarea,
+  Tooltip,
   useMantineTheme
 } from '@mantine/core';
 import { DateInput, DateValue, TimeInput } from '@mantine/dates';
@@ -35,12 +36,12 @@ import {
   IconCalendar,
   IconChevronDown,
   IconClock,
-  IconDotsDiagonal,
   IconFileUpload,
   IconNewSection,
   IconNote,
   IconPaperclip,
-  IconPlane
+  IconPlane,
+  IconUserCancel
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
@@ -88,6 +89,17 @@ export const MyRequests = () => {
     });
     setMyRequest(filteredData);
   }, [myRequests, _startDate, _endDate, _requestType, _requestStatus]);
+
+  const handleChangeRequestStatus = (
+    id: string | undefined,
+    status: IRequestStatus
+  ) => {
+    dispatch(
+      TimeoffActions.changeStatus(id, status, {
+        onSuccess: () => dispatch(TimeoffActions.getMyRequest())
+      })
+    );
+  };
 
   const {
     data: records,
@@ -143,7 +155,20 @@ export const MyRequests = () => {
         return (
           <Group>
             {record.fileId ? null : <IconFileUpload size={'1rem'} />}
-            <IconDotsDiagonal size={'1rem'} />
+            {record.status === IRequestStatus.PENDING ? (
+              <Tooltip label="Huỷ yêu cầu">
+                <IconUserCancel
+                  size={'1rem'}
+                  cursor={'pointer'}
+                  onClick={() =>
+                    handleChangeRequestStatus(
+                      record.id,
+                      IRequestStatus.CANCELLED
+                    )
+                  }
+                />
+              </Tooltip>
+            ) : null}
           </Group>
         );
       }
@@ -156,7 +181,7 @@ export const MyRequests = () => {
 
   return (
     <>
-      <Card withBorder p={'lg'} shadow={'xs'}>
+      <Card withBorder p={'xl'} shadow={'xs'} bg={'gray.1'}>
         <Group spacing={'xs'} mb={'lg'}>
           <IconArticle
             size={'2rem'}
@@ -281,7 +306,7 @@ export const ModalAddRequest = ({ close }: Props) => {
     if (_isSingleDay) {
       return Number(((_end - _start) / (8 * 60 * 60)).toFixed(2));
     } else {
-      return dayjs(_dateTo).diff(_dateFrom, 'day');
+      return dayjs(_dateTo).diff(_dateFrom, 'day') + 1;
     }
   };
 
@@ -306,9 +331,11 @@ export const ModalAddRequest = ({ close }: Props) => {
               minDate={new Date()}
             />
           </Group>
-          {dayjs(_dateTo).diff(_dateFrom, 'day') > 0 ? (
+          {dayjs(_dateTo).diff(_dateFrom, 'day') + 1 > 0 ? (
             <Text>
-              {`Tổng thời gian: ${dayjs(_dateTo).diff(_dateFrom, 'day')} ngày`}
+              {`Tổng thời gian: ${
+                dayjs(_dateTo).diff(_dateFrom, 'day') + 1
+              } ngày`}
             </Text>
           ) : null}
         </Group>
@@ -317,7 +344,7 @@ export const ModalAddRequest = ({ close }: Props) => {
           <DateInput
             rightSection={<IconCalendar size="0.9rem" color="blue" />}
             onChange={(value) => handleChangeDateTo(value)}
-            minDate={dayjs(_dateFrom).add(1, 'day').toDate()}
+            minDate={dayjs(_dateFrom).add(0, 'day').toDate()}
           />
         </Group>
       </Stack>

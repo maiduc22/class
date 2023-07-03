@@ -34,7 +34,6 @@ import CustomLoader from '@/components/custom/CustomLoader';
 export const Role = () => {
   const { state } = useAuthContext();
   const { authorities } = state;
-  console.log('🚀 ~ file: index.tsx:36 ~ Role ~ authorities:', authorities);
   const [_authorities, setAuthorities] = useState(authorities);
 
   useEffect(() => {

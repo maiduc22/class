@@ -1,3 +1,4 @@
+import { IRequestStatus } from '@/types/models/IRequest';
 import { HEADERS } from './header';
 
 export const API_URLS = {
@@ -138,23 +139,33 @@ export const API_URLS = {
   },
   TimeOff: {
     request: () => ({
-      endPoint: 'time-off/request',
+      endPoint: '/time-off/request',
       method: 'POST',
       headers: HEADERS.authHeader()
     }),
     getMyRequest: () => ({
-      endPoint: 'time-off/my-request',
+      endPoint: '/time-off/my-request',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getMyTimeoff: () => ({
+      endPoint: '/time-off/my-timeoff',
       method: 'GET',
       headers: HEADERS.authHeader()
     }),
     getBalanceHistory: () => ({
-      endPoint: 'time-off/balance',
+      endPoint: '/time-off/balance',
       method: 'GET',
       headers: HEADERS.authHeader()
     }),
     getAllRequest: () => ({
       endPoint: 'time-off',
       method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    changeStatus: (id: string, status: IRequestStatus) => ({
+      endPoint: `/time-off/${id}/change-status?status=${status}`,
+      method: 'POST',
       headers: HEADERS.authHeader()
     })
   }

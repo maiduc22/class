@@ -25,6 +25,8 @@ const timeoffReducer: Reducer<TimeoffState, TimeoffAction> = (
     case TimeoffActionType.TIMEOFF_ACTION_FAILURE:
     case TimeoffActionType.GET_BALANCE_HISTORY_SUCCESS:
     case TimeoffActionType.REQUEST_TIMEOFF_SUCCESS:
+    case TimeoffActionType.CHANGE_REQUEST_STATUS:
+    case TimeoffActionType.GET_MY_TIMEOFF_SUCCESS:
       return { ...state, isFetching: false };
     default:
       return state;
