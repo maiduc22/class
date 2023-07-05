@@ -14,7 +14,7 @@ export interface IBalance extends BaseModel {
 export enum IBalanceEvent {
   TAKE_TIME_OFF = 'TAKE_TIME_OFF',
   BALANCE_ADJUSTMENT = 'BALANCE_ADJUSTMENT',
-  ACCRUAL = 'ACCRUAL  '
+  ACCRUAL = 'ACCRUAL'
 }
 
 export const IBalanceEventDict: Record<
