@@ -2,6 +2,7 @@ import { RegisterPayload } from '@/configs/api/payload';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { RootState } from '@/redux/reducers';
+import { DepartmentActions } from '@/redux/reducers/department/department.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUserGender, IUserGenderDict } from '@/types/models/IUser';
 import {
@@ -22,7 +23,7 @@ import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 interface Props {
   closeModal: () => void;
@@ -32,6 +33,11 @@ export const ModalAddUser = ({ closeModal }: Props) => {
   const theme = useMantineTheme();
   const dispatch = useAppDispatch();
   const [previewImage, setPreviewImage] = useState<FileWithPath>();
+
+  useLayoutEffect(() => {
+    dispatch(DepartmentActions.getAllDepartment());
+  }, [dispatch]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoadingUpload, url, handleUploadImageOnFirebase] =
     useUploadFirebase();
