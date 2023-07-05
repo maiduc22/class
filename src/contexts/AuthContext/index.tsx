@@ -2,7 +2,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useCallApi } from '@/configs/api';
 import { API_URLS } from '@/configs/api/endpoint';
-import { ChangeProfilePayload, LoginPayload } from '@/configs/api/payload';
+import {
+  ChangeProfilePayload,
+  ChangePwdPayload,
+  LoginPayload
+} from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import { createContext, useCallback, useReducer } from 'react';
@@ -32,6 +36,7 @@ function authReducer(state = initialState, action: AuthActionType): AuthState {
     case AuthAction.AUTH_ACTION_FAILURE:
     case AuthAction.LOGIN_SUCCESS:
     case AuthAction.UPDATE_PROFILE:
+    case AuthAction.CHANGE_PWD:
       return { ...state, isFetching: false };
     case AuthAction.GET_AUTHORITIES:
       return { ...state, isFetching: false, authorities: action.payload };
@@ -136,7 +141,35 @@ function useAuthReducer(_state = initialState) {
       cb?.onError?.();
     }
   };
-  return { state, login, logout, getAuthorities, getProfile, updateProfile };
+
+  const changePwd = async (payload: ChangePwdPayload, cb?: Callback) => {
+    dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
+
+    const api = API_URLS.Auth.changePassword();
+
+    const { response, error } = await useCallApi({ ...api, payload });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: AuthAction.CHANGE_PWD
+      });
+      renderNotification('Thay đổi mật khẩu thành công', NotiType.SUCCESS);
+      cb?.onSuccess?.();
+    } else {
+      dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
+      renderNotification('Thay đổi mật khẩu thất bại', NotiType.ERROR);
+      cb?.onError?.();
+    }
+  };
+
+  return {
+    state,
+    login,
+    logout,
+    getAuthorities,
+    getProfile,
+    updateProfile,
+    changePwd
+  };
 }
 
 export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
@@ -145,7 +178,8 @@ export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
   logout: () => {},
   getAuthorities: async () => {},
   getProfile: async () => {},
-  updateProfile: async () => {}
+  updateProfile: async () => {},
+  changePwd: async () => {}
 });
 
 interface Props {

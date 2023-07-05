@@ -13,5 +13,6 @@ export const ROUTER = {
   TIME_OFF: '/my-time-off',
   REQUEST: '/request',
   NEWS: '/news',
-  CREATE_NEWS: '/create-news'
+  CREATE_NEWS: '/create-news',
+  MY_NEWS: '/my-news'
 };

@@ -1,9 +1,9 @@
-import { IUser } from '@/types/models/IUser';
+import { IEvent } from '@/types/models/IEvent';
 import { Avatar, Card, Divider, Group, Stack, Text } from '@mantine/core';
 import { IconCalendar, IconUser } from '@tabler/icons-react';
 
 interface Props {
-  usersList: IUser[];
+  usersList: IEvent[];
   date: string;
   type: EventType;
 }
@@ -15,7 +15,7 @@ export enum EventType {
 
 export const EventPopover = ({ usersList, date, type }: Props) => {
   return (
-    <Card>
+    <Card withBorder>
       <Stack>
         <Text fw={600} fz={'lg'}>
           {type === EventType.BIRTHDAY ? 'Sinh nhật' : 'Kỉ niệm'}
@@ -28,13 +28,12 @@ export const EventPopover = ({ usersList, date, type }: Props) => {
         <Group align={'flex-start'}>
           <IconUser size={'1.5rem'} />
           <Stack>
-            <Text>`${usersList.length} người`</Text>
+            <Text>{`${usersList.length} người`}</Text>
             {usersList.map((user) => (
               <Group>
                 <Avatar src={user.avatarFileId} />
                 <Stack>
                   <Text>{user.fullName}</Text>
-                  <Text>{user.roles[0].name}</Text>
                 </Stack>
               </Group>
             ))}

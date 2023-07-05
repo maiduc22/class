@@ -9,6 +9,7 @@ import {
   Col,
   Grid,
   Group,
+  Popover,
   Stack,
   Text,
   Tooltip,
@@ -33,6 +34,7 @@ import {
   subWeeks
 } from 'date-fns';
 import { useLayoutEffect, useState } from 'react';
+import { EventPopover, EventType } from './EventPopover';
 
 export const UpcomingEvents = () => {
   const dispatch = useAppDispatch();
@@ -151,7 +153,7 @@ export const UpcomingEvents = () => {
         });
 
         days.push(
-          <Col span={'auto'} h={150}>
+          <Col span={'auto'} h={150} pos={'relative'}>
             <Card p={'xs'} h={'100%'} withBorder radius={0}>
               <CardSection
                 withBorder
@@ -169,28 +171,45 @@ export const UpcomingEvents = () => {
                 </Text>
               </CardSection>
               <Stack py={'xs'}>
-                {usersWithBirthday.length > 0 ? (
-                  <Group spacing={'xs'}>
-                    <IconCake
-                      size={'1.3rem'}
-                      style={{
-                        background: 'white',
-                        borderRadius: '50%',
-                        border: '2px solid blue',
-                        padding: '2px'
-                      }}
-                      color="blue"
-                      cursor={'pointer'}
+                <Popover
+                  position="bottom"
+                  withArrow
+                  shadow="md"
+                  width={360}
+                  zIndex={'999'}
+                >
+                  {usersWithBirthday.length > 0 ? (
+                    <Popover.Target>
+                      <Group spacing={'xs'}>
+                        <IconCake
+                          size={'1.3rem'}
+                          style={{
+                            background: 'white',
+                            borderRadius: '50%',
+                            border: '2px solid blue',
+                            padding: '2px'
+                          }}
+                          color="blue"
+                          cursor={'pointer'}
+                        />
+                        {usersWithBirthday.map((user) => (
+                          <Avatar
+                            size={'1.3rem'}
+                            radius={'xl'}
+                            src={user.avatarFileId}
+                          />
+                        ))}
+                      </Group>
+                    </Popover.Target>
+                  ) : null}
+                  <Popover.Dropdown>
+                    <EventPopover
+                      usersList={usersWithBirthday}
+                      date={formattedDate}
+                      type={EventType.BIRTHDAY}
                     />
-                    {usersWithBirthday.map((user) => (
-                      <Avatar
-                        size={'1.3rem'}
-                        radius={'xl'}
-                        src={user.avatarFileId}
-                      />
-                    ))}
-                  </Group>
-                ) : null}
+                  </Popover.Dropdown>
+                </Popover>
                 {usersWithAnniversary.length > 0 ? (
                   <Group spacing={'xs'}>
                     <IconTimelineEvent

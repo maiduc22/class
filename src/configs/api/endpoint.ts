@@ -22,6 +22,11 @@ export const API_URLS = {
       endPoint: `/me/${id}`,
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    changePassword: () => ({
+      endPoint: `/me/change-pwd`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   Department: {

@@ -33,6 +33,10 @@ export type RegisterPayload = {
   avatar: string;
 };
 
+export type ChangePwdPayload = {
+  password: string;
+};
+
 export type CreateDepartmentPayload = {
   name: string;
   description: string;
@@ -82,4 +86,5 @@ export type ApiEndPointPayload =
   | ChangeProfilePayload
   | string[]
   | RequestTimeoffPayload
-  | CreateNewsPayload;
+  | CreateNewsPayload
+  | ChangePwdPayload;

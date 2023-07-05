@@ -18,14 +18,18 @@ import {
   Group,
   Header,
   Image,
+  Modal,
   Navbar,
   Popover,
+  Stack,
   Text,
+  TextInput,
   ThemeIcon,
   UnstyledButton,
   rem,
   useMantineTheme
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconBrandAsana,
   IconGitPullRequest,
@@ -78,7 +82,6 @@ const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
         <ThemeIcon color={color} variant="light">
           {icon}
         </ThemeIcon>
-
         <Text size="sm">{label}</Text>
       </Group>
     </UnstyledButton>
@@ -92,6 +95,7 @@ interface UserProps {
 const User = ({ profile }: UserProps) => {
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  const { changePwd } = useAuthContext();
 
   interface WrapperProps {
     children: ReactNode;
@@ -120,7 +124,8 @@ const User = ({ profile }: UserProps) => {
       </UnstyledButton>
     );
   };
-
+  const [opened, { close, open }] = useDisclosure();
+  const [_newPwd, setNewPwd] = useState('');
   return (
     <Box
       sx={{
@@ -132,7 +137,28 @@ const User = ({ profile }: UserProps) => {
         }`
       }}
     >
-      <Popover position={'top-end'} shadow="xs">
+      <Modal centered title="Thay đổi mật khẩu" opened={opened} onClose={close}>
+        <Stack spacing={'lg'}>
+          <TextInput
+            onChange={(e) => setNewPwd(e.currentTarget.value)}
+            label="Mật khẩu mới"
+          />
+          <Group position="right">
+            <Button variant="outline" onClick={() => close()}>
+              Huỷ
+            </Button>
+            <Button
+              onClick={() => {
+                changePwd({ password: _newPwd });
+                close();
+              }}
+            >
+              Cập nhật
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+      <Popover position={'top-end'} shadow="xs" withArrow arrowSize={10}>
         <Popover.Target>
           <UnstyledButton
             sx={{
@@ -176,7 +202,7 @@ const User = ({ profile }: UserProps) => {
             </Text>
           </Wrapper>
           <Wrapper>
-            <Text onClick={() => navigate(`${ROUTER.PROFILE}`)} fz={'xs'}>
+            <Text onClick={() => open()} fz={'xs'}>
               <Group spacing={2}>
                 <IconPassword size={'1rem'} />
                 Thay đổi mật khẩu

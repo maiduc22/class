@@ -9,7 +9,8 @@ export enum AuthAction {
   LOGOUT = 'LOGOUT',
   GET_AUTHORITIES = 'GET_AUTHORITIES',
   GET_PROFILE = 'GET_PROFILE',
-  UPDATE_PROFILE = 'UPDATE_PROFILE'
+  UPDATE_PROFILE = 'UPDATE_PROFILE',
+  CHANGE_PWD = 'CHANGE_PWD'
 }
 
 interface AuthActionPending {
@@ -42,6 +43,10 @@ interface UpdateProfile {
   type: AuthAction.UPDATE_PROFILE;
 }
 
+interface ChangePwd {
+  type: AuthAction.CHANGE_PWD;
+}
+
 export type AuthActionType =
   | Logout
   | AuthActionPending
@@ -49,4 +54,5 @@ export type AuthActionType =
   | LoginSuccess
   | GetAuthorities
   | GetProfile
-  | UpdateProfile;
+  | UpdateProfile
+  | ChangePwd;

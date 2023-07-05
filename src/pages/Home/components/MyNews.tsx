@@ -1,3 +1,4 @@
+import { ROUTER } from '@/configs/router';
 import { useAppSelector } from '@/hooks/redux';
 import { RootState } from '@/redux/reducers';
 import { INew } from '@/types/models/INew';
@@ -11,10 +12,13 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { IconClock, IconFlag, IconNews } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 export const MyNews = () => {
   const { myNews } = useAppSelector((state: RootState) => state.news);
   const theme = useMantineTheme();
+  const navigate = useNavigate();
+
   return (
     <Card bg={'gray.1'} p={'xl'}>
       <Stack>
@@ -36,12 +40,12 @@ export const MyNews = () => {
           <Text
             color="blue.8"
             sx={{ cursor: 'pointer' }}
-            // onClick={() => navigate(ROUTER.TIME_OFF)}
+            onClick={() => navigate(ROUTER.MY_NEWS)}
           >
             Xem tất cả
           </Text>
         </Group>
-        {myNews.map((news) => (
+        {myNews.slice(0, 2).map((news) => (
           <CardNews news={news} />
         ))}
       </Stack>
@@ -53,12 +57,12 @@ interface CardNewsProps {
   news: INew;
 }
 
-const CardNews = ({ news }: CardNewsProps) => {
+export const CardNews = ({ news }: CardNewsProps) => {
   const { isImportant, title, createdAt, authorName } = news;
   return (
-    <Card withBorder radius={'sm'} py={'xs'} px={'lg'}>
+    <Card withBorder radius={'sm'} py={'xs'} px={'lg'} shadow="xs">
       <Group position="apart" align="center">
-        <Stack spacing={'xs'}>
+        <Stack spacing={3}>
           <Group spacing={'xs'} align="center">
             {isImportant ? (
               <IconFlag color="red" size={'1.2rem'} stroke={'1.5'} />
@@ -67,7 +71,9 @@ const CardNews = ({ news }: CardNewsProps) => {
           </Group>
           <Group spacing={'xs'} align="center">
             <IconClock color="gray" size={'1rem'} />
-            <Text color="dimmed">{formatDateFromISOString(createdAt)}</Text>
+            <Text color="dimmed" fz={'sm'}>
+              {formatDateFromISOString(createdAt)}
+            </Text>
             <Divider orientation="vertical" />
             <Text>{authorName}</Text>
           </Group>
