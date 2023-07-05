@@ -322,30 +322,38 @@ export const ModalAddRequest = ({ close }: Props) => {
   const renderMultiDaysSelect = () => {
     return (
       <Stack>
-        <Group position="apart">
+        <Group spacing={'xl'}>
           <Group>
             <Text w={30}>Từ</Text>
             <DateInput
               rightSection={<IconCalendar size="0.9rem" color="blue" />}
               onChange={(value) => handleChangeDateFrom(value)}
               minDate={new Date()}
+              size={'sm'}
+              excludeDate={(date) => date.getDay() === 0 || date.getDay() === 6}
             />
           </Group>
-          {dayjs(_dateTo).diff(_dateFrom, 'day') + 1 > 0 ? (
+          <Group>
+            <Text w={30}>Đến</Text>
+            <DateInput
+              disabled={!_dateFrom}
+              rightSection={<IconCalendar size="0.9rem" color="blue" />}
+              onChange={(value) => handleChangeDateTo(value)}
+              minDate={dayjs(_dateFrom).add(0, 'day').toDate()}
+              excludeDate={(date) => date.getDay() === 0 || date.getDay() === 6}
+            />
+          </Group>
+        </Group>
+        <Group>
+          {_dateTo &&
+          _dateFrom &&
+          dayjs(_dateTo).diff(_dateFrom, 'day') + 1 > 0 ? (
             <Text>
               {`Tổng thời gian: ${
                 dayjs(_dateTo).diff(_dateFrom, 'day') + 1
               } ngày`}
             </Text>
           ) : null}
-        </Group>
-        <Group>
-          <Text w={30}>Đến</Text>
-          <DateInput
-            rightSection={<IconCalendar size="0.9rem" color="blue" />}
-            onChange={(value) => handleChangeDateTo(value)}
-            minDate={dayjs(_dateFrom).add(0, 'day').toDate()}
-          />
         </Group>
       </Stack>
     );
@@ -370,12 +378,10 @@ export const ModalAddRequest = ({ close }: Props) => {
         <Group>
           <DateInput
             rightSection={<IconCalendar size="0.9rem" color="blue" />}
-            onChange={(value) => {
-              handleChangeDateFrom(value);
-              handleChangeDateTo(value);
-            }}
+            onChange={(value) => handleChangeDateFrom(value)}
             minDate={new Date()}
-            max={'80px'}
+            size={'sm'}
+            excludeDate={(date) => date.getDay() === 0 || date.getDay() === 6}
           />
           <TimeInput
             ref={refStart}
@@ -434,7 +440,7 @@ export const ModalAddRequest = ({ close }: Props) => {
       id="request-timeoff"
       onSubmit={form.onSubmit((values) => handleSubmit(values))}
     >
-      <Stack spacing={'lg'}>
+      <Stack spacing={'lg'} py={'lg'}>
         <Grid align="center">
           <Col span={1}>
             <IconPlane size={'1.5rem'} />

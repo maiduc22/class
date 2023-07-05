@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
-import { IBalance } from '@/types/models/IBalance';
+import { IBalance, IBalanceEventDict } from '@/types/models/IBalance';
 import {
   IRequest,
   IRequestType,
@@ -96,7 +96,10 @@ export const BalanceHistory = () => {
     },
     {
       accessor: 'event',
-      title: 'Sự kiện'
+      title: 'Sự kiện',
+      render: ({ event }) => {
+        return <Text>{IBalanceEventDict[event].label}</Text>;
+      }
     },
     {
       accessor: 'type',

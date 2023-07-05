@@ -22,6 +22,8 @@ import { RoleDetails } from '../pages/RoleDetails';
 import { TimeOff } from '../pages/TimeOff';
 import { User } from '../pages/User';
 import { UserDetails } from '../pages/UserDetails';
+import { News } from '@/pages/News';
+import { CreateNewsPage } from '@/pages/News/components/CreateNewPage';
 
 const router = () => {
   return createBrowserRouter(
@@ -45,6 +47,8 @@ const router = () => {
           <Route path={ROUTER.ROLE_DETAILS} element={<RoleDetails />} />
           <Route path={ROUTER.PERMISSION} element={<Permission />} />
           <Route path={ROUTER.REQUEST} element={<Requests />} />
+          <Route path={ROUTER.NEWS} element={<News />} />
+          <Route path={ROUTER.CREATE_NEWS} element={<CreateNewsPage />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path="*" element={<Page404 />} />
         </Route>

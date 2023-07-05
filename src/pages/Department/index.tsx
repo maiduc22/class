@@ -122,6 +122,15 @@ const Department: React.FC = () => {
       render: (department: IDepartment) => {
         return (
           <Group position="center">
+            <Tooltip label="Xem chi tiết">
+              <IconInfoCircle
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() =>
+                  navigate(`${ROUTER.DEPARTMENT}/${department.id}`)
+                }
+              />
+            </Tooltip>
             {/* <IconEdit
               cursor={'pointer'}
               size={'1rem'}
@@ -140,15 +149,6 @@ const Department: React.FC = () => {
                 />
               </Tooltip>
             ) : null}
-            <Tooltip label="Xem chi tiết">
-              <IconInfoCircle
-                cursor={'pointer'}
-                size={'1rem'}
-                onClick={() =>
-                  navigate(`${ROUTER.DEPARTMENT}/${department.id}`)
-                }
-              />
-            </Tooltip>
           </Group>
         );
       }

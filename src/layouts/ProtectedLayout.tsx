@@ -5,6 +5,7 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
+import { NewsActions } from '@/redux/reducers/news/news.action';
 import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import { IUser } from '@/types/models/IUser';
 import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
@@ -18,6 +19,7 @@ import {
   Header,
   Image,
   Navbar,
+  Popover,
   Text,
   ThemeIcon,
   UnstyledButton,
@@ -29,10 +31,17 @@ import {
   IconGitPullRequest,
   IconLicense,
   IconLogout,
+  IconPassword,
   IconShield,
   IconUser
 } from '@tabler/icons-react';
-import { Suspense, useEffect, useLayoutEffect, useState } from 'react';
+import {
+  ReactNode,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useState
+} from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -83,18 +92,13 @@ interface UserProps {
 const User = ({ profile }: UserProps) => {
   const theme = useMantineTheme();
   const navigate = useNavigate();
-  return (
-    <Box
-      sx={{
-        paddingTop: theme.spacing.sm,
-        borderTop: `${rem(1)} solid ${
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2]
-        }`
-      }}
-      onClick={() => navigate(`${ROUTER.PROFILE}`)}
-    >
+
+  interface WrapperProps {
+    children: ReactNode;
+  }
+
+  const Wrapper: React.FC<WrapperProps> = ({ children }) => {
+    return (
       <UnstyledButton
         sx={{
           display: 'block',
@@ -108,22 +112,79 @@ const User = ({ profile }: UserProps) => {
             backgroundColor:
               theme.colorScheme === 'dark'
                 ? theme.colors.dark[6]
-                : theme.colors.gray[0]
+                : theme.colors.gray[2]
           }
         }}
       >
-        <Group>
-          <Avatar radius="xl" />
-          <Box sx={{ flex: 1 }}>
-            <Text size="sm" weight={500}>
-              {profile?.fullName}
-            </Text>
-            <Text color="dimmed" size="xs">
-              {profile?.employeeCode}
-            </Text>
-          </Box>
-        </Group>
+        {children}
       </UnstyledButton>
+    );
+  };
+
+  return (
+    <Box
+      sx={{
+        paddingTop: theme.spacing.sm,
+        borderTop: `${rem(1)} solid ${
+          theme.colorScheme === 'dark'
+            ? theme.colors.dark[4]
+            : theme.colors.gray[2]
+        }`
+      }}
+    >
+      <Popover position={'top-end'} shadow="xs">
+        <Popover.Target>
+          <UnstyledButton
+            sx={{
+              display: 'block',
+              width: '100%',
+              padding: theme.spacing.xs,
+              borderRadius: theme.radius.sm,
+              color:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[0]
+                  : theme.black,
+
+              '&:hover': {
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[6]
+                    : theme.colors.gray[0]
+              }
+            }}
+          >
+            <Group>
+              <Avatar radius="xl" src={profile?.avatarFileId} />
+              <Box sx={{ flex: 1 }}>
+                <Text size="sm" weight={500}>
+                  {profile?.fullName}
+                </Text>
+                <Text color="dimmed" size="xs">
+                  {profile?.employeeCode}
+                </Text>
+              </Box>
+            </Group>
+          </UnstyledButton>
+        </Popover.Target>
+        <Popover.Dropdown p={'xs'}>
+          <Wrapper>
+            <Text onClick={() => navigate(`${ROUTER.PROFILE}`)} fz={'xs'}>
+              <Group spacing={2}>
+                <IconUser size={'1rem'} />
+                Thông tin cá nhân
+              </Group>
+            </Text>
+          </Wrapper>
+          <Wrapper>
+            <Text onClick={() => navigate(`${ROUTER.PROFILE}`)} fz={'xs'}>
+              <Group spacing={2}>
+                <IconPassword size={'1rem'} />
+                Thay đổi mật khẩu
+              </Group>
+            </Text>
+          </Wrapper>
+        </Popover.Dropdown>
+      </Popover>
     </Box>
   );
 };
@@ -148,11 +209,8 @@ const ProtectedLayout = () => {
     getAuthorities();
     getProfile();
     dispatch(TimeoffActions.getMyRequest());
-    // dispatch(RoleActions.getAllRole());
-    // dispatch(DepartmentActions.getAllDepartment());
-    // dispatch(UserActions.getAllUser());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(NewsActions.getMyNews());
+  }, [dispatch, getAuthorities, getProfile]);
 
   useEffect(() => {
     setAuthorities(authorities);
@@ -193,6 +251,13 @@ const ProtectedLayout = () => {
       label: 'Quản Lý Xin Nghỉ Phép',
       to: ROUTER.REQUEST,
       auth: isGrantedPermission(_authorities, RESOURCES.TIMEOFF, SCOPES.VIEW)
+    },
+    {
+      icon: <IconGitPullRequest size={'1rem'} />,
+      color: 'pink',
+      label: 'Quản Lý Thông Báo',
+      to: ROUTER.NEWS,
+      auth: isGrantedPermission(_authorities, RESOURCES.NEWS, SCOPES.VIEW)
     }
   ];
   return (

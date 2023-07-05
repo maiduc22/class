@@ -111,6 +111,10 @@ export const Requests = () => {
 
   const columns: DataTableColumn<IRequest>[] = [
     {
+      accessor: 'createdBy',
+      title: 'Người gửi'
+    },
+    {
       accessor: 'dateFrom',
       title: 'Từ'
     },

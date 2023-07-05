@@ -1,9 +1,15 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { RootState } from '@/redux/reducers';
+import { EventActions } from '@/redux/reducers/event/event.action';
+import { IEvent } from '@/types/models/IEvent';
 import {
+  Avatar,
   Card,
   CardSection,
   Col,
   Grid,
   Group,
+  Stack,
   Text,
   Tooltip,
   useMantineTheme
@@ -26,9 +32,17 @@ import {
   startOfWeek,
   subWeeks
 } from 'date-fns';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 export const UpcomingEvents = () => {
+  const dispatch = useAppDispatch();
+
+  useLayoutEffect(() => {
+    dispatch(EventActions.getAllEvents());
+  }, [dispatch]);
+
+  const { events } = useAppSelector((state: RootState) => state.event);
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentWeek, setCurrentWeek] = useState(getWeek(currentMonth));
@@ -43,7 +57,13 @@ export const UpcomingEvents = () => {
       setCurrentWeek(getWeek(addWeeks(currentMonth, 1)));
     }
   };
+
   const theme = useMantineTheme();
+
+  // const calculateAniversary = (joinDate: string, day: Date) => {
+
+  // };
+
   const renderHeader = () => {
     const dateFormat = 'MMM d';
     const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 });
@@ -106,6 +126,30 @@ export const UpcomingEvents = () => {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat);
+
+        const usersWithBirthday: IEvent[] = [];
+
+        const usersWithAnniversary: IEvent[] = [];
+
+        events.forEach((user: IEvent) => {
+          const userBirthDate = new Date(user.dayOfBirth);
+          const userJoinDate = new Date(user.joinDate);
+
+          if (
+            userBirthDate.getMonth() === day.getMonth() &&
+            userBirthDate.getDate() === day.getDate()
+          ) {
+            usersWithBirthday.push(user);
+          }
+
+          if (
+            userJoinDate.getMonth() === day.getMonth() &&
+            userJoinDate.getDate() === day.getDate()
+          ) {
+            usersWithAnniversary.push(user);
+          }
+        });
+
         days.push(
           <Col span={'auto'} h={150}>
             <Card p={'xs'} h={'100%'} withBorder radius={0}>
@@ -124,6 +168,52 @@ export const UpcomingEvents = () => {
                   {formattedDate}
                 </Text>
               </CardSection>
+              <Stack py={'xs'}>
+                {usersWithBirthday.length > 0 ? (
+                  <Group spacing={'xs'}>
+                    <IconCake
+                      size={'1.3rem'}
+                      style={{
+                        background: 'white',
+                        borderRadius: '50%',
+                        border: '2px solid blue',
+                        padding: '2px'
+                      }}
+                      color="blue"
+                      cursor={'pointer'}
+                    />
+                    {usersWithBirthday.map((user) => (
+                      <Avatar
+                        size={'1.3rem'}
+                        radius={'xl'}
+                        src={user.avatarFileId}
+                      />
+                    ))}
+                  </Group>
+                ) : null}
+                {usersWithAnniversary.length > 0 ? (
+                  <Group spacing={'xs'}>
+                    <IconTimelineEvent
+                      size={'1.2rem'}
+                      style={{
+                        background: 'white',
+                        borderRadius: '50%',
+                        border: '2px solid blue',
+                        padding: '2px'
+                      }}
+                      color="blue"
+                      cursor={'pointer'}
+                    />
+                    {usersWithAnniversary.map((user) => (
+                      <Avatar
+                        size={'1.3rem'}
+                        radius={'xl'}
+                        src={user.avatarFileId}
+                      />
+                    ))}
+                  </Group>
+                ) : null}
+              </Stack>
             </Card>
           </Col>
         );
@@ -142,6 +232,7 @@ export const UpcomingEvents = () => {
       </Group>
     );
   };
+
   return (
     <Card withBorder w={'100%'} p={'xl'} shadow={'xs'} bg={'gray.1'}>
       {renderHeader()}

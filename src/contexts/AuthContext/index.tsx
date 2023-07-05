@@ -75,7 +75,7 @@ function useAuthReducer(_state = initialState) {
     renderNotification('Đăng xuất thành công', NotiType.SUCCESS);
   };
 
-  const getAuthorities = async (cb?: Callback) => {
+  const getAuthorities = useCallback(async (cb?: Callback) => {
     dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
 
     const api = API_URLS.Auth.getAuthorities();
@@ -92,7 +92,8 @@ function useAuthReducer(_state = initialState) {
       dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
       cb?.onError?.();
     }
-  };
+  }, []);
+
   const getProfile = useCallback(async (cb?: Callback) => {
     dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
 

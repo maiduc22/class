@@ -1,3 +1,4 @@
+import { INewStatus } from '@/types/models/INew';
 import { IRoleProperty } from '@/types/models/IRole';
 import { IUserGender } from '@/types/models/IUser';
 
@@ -64,6 +65,14 @@ export type RequestTimeoffPayload = {
   fileId?: string;
 };
 
+export type CreateNewsPayload = {
+  title: string;
+  content: string;
+  isPublic?: boolean;
+  status?: INewStatus;
+  isImportant?: boolean;
+  employeeIds?: string[];
+};
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
@@ -72,4 +81,5 @@ export type ApiEndPointPayload =
   | AssignRolePermissionPayload
   | ChangeProfilePayload
   | string[]
-  | RequestTimeoffPayload;
+  | RequestTimeoffPayload
+  | CreateNewsPayload;

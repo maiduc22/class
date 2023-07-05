@@ -12,7 +12,24 @@ export interface IBalance extends BaseModel {
 }
 
 export enum IBalanceEvent {
-  TAKE_TIME_OFF = '',
-  BALANCE_ADJUSTMENT = '',
-  ACCRUAL = ''
+  TAKE_TIME_OFF = 'TAKE_TIME_OFF',
+  BALANCE_ADJUSTMENT = 'BALANCE_ADJUSTMENT',
+  ACCRUAL = 'ACCRUAL  '
 }
+
+export const IBalanceEventDict: Record<
+  IBalanceEvent,
+  {
+    label: string;
+  }
+> = {
+  [IBalanceEvent.TAKE_TIME_OFF]: {
+    label: 'Take time off'
+  },
+  [IBalanceEvent.BALANCE_ADJUSTMENT]: {
+    label: 'Balance adjustment'
+  },
+  [IBalanceEvent.ACCRUAL]: {
+    label: 'Accrual'
+  }
+};
