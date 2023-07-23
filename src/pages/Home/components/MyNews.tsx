@@ -20,7 +20,7 @@ export const MyNews = () => {
   const navigate = useNavigate();
 
   return (
-    <Card bg={'gray.1'} p={'xl'}>
+    <Card withBorder w={'100%'} p={'xl'} shadow={'xs'}>
       <Stack>
         <Group position="apart">
           <Group spacing={'xs'}>

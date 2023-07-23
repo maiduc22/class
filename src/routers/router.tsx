@@ -25,6 +25,8 @@ import { UserDetails } from '../pages/UserDetails';
 import { News } from '@/pages/News';
 import { CreateNewsPage } from '@/pages/News/components/CreateNewPage';
 import { MyNews } from '@/pages/MyNews';
+import { MyAttendance } from '@/pages/MyAttendance';
+import { Attendance } from '@/pages/Attendance';
 
 const router = () => {
   return createBrowserRouter(
@@ -51,6 +53,8 @@ const router = () => {
           <Route path={ROUTER.NEWS} element={<News />} />
           <Route path={ROUTER.CREATE_NEWS} element={<CreateNewsPage />} />
           <Route path={ROUTER.MY_NEWS} element={<MyNews />} />
+          <Route path={ROUTER.MY_ATTENDANCE} element={<MyAttendance />} />
+          <Route path={ROUTER.ATTENDANCE} element={<Attendance />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path="*" element={<Page404 />} />
         </Route>

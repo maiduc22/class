@@ -44,7 +44,7 @@ export const MyTimeOff = () => {
   }, [myRequests]);
 
   return (
-    <Card withBorder w={'100%'} p={'xl'} shadow={'xs'} bg={'gray.1'}>
+    <Card withBorder w={'100%'} p={'xl'} shadow={'xs'}>
       <Stack spacing={'lg'}>
         <Group position="apart">
           <Group spacing={'xs'}>

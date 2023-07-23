@@ -32,6 +32,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBrandAsana,
+  IconClockCheck,
   IconGitPullRequest,
   IconLicense,
   IconLogout,
@@ -284,6 +285,13 @@ const ProtectedLayout = () => {
       label: 'Quản Lý Thông Báo',
       to: ROUTER.NEWS,
       auth: isGrantedPermission(_authorities, RESOURCES.NEWS, SCOPES.VIEW)
+    },
+    {
+      icon: <IconClockCheck size={'1rem'} />,
+      color: 'orange',
+      label: 'Quản Lý Chấm Công',
+      to: ROUTER.ATTENDANCE,
+      auth: true
     }
   ];
   return (
