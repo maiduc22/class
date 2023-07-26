@@ -18,7 +18,6 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { IconIdOff } from '@tabler/icons-react';
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { transformDate } from '../helper';
@@ -32,14 +31,15 @@ export const MyTimeOff = () => {
 
   useEffect(() => {
     setTodayRequest(
-      myRequests.filter((request) => {
-        const today = new Date();
-        const from = dayjs(request.dateFrom).toDate();
-        // const to = dayjs(request.dateTo).toDate();
-        if (today <= from) {
-          return true;
-        }
-      })
+      // myRequests.filter((request) => {
+      //   const today = new Date();
+      //   const from = dayjs(request.dateFrom).toDate();
+      //   // const to = dayjs(request.dateTo).toDate();
+      //   if (today <= from) {
+      //     return true;
+      //   }
+      // })
+      myRequests.slice(0, 2)
     );
   }, [myRequests]);
 

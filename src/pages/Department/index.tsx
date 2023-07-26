@@ -1,4 +1,6 @@
 import CustomLoader from '@/components/custom/CustomLoader';
+import { api } from '@/configs/api';
+import { API_URLS } from '@/configs/api/endpoint';
 import { ROUTER } from '@/configs/router';
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -18,7 +20,7 @@ import {
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconInfoCircle, IconTrash } from '@tabler/icons-react';
+import { IconDownload, IconInfoCircle, IconTrash } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -176,6 +178,22 @@ const Department: React.FC = () => {
     return <Navigate to={ROUTER.UNAUTHORIZE} />;
   }
 
+  const handleDownloadExcel = async () => {
+    const url = API_URLS.Department.exportExcel();
+    const fileName = 'Danh_sách_phòng_ban.xlsx';
+
+    await api
+      .get(url.endPoint, { ...url, responseType: 'blob' })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   return (
     <Stack>
       <Text fw={600} size={'lg'}>
@@ -187,15 +205,24 @@ const Department: React.FC = () => {
           miw={300}
           onChange={(e) => setQuery(e.currentTarget.value)}
         />
-        {isGrantedPermission(
-          _authorities,
-          RESOURCES.DEPARTMENT,
-          SCOPES.CREATE
-        ) && (
-          <Button onClick={openAddModal} hidden>
-            Thêm mới
+        <Group>
+          <Button
+            variant="outline"
+            leftIcon={<IconDownload size={'1rem'} />}
+            onClick={handleDownloadExcel}
+          >
+            Excel
           </Button>
-        )}
+          {isGrantedPermission(
+            _authorities,
+            RESOURCES.DEPARTMENT,
+            SCOPES.CREATE
+          ) && (
+            <Button onClick={openAddModal} hidden>
+              Thêm mới
+            </Button>
+          )}
+        </Group>
       </Group>
       <DataTable
         minHeight={200}

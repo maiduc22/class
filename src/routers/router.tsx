@@ -27,6 +27,7 @@ import { CreateNewsPage } from '@/pages/News/components/CreateNewPage';
 import { MyNews } from '@/pages/MyNews';
 import { MyAttendance } from '@/pages/MyAttendance';
 import { Attendance } from '@/pages/Attendance';
+import { UpdateNewsPage } from '@/pages/News/components/UpdateNewPage';
 
 const router = () => {
   return createBrowserRouter(
@@ -52,6 +53,7 @@ const router = () => {
           <Route path={ROUTER.REQUEST} element={<Requests />} />
           <Route path={ROUTER.NEWS} element={<News />} />
           <Route path={ROUTER.CREATE_NEWS} element={<CreateNewsPage />} />
+          <Route path={ROUTER.DETAILS_NEWS} element={<UpdateNewsPage />} />
           <Route path={ROUTER.MY_NEWS} element={<MyNews />} />
           <Route path={ROUTER.MY_ATTENDANCE} element={<MyAttendance />} />
           <Route path={ROUTER.ATTENDANCE} element={<Attendance />} />

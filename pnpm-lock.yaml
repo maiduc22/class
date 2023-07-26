@@ -74,6 +74,9 @@ dependencies:
   i18next:
     specifier: ^22.5.0
     version: 22.5.0
+  js-file-download:
+    specifier: ^0.4.12
+    version: 0.4.12
   jwt-decode:
     specifier: ^3.1.2
     version: 3.1.2
@@ -83,6 +86,9 @@ dependencies:
   mantine-datatable:
     specifier: ^2.5.5
     version: 2.5.5(@mantine/core@6.0.13)(@mantine/hooks@6.0.13)(react@18.2.0)
+  markdown-to-jsx:
+    specifier: ^7.2.1
+    version: 7.2.1(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -3593,6 +3599,10 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /js-file-download@0.4.12:
+    resolution: {integrity: sha512-rML+NkoD08p5Dllpjo0ffy4jRHeY6Zsapvr/W86N7E0yuzAO6qa5X9+xog6zQNlH102J7IXljNY2FtS6Lj3ucg==}
+    dev: false
+
   /js-sdsl@4.4.0:
     resolution: {integrity: sha512-FfVSdx6pJ41Oa+CF7RDaFmTnCaFhua+SNYQX74riGOpl96x+2jQCqEfQ2bnXu/5DPCqlRuiqyvTJM0Qjz26IVg==}
     dev: true
@@ -3779,6 +3789,15 @@ packages:
     dependencies:
       '@mantine/core': 6.0.13(@emotion/react@11.11.0)(@mantine/hooks@6.0.13)(@types/react@18.0.37)(react-dom@18.2.0)(react@18.2.0)
       '@mantine/hooks': 6.0.13(react@18.2.0)
+      react: 18.2.0
+    dev: false
+
+  /markdown-to-jsx@7.2.1(react@18.2.0):
+    resolution: {integrity: sha512-9HrdzBAo0+sFz9ZYAGT5fB8ilzTW+q6lPocRxrIesMO+aB40V9MgFfbfMXxlGjf22OpRy+IXlvVaQenicdpgbg==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
+    dependencies:
       react: 18.2.0
     dev: false
 

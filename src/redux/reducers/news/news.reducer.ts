@@ -18,7 +18,6 @@ const newsReducer: Reducer<NewsState, NewsAction> = (
     case NewsActionType.CREATE_NEWS_SUCCESS:
     case NewsActionType.UPDATE_NEWS_SUCCESS:
     case NewsActionType.DELETE_NEWS_SUCCESS:
-    case NewsActionType.TOGGLE_NEWS_SUCCESS:
       return { ...state, isFetching: false };
     case NewsActionType.GET_ALL_NEWS_SUCCESS:
       return { ...state, isFetching: false, news: action.payload };

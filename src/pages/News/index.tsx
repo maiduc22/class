@@ -60,7 +60,7 @@ export const News = () => {
         <Group>
           <Input
             icon={<IconSearch size={'1rem'} />}
-            placeholder="Tìm kiếm tiêu đề hoặc nội dung"
+            placeholder="Tìm kiếm tiêu đề "
             onChange={(e) => setQuery(e.currentTarget.value)}
             miw={'250px'}
           />

@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, ResponseType } from 'axios';
 import { ApiEndPointPayload } from './payload';
 import { CONFIG } from '../index';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: CONFIG.APP_URL as string
 });
 
@@ -12,6 +12,7 @@ interface UseCallApiProps {
   payload?: ApiEndPointPayload;
   headers?: AxiosRequestConfig['headers'];
   params?: AxiosRequestConfig['params'];
+  responseType?: ResponseType;
 }
 
 interface UseCallApiResponse {

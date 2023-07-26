@@ -64,6 +64,11 @@ export const API_URLS = {
       endPoint: `/departments/${id}/delete-user/?userId=${userId}`,
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    exportExcel: () => ({
+      endPoint: `/departments/export`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
     })
   },
   User: {
@@ -85,6 +90,11 @@ export const API_URLS = {
     updateUser: (id: string) => ({
       endPoint: `/users/${id}`,
       method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    download: () => ({
+      endPoint: `/users/export`,
+      method: 'GET',
       headers: HEADERS.authHeader()
     })
   },
@@ -189,11 +199,55 @@ export const API_URLS = {
       endPoint: '/news/my-news',
       method: 'GET',
       headers: HEADERS.authHeader()
+    }),
+    detailsNew: (id: string) => ({
+      endPoint: `/news/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    updateNew: (id: string) => ({
+      endPoint: `/news/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteNew: (id: string) => ({
+      endPoint: `/news/${id}/delete`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
     })
   },
   Events: {
     getAllEvents: () => ({
       endPoint: '/events',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
+  },
+  Attendance: {
+    checkin: () => ({
+      endPoint: '/attendances/check-in',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    checkout: (note: string | null) => ({
+      endPoint: `${
+        note ? `/attendances/check-out?note=${note}` : `/attendances/check-out`
+      }`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getAllAttendances: () => ({
+      endPoint: '/attendances',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getMyAttendances: () => ({
+      endPoint: '/attendances/my-attendance',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    downloadExcel: () => ({
+      endPoint: '/attendances/export',
       method: 'GET',
       headers: HEADERS.authHeader()
     })

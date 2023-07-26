@@ -1,9 +1,14 @@
+import CustomLoader from '@/components/custom/CustomLoader';
+import { api } from '@/configs/api';
+import { API_URLS } from '@/configs/api/endpoint';
 import { ROUTER } from '@/configs/router';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserGenderDict, IUserStatusDict } from '@/types/models/IUser';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Badge,
   Button,
@@ -15,14 +20,11 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconDownload, IconInfoCircle } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ModalAddUser } from './components/ModalAddUser';
-import { useAuthContext } from '@/hooks/context';
-import CustomLoader from '@/components/custom/CustomLoader';
-import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 
 export const User = () => {
   const { state } = useAuthContext();
@@ -136,6 +138,22 @@ export const User = () => {
     return <Navigate to={ROUTER.UNAUTHORIZE} />;
   }
 
+  const handleDownloadExcel = async () => {
+    const url = API_URLS.User.download();
+    const fileName = 'Danh_sách_nhân_viên.xlsx';
+
+    await api
+      .get(url.endPoint, { ...url, responseType: 'blob' })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   return (
     <>
       <Stack>
@@ -148,9 +166,22 @@ export const User = () => {
             miw={300}
             onChange={(e) => setQuery(e.currentTarget.value)}
           />
-          {isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.CREATE) ? (
-            <Button onClick={openAddModal}>Thêm nhân sự</Button>
-          ) : null}
+          <Group>
+            {isGrantedPermission(
+              _authorities,
+              RESOURCES.USER,
+              SCOPES.CREATE
+            ) ? (
+              <Button onClick={openAddModal}>Thêm nhân sự</Button>
+            ) : null}
+            <Button
+              variant="outline"
+              leftIcon={<IconDownload />}
+              onClick={handleDownloadExcel}
+            >
+              Excel
+            </Button>
+          </Group>
         </Group>
         <DataTable
           minHeight={200}

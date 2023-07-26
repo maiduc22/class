@@ -6,17 +6,21 @@ import { CheckAttendance } from './components/CheckAttendance';
 
 export const Home = () => {
   return (
-    <Stack px={50} spacing={30}>
+    <Stack px={'xl'} spacing={30}>
       <UpcomingEvents />
-      <Grid gutter={'xl'}>
-        <Col span={4}>
+      <Grid gutter={50}>
+        <Col span={7}>
           <MyTimeOff />
         </Col>
-        <Col span={3}>
+        <Col span={5}>
           <CheckAttendance />
         </Col>
       </Grid>
-      <MyNews />
+      <Grid gutter={50}>
+        <Col span={7}>
+          <MyNews />
+        </Col>
+      </Grid>
     </Stack>
   );
 };

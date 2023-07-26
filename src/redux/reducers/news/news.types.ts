@@ -16,8 +16,7 @@ export enum NewsActionType {
   GET_MY_NEWS_SUCCESS = 'GET_MY_NEWS_SUCCESS',
   CREATE_NEWS_SUCCESS = 'CREATE_NEWS_SUCCESS',
   UPDATE_NEWS_SUCCESS = 'UPDATE_NEWS_SUCCESS',
-  DELETE_NEWS_SUCCESS = 'DELETE_NEWS_SUCCESS',
-  TOGGLE_NEWS_SUCCESS = 'TOGGLE_NEWS_SUCCESS'
+  DELETE_NEWS_SUCCESS = 'DELETE_NEWS_SUCCESS'
 }
 
 export interface NewsActionPending {
@@ -43,9 +42,6 @@ export interface UpdateNewsSuccess {
 export interface DeleteNewsSuccess {
   type: NewsActionType.DELETE_NEWS_SUCCESS;
 }
-export interface ToggleNewsSuccess {
-  type: NewsActionType.TOGGLE_NEWS_SUCCESS;
-}
 
 export type NewsAction =
   | NewsActionPending
@@ -54,8 +50,7 @@ export type NewsAction =
   | GetMyNewsSuccess
   | CreateNewsSuccess
   | UpdateNewsSuccess
-  | DeleteNewsSuccess
-  | ToggleNewsSuccess;
+  | DeleteNewsSuccess;
 
 export type NewsThunkAction = ThunkAction<
   void,

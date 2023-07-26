@@ -104,7 +104,7 @@ export const CreateNewsPage = () => {
     <form
       onSubmit={form.onSubmit((values) => handleSubmit(values, selectedStatus))}
     >
-      <Stack spacing={'lg'}>
+      <Stack spacing={'lg'} px={'xl'}>
         <Text fw={600} fz={'lg'}>
           Tạo thông báo mới
         </Text>

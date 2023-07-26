@@ -76,4 +76,74 @@ const getMyNews =
     }
   };
 
-export const NewsActions = { getAllNews, getMyNews, createNews };
+const getDetailsNew =
+  (id: string, cb?: Callback): NewsThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({
+      type: NewsActionType.NEWS_ACTION_PENDING
+    });
+
+    const api = API_URLS.News.detailsNew(id);
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      cb?.onSuccess?.(response.data.data);
+    } else {
+      dispatch({
+        type: NewsActionType.NEWS_ACTION_FAILURE
+      });
+    }
+  };
+
+const deleteNew =
+  (id: string, cb?: Callback) => async (dispatch: AppDispatch) => {
+    dispatch({
+      type: NewsActionType.NEWS_ACTION_PENDING
+    });
+
+    const api = API_URLS.News.deleteNew(id);
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: NewsActionType.DELETE_NEWS_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification('Xoá thông báo thành công', NotiType.SUCCESS);
+    } else {
+      dispatch({
+        type: NewsActionType.NEWS_ACTION_FAILURE
+      });
+      renderNotification('Đã có lỗi khi xoá thông báo', NotiType.ERROR);
+    }
+  };
+
+const updateNew =
+  (id: string, payload: CreateNewsPayload, cb?: Callback) =>
+  async (dispatch: AppDispatch) => {
+    dispatch({
+      type: NewsActionType.NEWS_ACTION_PENDING
+    });
+
+    const api = API_URLS.News.updateNew(id);
+    const { response, error } = await useCallApi({ ...api, payload });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: NewsActionType.UPDATE_NEWS_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification('Cập nhật thông báo thành công', NotiType.SUCCESS);
+    } else {
+      dispatch({
+        type: NewsActionType.NEWS_ACTION_FAILURE
+      });
+      renderNotification('Đã có lỗi khi cập nhật thông báo', NotiType.ERROR);
+    }
+  };
+
+export const NewsActions = {
+  getAllNews,
+  getMyNews,
+  createNews,
+  getDetailsNew,
+  deleteNew,
+  updateNew
+};

@@ -4,7 +4,9 @@ export const HEADERS = {
     'Content-Type': 'application/json'
   }),
   fileHeader: () => ({
-    'Content-Type': 'multipart/form-data'
+    'Content-Type': 'multipart/form-data',
+    'Access-Control-Allow-Origin': '*',
+    Authorization: `Bearer ${localStorage.getItem('token')}`
   }),
   authHeader: () => ({
     'Content-Type': 'application/json',

@@ -58,9 +58,18 @@ interface CardNewsProps {
 }
 
 export const CardNews = ({ news }: CardNewsProps) => {
-  const { isImportant, title, createdAt, authorName } = news;
+  const { isImportant, title, createdAt, authorName, id } = news;
+  const navigate = useNavigate();
   return (
-    <Card withBorder radius={'sm'} py={'xs'} px={'lg'} shadow="xs">
+    <Card
+      withBorder
+      radius={'sm'}
+      py={'xs'}
+      px={'lg'}
+      shadow="xs"
+      onClick={() => navigate(`${ROUTER.NEWS}/${id}`)}
+      sx={{ cursor: 'pointer' }}
+    >
       <Group position="apart" align="center">
         <Stack spacing={3}>
           <Group spacing={'xs'} align="center">

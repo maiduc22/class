@@ -6,6 +6,7 @@ import permissionReducer from './permission/permission.reducer';
 import timeoffReducer from './timeoff/timeoff.reducer';
 import newsReducer from './news/news.reducer';
 import eventReducer from './event/event.reducer';
+import { atttendanceReducer } from './attendance/attendance.reducer';
 
 const rootReducer = combineReducers({
   department: departmentReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   permission: permissionReducer,
   timeoff: timeoffReducer,
   news: newsReducer,
-  event: eventReducer
+  event: eventReducer,
+  attendance: atttendanceReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,19 +1,53 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { RootState } from '@/redux/reducers';
+import { AttendanceAction } from '@/redux/reducers/attendance/attendance.action';
 import {
   Button,
   Card,
   Group,
+  Modal,
   Stack,
   Text,
+  Textarea,
   useMantineTheme
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconClock2, IconLogin, IconLogout } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
 export const CheckAttendance = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(AttendanceAction.getMyAttendances());
+  }, [dispatch]);
+
+  const { myAttendances } = useAppSelector(
+    (state: RootState) => state.attendance
+  );
+
+  const checkIfCheckInToday = () => {
+    const index = myAttendances.findIndex(({ start }) => {
+      if (
+        dayjs(start).date() === _currentDate.date() &&
+        dayjs(start).month() === _currentDate.month()
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    return index === -1 ? false : true;
+  };
+
   const theme = useMantineTheme();
   const [_currentDate, setCurrentDate] = useState(dayjs(new Date()));
-  const [_isCheckin, setIsCheckin] = useState(false);
+  const [_checkinDate, setCheckinDate] = useState<dayjs.Dayjs>();
+  const [_isCheckin, setIsCheckin] = useState(checkIfCheckInToday());
+  const [opened, { close, open }] = useDisclosure();
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,8 +59,21 @@ export const CheckAttendance = () => {
     };
   }, []);
 
-  const handleCheckInOut = () => {
-    setIsCheckin(!_isCheckin);
+  const handleCheckIn = () => {
+    console.log(_isCheckin);
+    // if (_isCheckin) {
+    //   dispatch(AttendanceAction.checkin());
+    //   setIsCheckin(!_isCheckin);
+    //   dispatch(AttendanceAction.getMyAttendances());
+    // } else {
+    //   open();
+    // }
+  };
+
+  const handleCheckOut = () => {
+    dispatch(AttendanceAction.checkout(note));
+    setNote('');
+    close();
   };
 
   return (
@@ -54,11 +101,26 @@ export const CheckAttendance = () => {
         <Button
           color={_isCheckin ? 'red' : 'blue'}
           leftIcon={_isCheckin ? <IconLogout /> : <IconLogin />}
-          onClick={handleCheckInOut}
+          onClick={handleCheckIn}
         >
           {_isCheckin ? 'Check out' : 'Check in'}
         </Button>
       </Stack>
+
+      <Modal opened={opened} onClose={close} title="Check out">
+        <Stack>
+          <Textarea
+            label="Ghi chú"
+            value={note}
+            onChange={(e) => setNote(e.currentTarget.value)}
+            placeholder="Có thể để trống"
+          />
+          <Group position="right">
+            <Button variant="outline">Huỷ</Button>
+            <Button onClick={handleCheckOut}>Check out</Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Card>
   );
 };
