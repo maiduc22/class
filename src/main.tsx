@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import customTheme from './theme';
-import './index.css';
 import { MantineProvider } from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications as NotificationsProvider } from '@mantine/notifications';
+import { I18nextProvider } from 'react-i18next';
 import { Provider as ReduxProvider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
-import { DatesProvider } from '@mantine/dates';
-import { I18nextProvider } from 'react-i18next';
+import './index.css';
+import customTheme from './theme';
 
 import {
   ArcElement,
@@ -37,13 +37,11 @@ import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import router from './routers/router';
 import store from './redux/store';
+import router from './routers/router';
 
-import i18next from './locales/i18n';
 import { AuthProvider } from './contexts/AuthContext';
-import { API_URLS } from './configs/api/endpoint';
-import { api } from './configs/api';
+import i18next from './locales/i18n';
 dayjs.locale(i18next.language);
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
@@ -51,14 +49,14 @@ dayjs.extend(relativeTime);
 dayjs.extend(localeData);
 dayjs.extend(duration);
 
-window.addEventListener('beforeunload', (ev) => {
-  // ev.preventDefault();
-  const url = API_URLS.Auth.logout();
-  api.post(url.endPoint, {}, { headers: url.headers });
-  localStorage.removeItem('token');
-  localStorage.removeItem('authUser');
-  return (ev.returnValue = 'Are you sure you want to close?');
-});
+// window.addEventListener('beforeunload', (ev) => {
+//   // ev.preventDefault();
+//   const url = API_URLS.Auth.logout();
+//   api.post(url.endPoint, {}, { headers: url.headers });
+//   localStorage.removeItem('token');
+//   localStorage.removeItem('authUser');
+//   return (ev.returnValue = 'Are you sure you want to close?');
+// });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
