@@ -15,6 +15,7 @@ import {
 import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Badge,
+  Button,
   Center,
   Group,
   Select,
@@ -27,6 +28,7 @@ import {
   IconBarrierBlock,
   IconCalendar,
   IconChevronDown,
+  IconDownload,
   IconFileLike
 } from '@tabler/icons-react';
 
@@ -85,6 +87,8 @@ export const Requests = () => {
     setAllRequest(filteredData);
   }, [allRequests, _startDate, _endDate, _requestType, _requestStatus]);
 
+  console.log(_allRequest);
+
   const handleChangeRequestStatus = (
     id: string | undefined,
     status: IRequestStatus
@@ -94,6 +98,47 @@ export const Requests = () => {
         onSuccess: () => dispatch(TimeoffActions.getAllRequest())
       })
     );
+  };
+
+  const handleDownloadFile = (url: string | undefined) => {
+    if (url) {
+      // Create a new XHR object
+      const lastSlashIndex = url.lastIndexOf('/');
+      const fileNameWithToken = url.substring(lastSlashIndex + 1);
+      const questionMarkIndex = fileNameWithToken.indexOf('?');
+      const fileName = fileNameWithToken.substring(0, questionMarkIndex);
+
+      // Extract the extension from the file name
+      const lastDotIndex = fileName.lastIndexOf('.');
+      const extension = fileName.substring(lastDotIndex + 1);
+      console.log(extension);
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      // Define the onload event handler
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const blob = xhr.response;
+          const downloadLink = document.createElement('a');
+          downloadLink.href = URL.createObjectURL(blob);
+          downloadLink.download = `Minh_chứng./${extension}`;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        } else {
+          console.error('File download failed:', xhr.statusText);
+        }
+      };
+      xhr.onerror = () => {
+        console.error('File download failed:', xhr.statusText);
+      };
+      xhr.open('GET', url);
+      xhr.send();
+    } else {
+      console.error(
+        'Could not determine the file extension from the URL:',
+        url
+      );
+    }
   };
 
   const {
@@ -135,7 +180,20 @@ export const Requests = () => {
     },
     {
       accessor: 'fileId',
-      title: 'Đính kèm'
+      title: 'Đính kèm',
+      textAlignment: 'center',
+      render: ({ fileId }) => {
+        return fileId ? (
+          <Button
+            variant="outline"
+            leftIcon={<IconDownload size={'1rem'} />}
+            size="xs"
+            onClick={() => handleDownloadFile(fileId)}
+          >
+            Tải xuống
+          </Button>
+        ) : null;
+      }
     },
     {
       accessor: 'status',

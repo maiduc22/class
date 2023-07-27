@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import CustomLoader from '@/components/custom/CustomLoader';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { RootState } from '@/redux/reducers';
 import { AttendanceAction } from '@/redux/reducers/attendance/attendance.action';
@@ -15,7 +16,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconClock2, IconLogin, IconLogout } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const CheckAttendance = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +29,9 @@ export const CheckAttendance = () => {
     (state: RootState) => state.attendance
   );
 
-  const checkIfCheckInToday = () => {
+  const [_currentDate, setCurrentDate] = useState(dayjs(new Date()));
+
+  const checkIfCheckInToday = useCallback(() => {
     const index = myAttendances.findIndex(({ start }) => {
       if (
         dayjs(start).date() === _currentDate.date() &&
@@ -40,12 +43,17 @@ export const CheckAttendance = () => {
       }
     });
     return index === -1 ? false : true;
-  };
+  }, [_currentDate, myAttendances]);
 
   const theme = useMantineTheme();
-  const [_currentDate, setCurrentDate] = useState(dayjs(new Date()));
+
   const [_checkinDate, setCheckinDate] = useState<dayjs.Dayjs>();
   const [_isCheckin, setIsCheckin] = useState(checkIfCheckInToday());
+
+  useEffect(() => {
+    setIsCheckin(checkIfCheckInToday());
+  }, [checkIfCheckInToday]);
+
   const [opened, { close, open }] = useDisclosure();
   const [note, setNote] = useState('');
 
@@ -60,14 +68,13 @@ export const CheckAttendance = () => {
   }, []);
 
   const handleCheckIn = () => {
-    console.log(_isCheckin);
-    // if (_isCheckin) {
-    //   dispatch(AttendanceAction.checkin());
-    //   setIsCheckin(!_isCheckin);
-    //   dispatch(AttendanceAction.getMyAttendances());
-    // } else {
-    //   open();
-    // }
+    if (!_isCheckin) {
+      dispatch(AttendanceAction.checkin());
+      setIsCheckin(!_isCheckin);
+      dispatch(AttendanceAction.getMyAttendances());
+    } else {
+      open();
+    }
   };
 
   const handleCheckOut = () => {
@@ -76,7 +83,7 @@ export const CheckAttendance = () => {
     close();
   };
 
-  return (
+  return myAttendances ? (
     <Card withBorder w={'100%'} p={'xl'} shadow={'xs'}>
       <Stack>
         <Group position="apart">
@@ -122,5 +129,7 @@ export const CheckAttendance = () => {
         </Stack>
       </Modal>
     </Card>
+  ) : (
+    <CustomLoader></CustomLoader>
   );
 };

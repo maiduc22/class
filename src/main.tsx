@@ -42,12 +42,23 @@ import store from './redux/store';
 
 import i18next from './locales/i18n';
 import { AuthProvider } from './contexts/AuthContext';
+import { API_URLS } from './configs/api/endpoint';
+import { api } from './configs/api';
 dayjs.locale(i18next.language);
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(localeData);
 dayjs.extend(duration);
+
+window.addEventListener('beforeunload', (ev) => {
+  // ev.preventDefault();
+  const url = API_URLS.Auth.logout();
+  api.post(url.endPoint, {}, { headers: url.headers });
+  localStorage.removeItem('token');
+  localStorage.removeItem('authUser');
+  return (ev.returnValue = 'Are you sure you want to close?');
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

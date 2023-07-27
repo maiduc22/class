@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { RootState } from '@/redux/reducers';
 import { DepartmentActions } from '@/redux/reducers/department/department.action';
+import { RoleActions } from '@/redux/reducers/role/role.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUserGender, IUserGenderDict } from '@/types/models/IUser';
 import {
@@ -36,6 +37,7 @@ export const ModalAddUser = ({ closeModal }: Props) => {
 
   useLayoutEffect(() => {
     dispatch(DepartmentActions.getAllDepartment());
+    dispatch(RoleActions.getAllRole());
   }, [dispatch]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,6 +45,7 @@ export const ModalAddUser = ({ closeModal }: Props) => {
     useUploadFirebase();
 
   const { roles } = useAppSelector((state: RootState) => state.role);
+  console.log(roles);
   const { departments } = useAppSelector(
     (state: RootState) => state.department
   );

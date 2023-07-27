@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RequestTimeoffPayload } from '@/configs/api/payload';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
+import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { RootState } from '@/redux/reducers';
 import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import {
@@ -29,6 +31,7 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { DateInput, DateValue, TimeInput } from '@mantine/dates';
+import { FileWithPath } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -36,6 +39,7 @@ import {
   IconCalendar,
   IconChevronDown,
   IconClock,
+  IconDownload,
   IconFileUpload,
   IconNewSection,
   IconNote,
@@ -114,6 +118,47 @@ export const MyRequests = () => {
     }
   });
 
+  const handleDownloadFile = (url: string | undefined) => {
+    if (url) {
+      // Create a new XHR object
+      const lastSlashIndex = url.lastIndexOf('/');
+      const fileNameWithToken = url.substring(lastSlashIndex + 1);
+      const questionMarkIndex = fileNameWithToken.indexOf('?');
+      const fileName = fileNameWithToken.substring(0, questionMarkIndex);
+
+      // Extract the extension from the file name
+      const lastDotIndex = fileName.lastIndexOf('.');
+      const extension = fileName.substring(lastDotIndex + 1);
+      console.log(extension);
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      // Define the onload event handler
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const blob = xhr.response;
+          const downloadLink = document.createElement('a');
+          downloadLink.href = URL.createObjectURL(blob);
+          downloadLink.download = `Minh_chứng./${extension}`;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        } else {
+          console.error('File download failed:', xhr.statusText);
+        }
+      };
+      xhr.onerror = () => {
+        console.error('File download failed:', xhr.statusText);
+      };
+      xhr.open('GET', url);
+      xhr.send();
+    } else {
+      console.error(
+        'Could not determine the file extension from the URL:',
+        url
+      );
+    }
+  };
+
   const columns: DataTableColumn<IRequest>[] = [
     {
       accessor: 'dateFrom',
@@ -136,7 +181,19 @@ export const MyRequests = () => {
     },
     {
       accessor: 'fileId',
-      title: 'Đính kèm'
+      title: 'Đính kèm',
+      render: ({ fileId }) => {
+        return fileId ? (
+          <Button
+            variant="outline"
+            leftIcon={<IconDownload size={'1rem'} />}
+            size="xs"
+            onClick={() => handleDownloadFile(fileId)}
+          >
+            Tải xuống
+          </Button>
+        ) : null;
+      }
     },
     {
       accessor: 'status',
@@ -283,6 +340,9 @@ export const ModalAddRequest = ({ close }: Props) => {
   const [_dateTo, setDateTo] = useState<DateValue>();
   const [_start, setStart] = useState(0);
   const [_end, setEnd] = useState(0);
+  const [previewImage, setPreviewImage] = useState<FileWithPath>();
+  const [isLoadingUpload, url, handleUploadImageOnFirebase] =
+    useUploadFirebase();
 
   const form = useForm<RequestTimeoffPayload>({
     initialValues: {
@@ -296,9 +356,9 @@ export const ModalAddRequest = ({ close }: Props) => {
       dayOff: 0
     },
     validate: {
-      type: isNotEmpty('Vui lòng lựa chọn loại yêu cầu'),
-      dateFrom: isNotEmpty('Thời gian bắt đầu không được bỏ trống'),
-      dateTo: isNotEmpty('Thời gian kết thúc không được bỏ trống')
+      type: isNotEmpty('Vui lòng lựa chọn loại yêu cầu')
+      // dateFrom: isNotEmpty('Thời gian bắt đầu không được bỏ trống'),
+      // dateTo: isNotEmpty('Thời gian kết thúc không được bỏ trống')
     }
   });
 
@@ -327,7 +387,9 @@ export const ModalAddRequest = ({ close }: Props) => {
             <Text w={30}>Từ</Text>
             <DateInput
               rightSection={<IconCalendar size="0.9rem" color="blue" />}
-              onChange={(value) => handleChangeDateFrom(value)}
+              onChange={(value) => {
+                handleChangeDateFrom(value);
+              }}
               minDate={new Date()}
               size={'sm'}
               excludeDate={(date) => date.getDay() === 0 || date.getDay() === 6}
@@ -378,7 +440,10 @@ export const ModalAddRequest = ({ close }: Props) => {
         <Group>
           <DateInput
             rightSection={<IconCalendar size="0.9rem" color="blue" />}
-            onChange={(value) => handleChangeDateFrom(value)}
+            onChange={(value) => {
+              handleChangeDateFrom(value);
+              handleChangeDateTo(value);
+            }}
             minDate={new Date()}
             size={'sm'}
             excludeDate={(date) => date.getDay() === 0 || date.getDay() === 6}
@@ -422,6 +487,7 @@ export const ModalAddRequest = ({ close }: Props) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = (values: RequestTimeoffPayload) => {
+    console.log(values);
     dispatch(
       TimeoffActions.requestTimeoff(
         { ...values, dayOff: calculateDayoff() },
@@ -509,11 +575,27 @@ export const ModalAddRequest = ({ close }: Props) => {
             <IconPaperclip size={'1.5rem'} />
           </Col>
           <Col span={10} offset={1}>
-            <FileInput placeholder="Tải tệp đính kém (có thể bỏ qua)" />
+            <FileInput
+              placeholder="Tải tệp đính kém (có thể bỏ qua)"
+              onChange={(files) => {
+                if (files) {
+                  setPreviewImage(files);
+                  handleUploadImageOnFirebase(files, {
+                    onSuccess: (downloadUrl) => {
+                      form.setFieldValue('fileId', downloadUrl);
+                    }
+                  });
+                }
+              }}
+            />
           </Col>
         </Grid>
         <Group position="right">
-          <Button type={'submit'} form="request-timeoff">
+          <Button
+            type={'submit'}
+            form="request-timeoff"
+            loading={isLoadingUpload}
+          >
             Tạo yêu cầu
           </Button>
         </Group>

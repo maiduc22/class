@@ -8,6 +8,11 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.header()
     }),
+    logout: () => ({
+      endPoint: `/me/logout`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
     getAuthorities: () => ({
       endPoint: '/me/authorities',
       method: 'GET',

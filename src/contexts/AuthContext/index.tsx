@@ -73,11 +73,22 @@ function useAuthReducer(_state = initialState) {
     }
   };
 
-  const logout = () => {
-    dispatch({ type: AuthAction.LOGOUT });
-    localStorage.removeItem('token');
-    localStorage.removeItem('authUser');
-    renderNotification('Đăng xuất thành công', NotiType.SUCCESS);
+  const logout = async () => {
+    dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
+
+    const api = API_URLS.Auth.logout();
+
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({ type: AuthAction.LOGOUT });
+      localStorage.removeItem('token');
+      localStorage.removeItem('authUser');
+      renderNotification('Đăng xuất thành công', NotiType.SUCCESS);
+    } else {
+      dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
+      renderNotification('Đăng xuất thất bại', NotiType.ERROR);
+    }
   };
 
   const getAuthorities = useCallback(async (cb?: Callback) => {
@@ -175,7 +186,7 @@ function useAuthReducer(_state = initialState) {
 export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
   state: initialState,
   login: async () => {},
-  logout: () => {},
+  logout: async () => {},
   getAuthorities: async () => {},
   getProfile: async () => {},
   updateProfile: async () => {},

@@ -1,8 +1,8 @@
 import { Col, Grid, Stack } from '@mantine/core';
-import { UpcomingEvents } from './components/UpcomingEvents';
-import { MyTimeOff } from './components/MyTimeoff';
-import { MyNews } from './components/MyNews';
 import { CheckAttendance } from './components/CheckAttendance';
+import { MyNews } from './components/MyNews';
+import { MyTimeOff } from './components/MyTimeoff';
+import { UpcomingEvents } from './components/UpcomingEvents';
 
 export const Home = () => {
   return (
