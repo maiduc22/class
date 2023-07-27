@@ -71,7 +71,7 @@ export const CheckAttendance = () => {
     if (!_isCheckin) {
       dispatch(AttendanceAction.checkin());
       setIsCheckin(!_isCheckin);
-      dispatch(AttendanceAction.getMyAttendances());
+      // dispatch(AttendanceAction.getMyAttendances());
     } else {
       open();
     }
