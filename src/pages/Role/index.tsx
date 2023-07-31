@@ -1,9 +1,12 @@
+import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
+import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { RoleActions } from '@/redux/reducers/role/role.action';
 import { IRole, IRoleStatus, IRoleStatusDict } from '@/types/models/IRole';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Badge,
   Button,
@@ -14,7 +17,7 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import { useDebouncedState, useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import {
   IconBrandPowershell,
@@ -27,9 +30,6 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ModalAddRole } from './components/ModalAddRole';
 import { ModalAssignPermission } from './components/ModalAssignPermission';
-import { useAuthContext } from '@/hooks/context';
-import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
-import CustomLoader from '@/components/custom/CustomLoader';
 
 export const Role = () => {
   const { state } = useAuthContext();
@@ -62,15 +62,19 @@ export const Role = () => {
   }, [dispatch]);
 
   const [query, setQuery] = useState('');
-  const [debounceQuery] = useDebouncedState(query, 200);
+  const [debounceQuery] = useDebouncedValue(query, 200);
 
   useEffect(() => {
     setRecords(
       roles.filter((role) => {
         if (debounceQuery !== '') {
           if (
-            role.name.includes(debounceQuery) ||
-            role.code.includes(debounceQuery)
+            role.name
+              .toLocaleLowerCase()
+              .includes(debounceQuery.toLocaleLowerCase()) ||
+            role.code
+              .toLocaleLowerCase()
+              .includes(debounceQuery.toLocaleLowerCase())
           ) {
             return true;
           }

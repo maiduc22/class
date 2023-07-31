@@ -105,7 +105,7 @@ export const DepartmentDetails = () => {
   }, [_department]);
 
   const handleCancel = () => {
-    form.reset();
+    // form.reset();
     setIsEditing(false);
   };
 
@@ -202,22 +202,24 @@ export const DepartmentDetails = () => {
               onClick={() => navigate(`${ROUTER.USER}/${id}`)}
             />
           </Tooltip>
-          <Tooltip label="Xoá khỏi phòng ban">
-            <IconLayoutGridRemove
-              cursor={'pointer'}
-              size={'1rem'}
-              onClick={() => {
-                dispatch(
-                  DepartmentActions.removeUser(id, _department?.id, {
-                    onSuccess: () => {
-                      getDepartmentDetails();
-                      dispatch(UserActions.getAllUser());
-                    }
-                  })
-                );
-              }}
-            />
-          </Tooltip>
+          {isGrantedUpdatePermission && (
+            <Tooltip label="Xoá khỏi phòng ban">
+              <IconLayoutGridRemove
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() => {
+                  dispatch(
+                    DepartmentActions.removeUser(id, _department?.id, {
+                      onSuccess: () => {
+                        getDepartmentDetails();
+                        dispatch(UserActions.getAllUser());
+                      }
+                    })
+                  );
+                }}
+              />
+            </Tooltip>
+          )}
         </Group>
       )
     }

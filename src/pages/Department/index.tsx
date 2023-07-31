@@ -53,8 +53,12 @@ const Department: React.FC = () => {
       departments.filter((department) => {
         if (debounceQuery !== '') {
           if (
-            department.name.includes(debounceQuery) ||
-            department.code.includes(debounceQuery)
+            department.name
+              .toLocaleLowerCase()
+              .includes(debounceQuery.toLocaleLowerCase()) ||
+            department.code
+              .toLocaleLowerCase()
+              .includes(debounceQuery.toLocaleLowerCase())
           ) {
             return true;
           }

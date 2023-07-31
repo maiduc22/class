@@ -43,7 +43,7 @@ function authReducer(state = initialState, action: AuthActionType): AuthState {
     case AuthAction.GET_PROFILE:
       return { ...state, isFetching: false, profile: action.payload };
     case AuthAction.LOGOUT:
-      return state;
+      return { ...state, isFetching: false };
     default:
       return state;
   }

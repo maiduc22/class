@@ -34,6 +34,7 @@ import {
   IconBrandAsana,
   IconClockCheck,
   IconGitPullRequest,
+  IconHistory,
   IconLicense,
   IconLogout,
   IconPassword,
@@ -291,7 +292,14 @@ const ProtectedLayout = () => {
       color: 'orange',
       label: 'Quản Lý Chấm Công',
       to: ROUTER.ATTENDANCE,
-      auth: true
+      auth: isGrantedPermission(_authorities, RESOURCES.ATTENDANCE, SCOPES.VIEW)
+    },
+    {
+      icon: <IconHistory size={'1rem'} />,
+      color: 'gray',
+      label: 'Lịch sử đăng nhập',
+      to: ROUTER.SESSION,
+      auth: isGrantedPermission(_authorities, RESOURCES.SESSION, SCOPES.VIEW)
     }
   ];
   return (

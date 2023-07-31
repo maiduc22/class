@@ -28,6 +28,7 @@ import { MyNews } from '@/pages/MyNews';
 import { MyAttendance } from '@/pages/MyAttendance';
 import { Attendance } from '@/pages/Attendance';
 import { UpdateNewsPage } from '@/pages/News/components/UpdateNewPage';
+import { Session } from '@/pages/Session';
 
 const router = () => {
   return createBrowserRouter(
@@ -57,6 +58,7 @@ const router = () => {
           <Route path={ROUTER.MY_NEWS} element={<MyNews />} />
           <Route path={ROUTER.MY_ATTENDANCE} element={<MyAttendance />} />
           <Route path={ROUTER.ATTENDANCE} element={<Attendance />} />
+          <Route path={ROUTER.SESSION} element={<Session />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path="*" element={<Page404 />} />
         </Route>

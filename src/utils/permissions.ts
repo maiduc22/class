@@ -19,7 +19,9 @@ export enum RESOURCES {
   ROLE = 'role',
   PERMISSION = 'permission',
   TIMEOFF = 'timeoff',
-  NEWS = 'news'
+  NEWS = 'news',
+  ATTENDANCE = 'attendance',
+  SESSION = 'session'
 }
 
 export enum SCOPES {

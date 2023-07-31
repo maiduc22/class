@@ -28,11 +28,7 @@ const ModalCreateDepartment: React.FC<Props> = ({ closeModal }) => {
     validate: {
       name: isNotEmpty('Không được để trống'),
       description: isNotEmpty('Không được để trống')
-    },
-    transformValues: (value) => ({
-      name: value.name,
-      description: value.description
-    })
+    }
   });
   return (
     <form

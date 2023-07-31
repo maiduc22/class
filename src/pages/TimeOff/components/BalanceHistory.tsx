@@ -25,9 +25,21 @@ import {
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react';
 
-export const BalanceHistory = () => {
+export interface ComponentRef {
+  triggerFunction: () => void;
+}
+
+export const BalanceHistory = forwardRef<ComponentRef>(() => {
   const dispatch = useAppDispatch();
   const [_balanceHistory, setBalanceHistory] = useState<IBalance[]>();
 
@@ -40,6 +52,11 @@ export const BalanceHistory = () => {
       })
     );
   }, [dispatch]);
+
+  const triggerRef = useRef(getBalanceHistory());
+  useImperativeHandle(undefined, () => ({
+    triggerFunction: triggerRef
+  }));
 
   useEffect(() => {
     getBalanceHistory();
@@ -211,4 +228,4 @@ export const BalanceHistory = () => {
       </Card>
     </>
   );
-};
+});

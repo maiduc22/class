@@ -256,5 +256,12 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader()
     })
+  },
+  Session: {
+    getAll: () => ({
+      endPoint: '/sessions',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
   }
 };

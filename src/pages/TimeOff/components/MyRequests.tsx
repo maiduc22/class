@@ -50,6 +50,7 @@ import {
 import dayjs from 'dayjs';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { BalanceHistory, ComponentRef } from './BalanceHistory';
 
 export const MyRequests = () => {
   const theme = useMantineTheme();
@@ -485,15 +486,19 @@ export const ModalAddRequest = ({ close }: Props) => {
     );
   };
   const dispatch = useAppDispatch();
+  const componentRef = useRef<ComponentRef>(null);
 
   const handleSubmit = (values: RequestTimeoffPayload) => {
-    console.log(values);
     dispatch(
       TimeoffActions.requestTimeoff(
         { ...values, dayOff: calculateDayoff() },
         {
           onSuccess: () => {
             dispatch(TimeoffActions.getMyRequest());
+            dispatch(TimeoffActions.getBalanceHistory());
+            if (componentRef && componentRef.current) {
+              componentRef.current.triggerFunction(); // Call the handleTrigger function in ComponentB
+            }
             close();
           }
         }

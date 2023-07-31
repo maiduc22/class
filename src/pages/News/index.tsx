@@ -9,8 +9,18 @@ import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardNews } from './components/CardNews';
+import { useAuthContext } from '@/hooks/context';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 
 export const News = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const dispatch = useAppDispatch();
   const { news } = useAppSelector((state: RootState) => state.news);
   const [_allNews, setAllNews] = useState(news);
@@ -64,10 +74,12 @@ export const News = () => {
             onChange={(e) => setQuery(e.currentTarget.value)}
             miw={'250px'}
           />
-          <Button onClick={() => navigate(ROUTER.CREATE_NEWS)}>
-            <IconPlus size={'1rem'} />
-            Tạo mới
-          </Button>
+          {isGrantedPermission(_authorities, RESOURCES.NEWS, SCOPES.CREATE) && (
+            <Button onClick={() => navigate(ROUTER.CREATE_NEWS)}>
+              <IconPlus size={'1rem'} />
+              Tạo mới
+            </Button>
+          )}
         </Group>
       </Group>
 

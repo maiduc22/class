@@ -24,6 +24,7 @@ import {
   Tooltip
 } from '@mantine/core';
 import { DateInput, DateValue } from '@mantine/dates';
+import { modals } from '@mantine/modals';
 import {
   IconBarrierBlock,
   IconCalendar,
@@ -141,6 +142,26 @@ export const Requests = () => {
     }
   };
 
+  const openAcceptModal = (id: string) =>
+    modals.openConfirmModal({
+      title: 'Chấn nhập yêu cầu nghỉ phép',
+      labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
+      // onCancel: () => {}
+      onConfirm: () => {
+        handleChangeRequestStatus(id, IRequestStatus.APPROVED);
+      }
+    });
+
+  const openRejectModal = (id: string) =>
+    modals.openConfirmModal({
+      title: 'Từ chối yêu cầu nghỉ phép',
+      labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
+      // onCancel: () => {}
+      onConfirm: () => {
+        handleChangeRequestStatus(id, IRequestStatus.REJECTED);
+      }
+    });
+
   const {
     data: records,
     page,
@@ -156,7 +177,7 @@ export const Requests = () => {
 
   const columns: DataTableColumn<IRequest>[] = [
     {
-      accessor: 'createdBy',
+      accessor: 'employeeName',
       title: 'Người gửi'
     },
     {
@@ -216,24 +237,14 @@ export const Requests = () => {
                 <IconFileLike
                   cursor={'pointer'}
                   size={'1.2rem'}
-                  onClick={() =>
-                    handleChangeRequestStatus(
-                      record.id,
-                      IRequestStatus.APPROVED
-                    )
-                  }
+                  onClick={() => openAcceptModal(record.id)}
                 />
               </Tooltip>
               <Tooltip label="Từ chối">
                 <IconBarrierBlock
                   cursor={'pointer'}
                   size={'1.2rem'}
-                  onClick={() =>
-                    handleChangeRequestStatus(
-                      record.id,
-                      IRequestStatus.REJECTED
-                    )
-                  }
+                  onClick={() => openRejectModal(record.id)}
                 />
               </Tooltip>
             </Group>

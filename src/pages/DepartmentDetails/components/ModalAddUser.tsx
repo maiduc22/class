@@ -25,6 +25,12 @@ export const ModalAdduser = ({
   const [_query, setQuery] = useState('');
   const [debounceValue] = useDebouncedValue(_query, 200);
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(UserActions.getAllUser());
+  }, [dispatch]);
+
   useEffect(() => {
     setUsers(
       users.filter((user) => {
@@ -41,8 +47,6 @@ export const ModalAdduser = ({
       })
     );
   }, [debounceValue, users]);
-
-  const dispatch = useAppDispatch();
 
   const handleAdd = (id: string) => {
     if (userList.includes(id)) {

@@ -32,8 +32,18 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalAddUserIntoRole } from './components/ModalAddUserIntoRole';
+import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
+import { useAuthContext } from '@/hooks/context';
 
 export const RoleDetails = () => {
+  const { state } = useAuthContext();
+  const { authorities } = state;
+  const [_authorities, setAuthorities] = useState(authorities);
+
+  useEffect(() => {
+    setAuthorities(authorities);
+  }, [authorities]);
+
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -167,13 +177,15 @@ export const RoleDetails = () => {
               onClick={() => navigate(`${ROUTER.USER}/${id}`)}
             />
           </Tooltip>
-          <Tooltip label="Xoá khỏi vai trò">
-            <IconLayoutGridRemove
-              cursor={'pointer'}
-              size={'1rem'}
-              onClick={() => handleRemoveUser(id)}
-            />
-          </Tooltip>
+          {isGrantedUpdatePermission && (
+            <Tooltip label="Xoá khỏi vai trò">
+              <IconLayoutGridRemove
+                cursor={'pointer'}
+                size={'1rem'}
+                onClick={() => handleRemoveUser(id)}
+              />
+            </Tooltip>
+          )}
         </Group>
       )
     }
@@ -192,26 +204,34 @@ export const RoleDetails = () => {
     }
   });
 
+  const isGrantedUpdatePermission = isGrantedPermission(
+    _authorities,
+    RESOURCES.ROLE,
+    SCOPES.UPDATE
+  );
+
   return (
     <Stack>
       <Group position="apart" mb={'lg'}>
         <Text fw={600} size={'lg'}>
           Thông tin chi tiết vai trò
         </Text>
-        <Group>
-          {_isEditing ? (
-            <Button onClick={handleCancelUpdate} variant="outline">
-              Huỷ
+        {isGrantedUpdatePermission && (
+          <Group>
+            {_isEditing ? (
+              <Button onClick={handleCancelUpdate} variant="outline">
+                Huỷ
+              </Button>
+            ) : null}
+            <Button
+              leftIcon={<IconEditCircle size={'1rem'} />}
+              type={'submit'}
+              form={`update-role-form-${_roleDetails?.id}`}
+            >
+              {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
             </Button>
-          ) : null}
-          <Button
-            leftIcon={<IconEditCircle size={'1rem'} />}
-            type={'submit'}
-            form={`update-role-form-${_roleDetails?.id}`}
-          >
-            {_isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
-          </Button>
-        </Group>
+          </Group>
+        )}
       </Group>
       {!_roleDetails ? (
         <CustomLoader />
@@ -294,9 +314,11 @@ export const RoleDetails = () => {
         <Text fw={600} size={'lg'}>
           Danh sách nhân sự đảm nhận vai trò
         </Text>
-        <Button onClick={open} leftIcon={<IconUserPlus size={'1rem'} />}>
-          Thêm nhân sự
-        </Button>
+        {isGrantedUpdatePermission && (
+          <Button onClick={open} leftIcon={<IconUserPlus size={'1rem'} />}>
+            Thêm nhân sự
+          </Button>
+        )}
       </Group>
       <DataTable
         minHeight={200}

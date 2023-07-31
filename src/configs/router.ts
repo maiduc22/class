@@ -17,5 +17,6 @@ export const ROUTER = {
   CREATE_NEWS: '/news/create-news',
   MY_NEWS: '/my-news',
   ATTENDANCE: '/attendance',
-  MY_ATTENDANCE: '/attendance/my-attendance'
+  MY_ATTENDANCE: '/attendance/my-attendance',
+  SESSION: '/session'
 };
