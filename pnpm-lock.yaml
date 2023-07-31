@@ -1,9 +1,31 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
+  '@ckeditor/ckeditor5-build-classic':
+    specifier: ^38.1.0
+    version: 38.1.0
+  '@ckeditor/ckeditor5-react':
+    specifier: ^6.1.0
+    version: 6.1.0(@ckeditor/ckeditor5-core@38.1.0)(@ckeditor/ckeditor5-engine@38.1.0)(@ckeditor/ckeditor5-utils@38.1.0)(@ckeditor/ckeditor5-watchdog@38.1.0)(react@18.2.0)
   '@emotion/react':
     specifier: ^11.11.0
     version: 11.11.0(@types/react@18.0.37)(react@18.2.0)
+  '@fullcalendar/daygrid':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
+  '@fullcalendar/interaction':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
+  '@fullcalendar/react':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0)
+  '@fullcalendar/timegrid':
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
   '@mantine/core':
     specifier: ^6.0.13
     version: 6.0.13(@emotion/react@11.11.0)(@mantine/hooks@6.0.13)(@types/react@18.0.37)(react-dom@18.2.0)(react@18.2.0)
@@ -37,6 +59,9 @@ dependencies:
   chart.js:
     specifier: ^4.3.0
     version: 4.3.0
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   dayjs:
     specifier: ^1.11.8
     version: 1.11.8
@@ -49,6 +74,9 @@ dependencies:
   i18next:
     specifier: ^22.5.0
     version: 22.5.0
+  js-file-download:
+    specifier: ^0.4.12
+    version: 0.4.12
   jwt-decode:
     specifier: ^3.1.2
     version: 3.1.2
@@ -58,9 +86,18 @@ dependencies:
   mantine-datatable:
     specifier: ^2.5.5
     version: 2.5.5(@mantine/core@6.0.13)(@mantine/hooks@6.0.13)(react@18.2.0)
+  markdown-to-jsx:
+    specifier: ^7.2.1
+    version: 7.2.1(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
+  react-avatar-edit:
+    specifier: ^1.2.0
+    version: 1.2.0(react@18.2.0)
+  react-awesome-calendar:
+    specifier: ^1.0.14
+    version: 1.0.14(react-dom@18.2.0)(react@18.2.0)
   react-chartjs-2:
     specifier: ^5.2.0
     version: 5.2.0(chart.js@4.3.0)(react@18.2.0)
@@ -358,6 +395,307 @@ packages:
       '@babel/helper-string-parser': 7.21.5
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+
+  /@ckeditor/ckeditor5-adapter-ckfinder@38.1.0:
+    resolution: {integrity: sha512-ThWSKz4uOTmkELGuodtKUEZdgwl6BAzqfrmWcm85313esuAVuYrRVuHvOboMPjxg4pMfemfL/Cp/03nvugqZCg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-autoformat@38.1.0:
+    resolution: {integrity: sha512-heptwiVtPzriWPNq9Qpns8ClSHD49LcqdGDU0bWhAbDhfUmbIeUiFiaPn8F8u9R2qWpg0E5bIHzxED6uRBr5Nw==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-basic-styles@38.1.0:
+    resolution: {integrity: sha512-K/lhLLY52YZ2AfTOeqqwIOiPbIh7qYEfj/kytMd7PQ1ScFYbGMdWwgPTXpFi0JG7O2vK+5fkS+03e4klTX6IkA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-block-quote@38.1.0:
+    resolution: {integrity: sha512-gEkVmhq4kSZR55vojSubz4JXDmffHm0FurL5wV/y28W5HigWI1PmbeZhxHLHtlB6DPseLIWRjB5Q9Nku5UoN0w==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-build-classic@38.1.0:
+    resolution: {integrity: sha512-bP3EYzrhgWEk4C2jeupmCKf+joJUxlXdaeEtwB8a15XMjMj5k6HrpnCtilqbyF7Yc+KxAsffjERmXXsO902tLg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-adapter-ckfinder': 38.1.0
+      '@ckeditor/ckeditor5-autoformat': 38.1.0
+      '@ckeditor/ckeditor5-basic-styles': 38.1.0
+      '@ckeditor/ckeditor5-block-quote': 38.1.0
+      '@ckeditor/ckeditor5-ckbox': 38.1.0
+      '@ckeditor/ckeditor5-ckfinder': 38.1.0
+      '@ckeditor/ckeditor5-cloud-services': 38.1.0
+      '@ckeditor/ckeditor5-easy-image': 38.1.0
+      '@ckeditor/ckeditor5-editor-classic': 38.1.0
+      '@ckeditor/ckeditor5-essentials': 38.1.0
+      '@ckeditor/ckeditor5-heading': 38.1.0
+      '@ckeditor/ckeditor5-image': 38.1.0
+      '@ckeditor/ckeditor5-indent': 38.1.0
+      '@ckeditor/ckeditor5-link': 38.1.0
+      '@ckeditor/ckeditor5-list': 38.1.0
+      '@ckeditor/ckeditor5-media-embed': 38.1.0
+      '@ckeditor/ckeditor5-paragraph': 38.1.0
+      '@ckeditor/ckeditor5-paste-from-office': 38.1.0
+      '@ckeditor/ckeditor5-table': 38.1.0
+      '@ckeditor/ckeditor5-typing': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-ckbox@38.1.0:
+    resolution: {integrity: sha512-+NgnBxwwIxL2nbvC/C+CEPm2VpkT6jsojkEEYoK6sOLoG0iCiCmEZWyROCGUJZw2JEN0cXbTpZaZTfw2cyXHFg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-ckfinder@38.1.0:
+    resolution: {integrity: sha512-3WwXMv/VljZhDzfd/Qt2AqbFFyQlrC+qEkv4V+qLRo6Tc2VhtUJ56J9zIjtedR+KGdJ0GiZm+eK+cl2MWlZ+JA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-clipboard@38.1.0:
+    resolution: {integrity: sha512-OoxzP+GG9b80otVlGbJH6kTWM5AR5oJNGyj76KaxmhWfpyVifHM14iIFBjuEDzORsRZdb3+DA26+GcnkJ08/GA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      '@ckeditor/ckeditor5-widget': 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-cloud-services@38.1.0:
+    resolution: {integrity: sha512-2BbKF4/xlF+6YNHTxvJMzTEaopKRrnpEFJaoHI9kN/EnmpwjI+6VRj7ezdk33xCUcSqP8K/sMyIFuL86GP7maQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-core@38.1.0:
+    resolution: {integrity: sha512-jlz42+72zDVThAuQD0LMRA7qhWRHeestgBhMkVYdi1KRTEB59FWvV9vLfrJGs/qiB5vVkzDvK4etKqjOWm1KnA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-easy-image@38.1.0:
+    resolution: {integrity: sha512-q4SWi3BI28cR2bxsCjr+Gzk4Z7P7ao73q1BanqqPodkOw52WimlEM9uTJu9Q3mw1757WHQeozVeIvdYjcu4qMw==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-editor-classic@38.1.0:
+    resolution: {integrity: sha512-FDB+G4jNS/1nBP25VP1F+XYlosKRW68AEsmR52X1zW64KW/9AAA9jSLQLmAsf/JA96HOviSdNDItlvzwq4x05g==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-engine@38.1.0:
+    resolution: {integrity: sha512-Ldkw66gPMAL9GHnD+PsteWCay3ImPd+Lh/s54ISQxPDN8v4G3MNx9n003RA0ZtLKrbVhYXmAIF3xlzWWAkQK4w==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-enter@38.1.0:
+    resolution: {integrity: sha512-mBjr1Bk12ugPgScxnRncAxM5YcQUQosf01T5ekqT4/tAmoICyVgcJk4OU1H16TOzIRul0D4dr6eeg1yUhRHZPg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-essentials@38.1.0:
+    resolution: {integrity: sha512-/RsNDJSHXQ4YcdcFFVoneC0PeW/d0NFz8ba6Sh5lCvfr/ja7HztmtkmGmPej6O7POqkWXRTbdKL7Zistnhm6Mg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-heading@38.1.0:
+    resolution: {integrity: sha512-pGqmJtaM7S509oj3S3cAkd2ClxASyUaD0QeDxSiJ2MzQQSph0v+CiKnzicLAb/hmhVB8ik5i21OpStNuGtn2Ww==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-image@38.1.0:
+    resolution: {integrity: sha512-KaxsCdP4H381pnP4+hIoITsitfoWzLX2CCFNwglImHwsw3GzMd4uRuJjq+Zvd8mTPifULTWNsg6O4S9dEe3zmA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      ckeditor5: 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-indent@38.1.0:
+    resolution: {integrity: sha512-rcTHpvOM/JRtHE+n8dnirAIIzGV2HtjuBdRMjwrU5F4Q0dgPDh/zWbm6/bAgSjjhE0aiUgdxgfItmGlnAu1pFw==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-link@38.1.0:
+    resolution: {integrity: sha512-/GoXWpZ522GD0qGvqj0Y57Lo2amakWRN//k3Nc5sHvtxjhwP87Wqb8YGtVR1bB33xmvWzBwB7W1EHA+Gqkh84A==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      ckeditor5: 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-list@38.1.0:
+    resolution: {integrity: sha512-FiBjSPjudYp4thheroIbhZ5qIpPsd/FpHrzEvtvvkuse8ltw17hwCxnCViyDQgnowhoAlJmmEwo7P8C4U4Qs0A==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-media-embed@38.1.0:
+    resolution: {integrity: sha512-k+x6tQ4jlH9pQvpBzb9a1paQm569Hm86tfHitkK18OHtBLgscNAGsswwzEBT/7ek+sP/25n1ugxdlXFeBtA0+A==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-paragraph@38.1.0:
+    resolution: {integrity: sha512-B0meYDsGzR1e7pXN7Ky8L1BD80gJa+WHDUcDMLtEb+awQrdXf6JmD1CbH6ejbfBWSq+klO4cucenDSN4PK9e/g==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-paste-from-office@38.1.0:
+    resolution: {integrity: sha512-RYZiCyRvCEqlLymAmW7OWVWRb0bkCuU2gWKiv/jhvgP58ZoGWDszVgAXJEcGJqCaJ2Q6mL7AVu4sdTDshTUk2A==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-react@6.1.0(@ckeditor/ckeditor5-core@38.1.0)(@ckeditor/ckeditor5-engine@38.1.0)(@ckeditor/ckeditor5-utils@38.1.0)(@ckeditor/ckeditor5-watchdog@38.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-uwJ89pOJnjlMgfluGJhxatt6zV5ZavuV7AaRvJpxzAU7SjoC3sNumohDRmI0KGDGoyCVPMJO9fgE3ijIb3gHlQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    peerDependencies:
+      '@ckeditor/ckeditor5-core': '>=37.0.0'
+      '@ckeditor/ckeditor5-engine': '>=37.0.0'
+      '@ckeditor/ckeditor5-utils': '>=37.0.0'
+      '@ckeditor/ckeditor5-watchdog': '>=37.0.0'
+      react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      '@ckeditor/ckeditor5-watchdog': 38.1.0
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@ckeditor/ckeditor5-select-all@38.1.0:
+    resolution: {integrity: sha512-04QCaVepM86iLSnQANMG6BAt0zW248So2vo5dOhSEvCoj6HlOtfxOSdwLykiLMYaKUucxhDtvboHEexshcQ34w==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-table@38.1.0:
+    resolution: {integrity: sha512-jXP30EjjCc73HdmwZDWxwP88xL9mCvFudE3swIOp4VLoyMDRQHFudsdZ0qoLmmy+Bobje6pJk8vNKalUaMKAKg==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      ckeditor5: 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-typing@38.1.0:
+    resolution: {integrity: sha512-Y30Ein/vSBpVMnqPMEO41DcG03zZBX1alaY8p3E30K4J19i8krZ49fr6ej06Tz9JtwF6SjRqK9BGan5KL3XeeQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-ui@38.1.0:
+    resolution: {integrity: sha512-k44qe+z/08En0/SKc/LC9jSy7Gy5S/5L6HReJ/ah7Ur2xbvA8hiiH1qc39m0vuUOFYC+YrYmvEps5o/ADgmy4A==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      color-convert: 2.0.1
+      color-parse: 1.4.2
+      lodash-es: 4.17.21
+      vanilla-colorful: 0.7.2
+    dev: false
+
+  /@ckeditor/ckeditor5-undo@38.1.0:
+    resolution: {integrity: sha512-bm0WPJUqLihYVOsEWVXFLLM4hYh3vW4xcphUQNtkkkL4yXzvCYqtFr1vODgBsOiLfcmLhQzwSP/gWOxTzwtPqQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-upload@38.1.0:
+    resolution: {integrity: sha512-IaBXioCzhOik6qIAFZEm8eCv2yVUNpAZ9RVbbQbmVqm6W2u8dh6or1j33XEwMXtIVbakbmgEjuBTy3w+gxoDCQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+    dev: false
+
+  /@ckeditor/ckeditor5-utils@38.1.0:
+    resolution: {integrity: sha512-TVo2R4tMT2VGXlGcpi3XbmyHqTx4IMM6RPICqQyo8Cl8SR8ksyPXeAJuTLvXbYaxbVKhztnY/p6Uu/zEBV7kdA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-watchdog@38.1.0:
+    resolution: {integrity: sha512-o6M8bTnvrxfcwmX05iuvH9fvOwfe7pvEpduXDI35gXDUqOYN14lQFkU48OM4C/QvRQyos8WNLq2d+yg0cwNnIQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      lodash-es: 4.17.21
+    dev: false
+
+  /@ckeditor/ckeditor5-widget@38.1.0:
+    resolution: {integrity: sha512-7j1lgMKLOGdjndRWyogHGTW0pDr+0q5YP0LyqGWciiuxN6SWYSLOaYACBVKnCWp6VtvmPM473ZXF2RKW7YOVQQ==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-enter': 38.1.0
+      '@ckeditor/ckeditor5-typing': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      lodash-es: 4.17.21
+    dev: false
 
   /@emotion/babel-plugin@11.11.0:
     resolution: {integrity: sha512-m4HEDZleaaCH+XgDDsPF15Ht6wTLsgDTeR3WYj9Q/k76JtWhrJjcP4+/XlG8LGT/Rol9qUfOIztXeA84ATpqPQ==}
@@ -1164,6 +1502,49 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       tabbable: 6.1.2
+    dev: false
+
+  /@fullcalendar/core@6.1.8:
+    resolution: {integrity: sha512-i8JBIvZCWGO9dsMEDcx9bnsQZ9PtGSJdOXGgWbhLaGq2iq41OBdp9g9gM4b/Otv2oK8bL5Gl6CsMmb/HkDtA6Q==}
+    dependencies:
+      preact: 10.12.1
+    dev: false
+
+  /@fullcalendar/daygrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-kCZxQFKb9Vqa3CZRX0v7rMSJ2mlTt4gDpyLfiNJKxUAq7W51uKurPaFZWicaXy1ESHVBxKNlbx5uNjBpyu50JQ==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+    dev: false
+
+  /@fullcalendar/interaction@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-r6W4E9ohaA87M2uPSlmpE2WT7Fzu7LN0u2pE6D/tThruCEaAPbN8Pw5+sqclsuyTIL09mg0eSJm/ggJekTabSA==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+    dev: false
+
+  /@fullcalendar/react@6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-E8GQSQyZHkjpwxQW5Vci7iZgN7f33ntuRcvfGii4Fn35t9VHGz2SEyKAWXpVf38elcKTZKVgajU9ipStd+1LEg==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+      react: ^16.7.0 || ^17 || ^18
+      react-dom: ^16.7.0 || ^17 || ^18
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@fullcalendar/timegrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-3+3KHHCoNcaLs/gQt004hAqICbY5+WAffrZ0ePv+80HFB1OVh8BQ5XXLHSOUbTvXdgtUTcfBHuw9fhO31kt5gA==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.8
+    dependencies:
+      '@fullcalendar/core': 6.1.8
+      '@fullcalendar/daygrid': 6.1.8(@fullcalendar/core@6.1.8)
     dev: false
 
   /@grpc/grpc-js@1.7.3:
@@ -1986,6 +2367,10 @@ packages:
     resolution: {integrity: sha512-BoCcDt8zBGShn6DawAGQw37s9SSs+fEjiZWDzyB+841PbOogcR2X7LGlM4sR3Zsiq/zoyl8MFWDfN6oDSlveBQ==}
     dev: false
 
+  /blueimp-load-image@5.16.0:
+    resolution: {integrity: sha512-3DUSVdOtlfNRk7moRZuTwDmA3NnG8KIJuLcq3c0J7/BIr6X3Vb/EpX3kUH1joxUhmoVF4uCpDfz7wHkz8pQajA==}
+    dev: false
+
   /body-parser@1.5.0:
     resolution: {integrity: sha512-UJfZike68QN1mdo0mA+Z0y+0qi10oxOrCPw2CZpP73O/LIfEWHDy9SHhwsME1mdk1WmnltBLddUkfBpuKPH4Ng==}
     engines: {node: '>= 0.8'}
@@ -2080,6 +2465,29 @@ packages:
       '@kurkle/color': 0.3.2
     dev: false
 
+  /ckeditor5@38.1.0:
+    resolution: {integrity: sha512-rWkzD5d6qJkeC4IrVV56f3x2bd5USyYJ0Ida2nGReNLvQD4DhOsedfUe2cffhiSCDXW9nzyLAYtgDPl2V2zJaA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    dependencies:
+      '@ckeditor/ckeditor5-clipboard': 38.1.0
+      '@ckeditor/ckeditor5-core': 38.1.0
+      '@ckeditor/ckeditor5-engine': 38.1.0
+      '@ckeditor/ckeditor5-enter': 38.1.0
+      '@ckeditor/ckeditor5-paragraph': 38.1.0
+      '@ckeditor/ckeditor5-select-all': 38.1.0
+      '@ckeditor/ckeditor5-typing': 38.1.0
+      '@ckeditor/ckeditor5-ui': 38.1.0
+      '@ckeditor/ckeditor5-undo': 38.1.0
+      '@ckeditor/ckeditor5-upload': 38.1.0
+      '@ckeditor/ckeditor5-utils': 38.1.0
+      '@ckeditor/ckeditor5-watchdog': 38.1.0
+      '@ckeditor/ckeditor5-widget': 38.1.0
+    dev: false
+
+  /classnames@2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
+
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
@@ -2146,6 +2554,12 @@ packages:
 
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  /color-parse@1.4.2:
+    resolution: {integrity: sha512-RI7s49/8yqDj3fECFZjUI1Yi0z/Gq1py43oNJivAIIDSyJiOZLfYCRQEgn8HEVAj++PcRe8AnL2XF0fRJ3BTnA==}
+    dependencies:
+      color-name: 1.1.4
+    dev: false
 
   /colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
@@ -2269,6 +2683,13 @@ packages:
   /cycle@1.0.3:
     resolution: {integrity: sha512-TVF6svNzeQCOpjCqsy0/CSy8VgObG3wXusJ73xW2GbG5rGx7lC8zxDSURicsXI2UsGdi2L0QNRCi745/wUDvsA==}
     engines: {node: '>=0.4.0'}
+    dev: false
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.3
     dev: false
 
   /dayjs@1.11.8:
@@ -2665,6 +3086,10 @@ packages:
       signal-exit: 3.0.7
       strip-final-newline: 3.0.0
     dev: true
+
+  /exif-js@2.3.0:
+    resolution: {integrity: sha512-1Og9pAzG2FZRVlaavH8bB8BTeHcjMdJhKmeQITkX+uLRCD0xPtKAdZ2clZmQdJ56p9adXtJ8+jwrGp/4505lYg==}
+    dev: false
 
   /express@4.6.1:
     resolution: {integrity: sha512-nG9Y8xfzgrW/9XCr5sv+KDbtY8mZPN9HO3GziltaubpvleI+1RyHxAKvYjmFih3HkQIaPXW9ozxMHBDNf3UXng==}
@@ -3174,6 +3599,10 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /js-file-download@0.4.12:
+    resolution: {integrity: sha512-rML+NkoD08p5Dllpjo0ffy4jRHeY6Zsapvr/W86N7E0yuzAO6qa5X9+xog6zQNlH102J7IXljNY2FtS6Lj3ucg==}
+    dev: false
+
   /js-sdsl@4.4.0:
     resolution: {integrity: sha512-FfVSdx6pJ41Oa+CF7RDaFmTnCaFhua+SNYQX74riGOpl96x+2jQCqEfQ2bnXu/5DPCqlRuiqyvTJM0Qjz26IVg==}
     dev: true
@@ -3226,6 +3655,10 @@ packages:
   /klona@2.0.6:
     resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
     engines: {node: '>= 8'}
+    dev: false
+
+  /konva@8.4.3:
+    resolution: {integrity: sha512-ARqdgAbdNIougRlOKvkQwHlGhXPRBV4KvhCP+qoPpGoVQwwiJe4Hkdu4HHdRPb9rGUp04jDTAxBzEwBsE272pg==}
     dev: false
 
   /levn@0.4.1:
@@ -3294,6 +3727,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
   /lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
     dev: false
@@ -3352,6 +3789,15 @@ packages:
     dependencies:
       '@mantine/core': 6.0.13(@emotion/react@11.11.0)(@mantine/hooks@6.0.13)(@types/react@18.0.37)(react-dom@18.2.0)(react@18.2.0)
       '@mantine/hooks': 6.0.13(react@18.2.0)
+      react: 18.2.0
+    dev: false
+
+  /markdown-to-jsx@7.2.1(react@18.2.0):
+    resolution: {integrity: sha512-9HrdzBAo0+sFz9ZYAGT5fB8ilzTW+q6lPocRxrIesMO+aB40V9MgFfbfMXxlGjf22OpRy+IXlvVaQenicdpgbg==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
+    dependencies:
       react: 18.2.0
     dev: false
 
@@ -3702,6 +4148,10 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /preact@10.12.1:
+    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
+    dev: false
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -3792,6 +4242,28 @@ packages:
     dependencies:
       bytes: 1.0.0
       iconv-lite: 0.4.4
+    dev: false
+
+  /react-avatar-edit@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-xTn/hC8KOTFvMagkAiLNq2yWTosCL88ZX34/CTb7dyadGSR27tc56JYBeYcLojTn2y/Hin8azT9aNVvQytAQ/w==}
+    peerDependencies:
+      react: ^16.x || ^17 || ^18
+    dependencies:
+      blueimp-load-image: 5.16.0
+      exif-js: 2.3.0
+      konva: 8.4.3
+      react: 18.2.0
+    dev: false
+
+  /react-awesome-calendar@1.0.14(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-AlwFVoECJo7H9z4anVYrb21HVnrEE1iHtoh9V0Emi0dFKf5PGARzQX/8z/lPAB3cuwM/5rME81KqhU5ruiMVxQ==}
+    peerDependencies:
+      react: ^16.7.0
+      react-dom: ^16.7.0
+    dependencies:
+      classnames: 2.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-chartjs-2@5.2.0(chart.js@4.3.0)(react@18.2.0):
@@ -4594,6 +5066,10 @@ packages:
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
+    dev: false
+
+  /vanilla-colorful@0.7.2:
+    resolution: {integrity: sha512-z2YZusTFC6KnLERx1cgoIRX2CjPRP0W75N+3CC6gbvdX5Ch47rZkEMGO2Xnf+IEmi3RiFLxS18gayMA27iU7Kg==}
     dev: false
 
   /vary@0.1.0:

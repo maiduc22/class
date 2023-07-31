@@ -1,6 +1,6 @@
 import { BackgroundImage, Box, Center, Grid, MediaQuery } from '@mantine/core';
 import { Navigate, Outlet } from 'react-router-dom';
-import bg from '../assets/img/bg.jpg';
+import bg from '@/assets/imgs/bg.jpg';
 import { ROUTER } from '@/configs/router';
 
 const AuthLayout = () => {

@@ -1,14 +1,16 @@
 export const HEADERS = {
   header: () => ({
-    accept: 'application/json',
-    'Content-Type': 'application/json; charset=UTF-8'
+    accept: '*/*',
+    'Content-Type': 'application/json'
   }),
   fileHeader: () => ({
-    'Content-Type': 'multipart/form-data'
+    'Content-Type': 'multipart/form-data',
+    'Access-Control-Allow-Origin': '*',
+    Authorization: `Bearer ${localStorage.getItem('token')}`
   }),
   authHeader: () => ({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    Authorization: `${localStorage.getItem('token')}`
+    Authorization: `Bearer ${localStorage.getItem('token')}`
   })
 };

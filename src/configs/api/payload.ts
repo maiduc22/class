@@ -1,69 +1,90 @@
-import { IProperty } from '@/types/models/IProperty';
-import { IUserRole } from '@/types/models/IUser';
-
-export type SignUpPayload = {
-  username: string;
-  password: string;
-  fullName: string;
-  role: IUserRole;
-};
+import { INewStatus } from '@/types/models/INew';
+import { IRoleProperty } from '@/types/models/IRole';
+import { IUserGender } from '@/types/models/IUser';
 
 export type LoginPayload = {
   username: string;
   password: string;
 };
 
-export type EditProfilePayload = {
+export type ChangeProfilePayload = {
   fullName: string;
-  salary: number;
-  image: string;
+  email: string;
+  phoneNumber: string;
+  gender: IUserGender;
+  description: string;
+  dayOfBirth: string;
+  avatarFileId: string;
+  roleIds: string[];
+  departmentId: string;
 };
 
-export type SearchPayload = {
-  url: string;
+export type RegisterPayload = {
+  username: string;
+  password: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  gender: IUserGender;
+  roleIds: string[];
+  departmentId: string;
+  description: string;
+  dayOfBirth: string | undefined;
+  avatar: string;
 };
 
-export type CreateDrugPayload = {
+export type ChangePwdPayload = {
+  password: string;
+};
+
+export type CreateDepartmentPayload = {
   name: string;
-  qty: number;
-  price: number;
-  condition?: number;
-  image: string;
-  propertyID: number | undefined;
-  supplierID: number | undefined;
-  exp?: string;
+  description: string;
+  parentId?: string;
 };
 
-export type UpdateDrugPayload = CreateDrugPayload;
+export type UpdateDepartmentPayload = CreateDepartmentPayload;
 
-export type CreatePropertyPayload = IProperty;
-
-export type UpdatePropertyPayload = IProperty;
-
-export type CreateSupplierPayload = {
+export type CreateRolePayload = {
   name: string;
-  address: string;
-  phone: string;
+  description: string;
+  isRoot: boolean;
+  properties: IRoleProperty[];
 };
 
-export type UpdateSupplierPayload = CreateSupplierPayload;
+export type UpdateRolePayload = CreateRolePayload;
 
-export type CreateUnitPayload = {
-  name: string;
-  parentID: number;
+export type AssignRolePermissionPayload = {
+  permissionIds: string[];
 };
 
-export type UpdateUnitPayload = CreateUnitPayload;
+export type RequestTimeoffPayload = {
+  type: string;
+  note?: string;
+  dateFrom: string;
+  dateTo: string;
+  start?: number;
+  end?: number;
+  dayOff: number;
+  fileId?: string;
+};
 
+export type CreateNewsPayload = {
+  title: string;
+  content: string;
+  isPublic?: boolean;
+  status?: INewStatus;
+  isImportant?: boolean;
+  employeeIds?: string[];
+};
 export type ApiEndPointPayload =
-  | SignUpPayload
   | LoginPayload
-  | EditProfilePayload
-  | SearchPayload
-  | CreateDrugPayload
-  | UpdateDrugPayload
-  | UpdatePropertyPayload
-  | CreateSupplierPayload
-  | UpdateSupplierPayload
-  | CreateUnitPayload
-  | UpdateUnitPayload;
+  | RegisterPayload
+  | CreateDepartmentPayload
+  | CreateRolePayload
+  | AssignRolePermissionPayload
+  | ChangeProfilePayload
+  | string[]
+  | RequestTimeoffPayload
+  | CreateNewsPayload
+  | ChangePwdPayload;
