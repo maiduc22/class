@@ -7,6 +7,13 @@ import { Button, Group, Stack, TextInput } from '@mantine/core';
 import { DateInput, DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
+import { useState } from 'react';
+
+import DatePicker from 'react-date-picker';
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 interface Props {
   closeModal: () => void;
@@ -15,6 +22,7 @@ interface Props {
 
 export const ModalUpdateUser = ({ closeModal, user }: Props) => {
   const dispatch = useAppDispatch();
+  const [value, onChange] = useState<Value>(new Date());
 
   const validatePhone = (phone: string | undefined) => {
     if (!phone) return true;
@@ -95,7 +103,7 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
         />
       </Stack>
 
-      <Group position="right" mt={'md'}>
+      <Group position="right" mt={'xl'}>
         <Button type="submit">Cập nhật</Button>
       </Group>
     </form>

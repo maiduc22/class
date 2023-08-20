@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import appIcon from '@/assets/imgs/hrm.png';
+import appIcon from '@/assets/imgs/logo.jpg';
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
 
