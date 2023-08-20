@@ -27,6 +27,7 @@ const Teacher: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { teachers } = useAppSelector((state: RootState) => state.teacher);
+  console.log(teachers);
   const [_records, setRecords] = useState<IUser[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<IUser>();
   const [_query, setQuery] = useState('');
@@ -75,7 +76,7 @@ const Teacher: React.FC = () => {
       title: 'Số điện thoại',
       textAlignment: 'center'
     },
-    { accessor: 'dayOfBirth', title: 'Ngày sinh', textAlignment: 'center' },
+    { accessor: 'dob', title: 'Ngày sinh', textAlignment: 'center' },
     {
       accessor: '',
       title: '',
