@@ -10,8 +10,6 @@ export type RegisterPayload = {
   username: string;
   password: string;
   fullName: string;
-  phoneNumber: string;
-  dayOfBirth: string | undefined;
   role: IUserRole;
 };
 

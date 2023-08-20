@@ -6,7 +6,6 @@ import { IUserRole } from '@/types/models/IUser';
 import { Button, Group, Stack, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
-import dayjs from 'dayjs';
 
 interface Props {
   closeModal: () => void;
@@ -21,20 +20,15 @@ export const ModalAddUser = ({ closeModal, role }: Props) => {
       username: '',
       password: '',
       fullName: '',
-      phoneNumber: '',
-      dayOfBirth: undefined,
       role: role
     },
     validate: {
       username: isNotEmpty('Tên đăng nhập không được bỏ trống'),
       password: isNotEmpty('Mật khẩu không được bỏ trống'),
-      fullName: isNotEmpty('Họ tên không được bỏ trống'),
-      phoneNumber: isNotEmpty('Số điện thoại không được bỏ trống'),
-      dayOfBirth: isNotEmpty('Ngày sinh không được bỏ trống')
+      fullName: isNotEmpty('Họ tên không được bỏ trống')
     },
     transformValues: (values) => ({
-      ...values,
-      dayOfBirth: dayjs(values.dayOfBirth).toISOString()
+      ...values
     })
   });
 
@@ -66,27 +60,9 @@ export const ModalAddUser = ({ closeModal, role }: Props) => {
         />
         <TextInput
           withAsterisk
-          label="Email"
-          placeholder="Nhập email"
-          type={'email'}
-          {...form.getInputProps('email')}
-        />
-        <TextInput
-          withAsterisk
           label="Mật khẩu"
           placeholder="Nhập mật khẩu"
           {...form.getInputProps('password')}
-        />
-        <TextInput
-          withAsterisk
-          label="Số điện thoại"
-          placeholder="Nhập số điện thoại"
-          {...form.getInputProps('phoneNumber')}
-        />
-        <DatePickerInput
-          label="Ngày sinh"
-          placeholder="Nhập ngày sinh"
-          {...form.getInputProps('dayOfBirth')}
         />
 
         {/* <Select
