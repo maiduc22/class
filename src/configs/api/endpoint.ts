@@ -50,6 +50,11 @@ export const API_URLS = {
       endPoint: '/teachers',
       method: 'GET',
       headers: HEADERS.authHeader()
+    }),
+    getTeacherById: (id: string) => ({
+      endPoint: `/teachers/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
     })
   }
 };

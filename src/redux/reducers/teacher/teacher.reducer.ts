@@ -18,11 +18,7 @@ const teacherReducer: Reducer<TeacherState, TeacherAction> = (
     case TeacherActionType.GET_ALL_TEACHER_SUCCESS:
       return { ...state, isFetching: false, teachers: action.payload };
     case TeacherActionType.CREATE_TEACHER_SUCCESS:
-    case TeacherActionType.UPDATE_TEACHER_SUCCESS:
-    case TeacherActionType.DELETE_TEACHER_SUCCESS:
-    case TeacherActionType.GET_DETAILS_TEACHER_SUCCESS:
-    case TeacherActionType.ADD_USER_SUCCESS:
-    case TeacherActionType.REMOVE_USER_SUCCESS:
+    case TeacherActionType.GET_TEACHER_BY_ID_SUCCESS:
       return { ...state, isFetching: false };
     default:
       return state;

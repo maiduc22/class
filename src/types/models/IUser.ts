@@ -10,6 +10,7 @@ export interface IUser extends BaseModel {
   phoneNumber: string;
   role: IUserRole;
   courses?: ICourse[];
+  email: string;
 }
 
 export enum IUserRole {

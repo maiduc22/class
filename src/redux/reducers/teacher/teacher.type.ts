@@ -13,11 +13,7 @@ export enum TeacherActionType {
 
   GET_ALL_TEACHER_SUCCESS = 'GET_ALL_TEACHER_ACTION_SUCCESS',
   CREATE_TEACHER_SUCCESS = 'CREATE_TEACHER_SUCCESS',
-  UPDATE_TEACHER_SUCCESS = 'UPDATE_TEACHER_SUCCESS',
-  DELETE_TEACHER_SUCCESS = 'DELETE_TEACHER_SUCCESS',
-  GET_DETAILS_TEACHER_SUCCESS = 'GET_DETAILS_TEACHER_SUCCESS',
-  ADD_USER_SUCCESS = 'ADD_USER_SUCCESS',
-  REMOVE_USER_SUCCESS = 'REMOVE_USER_SUCCESS'
+  GET_TEACHER_BY_ID_SUCCESS = 'GET_TEACHER_BY_ID_SUCCESS'
 }
 
 export interface TeacherActionPending {
@@ -37,21 +33,8 @@ export interface CreateTeacherSuccess {
   type: TeacherActionType.CREATE_TEACHER_SUCCESS;
 }
 
-export interface UpdateTeacherSuccess {
-  type: TeacherActionType.UPDATE_TEACHER_SUCCESS;
-}
-
-export interface DeleteTeacherSuccess {
-  type: TeacherActionType.DELETE_TEACHER_SUCCESS;
-}
-export interface GetDetailsTeacherSuccess {
-  type: TeacherActionType.GET_DETAILS_TEACHER_SUCCESS;
-}
-export interface AddUserSuccess {
-  type: TeacherActionType.ADD_USER_SUCCESS;
-}
-export interface RemoveUserSuccess {
-  type: TeacherActionType.REMOVE_USER_SUCCESS;
+export interface GetTeacherByIdSuccess {
+  type: TeacherActionType.GET_TEACHER_BY_ID_SUCCESS;
 }
 
 export type TeacherAction =
@@ -59,11 +42,7 @@ export type TeacherAction =
   | TeacherActionFailure
   | GetAllTeacherSuccess
   | CreateTeacherSuccess
-  | UpdateTeacherSuccess
-  | DeleteTeacherSuccess
-  | GetDetailsTeacherSuccess
-  | AddUserSuccess
-  | RemoveUserSuccess;
+  | GetTeacherByIdSuccess;
 
 export type TeacherThunkAction = ThunkAction<
   void,

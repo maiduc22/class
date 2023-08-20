@@ -13,6 +13,12 @@ export type RegisterPayload = {
   role: IUserRole;
 };
 
+export type UpdateUserPayload = {
+  fullName: string;
+  dob: string;
+  email: string;
+  phoneNumber: string;
+};
 export type CreateCoursePayload = {
   name: string;
   description: string;
@@ -21,4 +27,8 @@ export type CreateCoursePayload = {
   timeTables: TimeTable[];
 };
 
-export type ApiEndPointPayload = LoginPayload | RegisterPayload | string[];
+export type ApiEndPointPayload =
+  | LoginPayload
+  | RegisterPayload
+  | string[]
+  | UpdateUserPayload;

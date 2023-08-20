@@ -1,5 +1,5 @@
 import { ModalAddUser } from '@/components/modal/ModalAddUser';
-import { ROUTER } from '@/configs/router';
+import { ModalUpdateUser } from '@/components/modal/ModalUpdateUser';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
@@ -15,17 +15,24 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { IconInfoCircle } from '@tabler/icons-react';
+import {
+  IconDeviceTabletExclamation,
+  IconEditCircle,
+  IconHttpDelete,
+  IconInfoCircle,
+  IconTrash
+} from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherDetails } from '../TeacherDetails';
+import { UserActions } from '@/redux/reducers/user/user.action';
+import { ROUTER } from '@/configs/router';
 
 const Teacher: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { teachers } = useAppSelector((state: RootState) => state.teacher);
-  console.log(teachers);
   const [_records, setRecords] = useState<IUser[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<IUser>();
   const [_query, setQuery] = useState('');
@@ -57,22 +64,29 @@ const Teacher: React.FC = () => {
 
   const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
     useDisclosure();
-
+  const [
+    openedUpdateModal,
+    { close: closeUpdateModal, open: openUpdateModal }
+  ] = useDisclosure();
   const [
     openedDetailsModal,
     { close: closeDetailsModal, open: openDetailsModal }
   ] = useDisclosure();
 
   const columns: DataTableColumn<IUser>[] = [
-    { accessor: 'userName', title: 'Tên tài khoản' },
-    { accessor: 'fullName', title: 'Họ tên' },
-    { accessor: 'phoneNumber', title: 'Số điện thoại' },
-    { accessor: 'dayOfBirth', title: 'Ngày sinh' },
+    { accessor: 'userName', title: 'Tên tài khoản', textAlignment: 'center' },
+    { accessor: 'fullName', title: 'Họ tên', textAlignment: 'center' },
+    {
+      accessor: 'phoneNumber',
+      title: 'Số điện thoại',
+      textAlignment: 'center'
+    },
+    { accessor: 'dayOfBirth', title: 'Ngày sinh', textAlignment: 'center' },
     {
       accessor: '',
       title: '',
       textAlignment: 'center',
-      width: '100px',
+      width: '',
       render: (record) => (
         <Group position="center">
           <Tooltip label="Thông tin chi tiết">
@@ -80,9 +94,34 @@ const Teacher: React.FC = () => {
               cursor={'pointer'}
               size={'1rem'}
               onClick={() => {
-                // navigate(`${ROUTER.TEACHER}/${record.id}`);
+                navigate(`${ROUTER.TEACHER}/${record.id}`);
+                // setSelectedRecord(record);
+                // openDetailsModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip label="Sửa thông tin">
+            <IconEditCircle
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => {
                 setSelectedRecord(record);
-                openDetailsModal();
+                openUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip label="Xoá tài khoản">
+            <IconTrash
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => {
+                dispatch(
+                  UserActions.deleteUser(record.id, {
+                    onSuccess: () => {
+                      dispatch(TeacherActions.getAllTeacher());
+                    }
+                  })
+                );
               }}
             />
           </Tooltip>
@@ -154,17 +193,17 @@ const Teacher: React.FC = () => {
       >
         <TeacherDetails courses={selectedRecord?.courses || []} />
       </Modal>
-      {/* <Modal
+      <Modal
         centered
         opened={openedUpdateModal}
         onClose={closeUpdateModal}
-        title="Cập nhật thông tin phòng ban"
+        title="Cập nhật thông tin"
       >
-        <ModalUpdateDepartment
+        <ModalUpdateUser
           closeModal={closeUpdateModal}
-          department={_selectedRecord}
+          user={selectedRecord || null}
         />
-      </Modal> */}
+      </Modal>
     </Stack>
   );
 };

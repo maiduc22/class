@@ -30,6 +30,29 @@ const getAllTeacher =
     }
   };
 
+const getTeacherById =
+  (id: string, cb?: Callback): TeacherThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: TeacherActionType.TEACHER_ACTION_PENDING });
+
+    const api = API_URLS.Teacher.getTeacherById(id);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      const { data } = response;
+      dispatch({
+        type: TeacherActionType.GET_TEACHER_BY_ID_SUCCESS
+      });
+      cb?.onSuccess?.(data.data);
+    } else {
+      dispatch({ type: TeacherActionType.TEACHER_ACTION_FAILURE });
+      renderNotification(
+        'Đã có lỗi khi lấy thông tin chi tiết giáo viên',
+        NotiType.ERROR
+      );
+    }
+  };
 export const TeacherActions = {
-  getAllTeacher
+  getAllTeacher,
+  getTeacherById
 };
