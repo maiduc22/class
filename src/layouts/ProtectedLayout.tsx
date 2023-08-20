@@ -5,10 +5,7 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
-import { NewsActions } from '@/redux/reducers/news/news.action';
-import { TimeoffActions } from '@/redux/reducers/timeoff/timeoff.action';
 import { IUser } from '@/types/models/IUser';
-import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
 import {
   Anchor,
   AppShell,
@@ -32,22 +29,13 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBrandAsana,
-  IconClockCheck,
   IconGitPullRequest,
-  IconHistory,
   IconLicense,
   IconLogout,
   IconPassword,
-  IconShield,
   IconUser
 } from '@tabler/icons-react';
-import {
-  ReactNode,
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useState
-} from 'react';
+import { ReactNode, Suspense, useLayoutEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -55,7 +43,7 @@ interface NavLinkProps {
   color: string;
   label: string;
   to: string;
-  auth: boolean;
+  auth?: boolean;
 }
 
 const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
@@ -91,7 +79,7 @@ const NavLink = ({ icon, color, label, to }: NavLinkProps) => {
 };
 
 interface UserProps {
-  profile: IUser | null;
+  profile?: IUser | null;
 }
 
 const User = ({ profile }: UserProps) => {
@@ -182,13 +170,13 @@ const User = ({ profile }: UserProps) => {
             }}
           >
             <Group>
-              <Avatar radius="xl" src={profile?.avatarFileId} />
+              <Avatar radius="xl" />
               <Box sx={{ flex: 1 }}>
                 <Text size="sm" weight={500}>
                   {profile?.fullName}
                 </Text>
                 <Text color="dimmed" size="xs">
-                  {profile?.employeeCode}
+                  {profile?.role}
                 </Text>
               </Box>
             </Group>
@@ -219,87 +207,46 @@ const User = ({ profile }: UserProps) => {
 
 const ProtectedLayout = () => {
   const navigate = useNavigate();
-  const { logout, state, getAuthorities, getProfile } = useAuthContext();
-  const { authorities, profile } = state;
-  const [_authorities, setAuthorities] = useState(authorities);
+  const { getProfile } = useAuthContext();
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     navigate(ROUTER.LOGIN);
-    logout();
+    localStorage.clear();
   };
 
   if (!localStorage.getItem('token')) {
     return <Navigate to={ROUTER.LOGIN} />;
   }
 
-  useLayoutEffect(() => {
-    getAuthorities();
-    getProfile();
-    dispatch(TimeoffActions.getMyRequest());
-    dispatch(NewsActions.getMyNews());
-  }, [dispatch, getAuthorities, getProfile]);
-
-  useEffect(() => {
-    setAuthorities(authorities);
-  }, [authorities]);
+  // useLayoutEffect(() => {
+  //   getProfile();
+  // }, [dispatch, getProfile]);
 
   const navLinks: NavLinkProps[] = [
-    {
-      icon: <IconBrandAsana size="1rem" />,
-      color: 'grape',
-      label: 'Quản Lý Phòng Ban',
-      to: ROUTER.DEPARTMENT,
-      auth: isGrantedPermission(_authorities, RESOURCES.DEPARTMENT, SCOPES.VIEW)
-    },
-    {
-      icon: <IconUser size={'1rem'} />,
-      color: 'blue',
-      label: 'Quản Lý Nhân Sự',
-      to: ROUTER.USER,
-      auth: isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.VIEW)
-    },
+    // {
+    //   icon: <IconUser size={'1rem'} />,
+    //   color: 'blue',
+    //   label: 'Quản Lý Tài Khoản',
+    //   to: ROUTER.USER
+    // },
     {
       icon: <IconLicense size={'1rem'} />,
       color: 'yellow',
-      label: 'Quản Lý Vai Trò',
-      to: ROUTER.ROLE,
-      auth: isGrantedPermission(_authorities, RESOURCES.ROLE, SCOPES.VIEW)
+      label: 'Quản Lý Phòng Học',
+      to: ROUTER.ROOM
     },
     {
-      icon: <IconShield size={'1rem'} />,
-      color: 'red',
-      label: 'Quản Lý Quyền',
-      to: ROUTER.PERMISSION,
-      auth: isGrantedPermission(_authorities, RESOURCES.PERMISSION, SCOPES.VIEW)
+      icon: <IconBrandAsana size="1rem" />,
+      color: 'grape',
+      label: 'Quản Lý Giáo Viên',
+      to: ROUTER.TEACHER
     },
     {
-      icon: <IconGitPullRequest size={'1rem'} />,
-      color: 'green',
-      label: 'Quản Lý Xin Nghỉ Phép',
-      to: ROUTER.REQUEST,
-      auth: isGrantedPermission(_authorities, RESOURCES.TIMEOFF, SCOPES.VIEW)
-    },
-    {
-      icon: <IconGitPullRequest size={'1rem'} />,
+      icon: <IconLicense size={'1rem'} />,
       color: 'pink',
-      label: 'Quản Lý Thông Báo',
-      to: ROUTER.NEWS,
-      auth: isGrantedPermission(_authorities, RESOURCES.NEWS, SCOPES.VIEW)
-    },
-    {
-      icon: <IconClockCheck size={'1rem'} />,
-      color: 'orange',
-      label: 'Quản Lý Chấm Công',
-      to: ROUTER.ATTENDANCE,
-      auth: isGrantedPermission(_authorities, RESOURCES.ATTENDANCE, SCOPES.VIEW)
-    },
-    {
-      icon: <IconHistory size={'1rem'} />,
-      color: 'gray',
-      label: 'Lịch sử đăng nhập',
-      to: ROUTER.SESSION,
-      auth: isGrantedPermission(_authorities, RESOURCES.SESSION, SCOPES.VIEW)
+      label: 'Quản Lý Khoá Học',
+      to: ROUTER.COURSE
     }
   ];
   return (
@@ -321,15 +268,13 @@ const ProtectedLayout = () => {
           >
             <Navbar.Section grow mt="0">
               <div>
-                {navLinks
-                  .filter((link) => link.auth === true)
-                  .map((link) => (
-                    <NavLink {...link} key={link.label} />
-                  ))}
+                {navLinks.map((link) => (
+                  <NavLink {...link} key={link.label} />
+                ))}
               </div>
             </Navbar.Section>
             <Navbar.Section>
-              <User profile={profile} />
+              <User />
             </Navbar.Section>
           </Navbar>
         }
@@ -341,7 +286,7 @@ const ProtectedLayout = () => {
                   <Image src={appIcon} height={32} width={32} />
                 </Anchor>
                 <Text fw={600} fz="lg">
-                  Hệ Thống Quản Lý Nhân Sự - HRMS
+                  HỆ THỐNG QUẢN LÝ HỌC TẬP
                 </Text>
               </Group>
               <Group>

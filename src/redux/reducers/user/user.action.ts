@@ -3,7 +3,7 @@ import { UserActionType, UserThunkAction } from './user.types';
 import { API_URLS } from '@/configs/api/endpoint';
 import { useCallApi } from '@/configs/api';
 import { NotiType, renderNotification } from '@/utils/notifications';
-import { ChangeProfilePayload, RegisterPayload } from '@/configs/api/payload';
+import { RegisterPayload } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 
 const getAllUser = (): UserThunkAction => async (dispatch: AppDispatch) => {
@@ -23,7 +23,10 @@ const getAllUser = (): UserThunkAction => async (dispatch: AppDispatch) => {
     });
   } else {
     dispatch({ type: UserActionType.USER_ACTION_FAILURE });
-    renderNotification('Đã có lỗi khi lấy danh sách nhân sự', NotiType.ERROR);
+    renderNotification(
+      'Đã có lỗi khi lấy danh sách tài khoảng',
+      NotiType.ERROR
+    );
   }
 };
 
@@ -42,15 +45,15 @@ const createUser =
         type: UserActionType.CREATE_USER_SUCCESS
       });
       cb?.onSuccess?.();
-      renderNotification('Tạo mới nhân sự thành công', NotiType.SUCCESS);
+      renderNotification('Tạo thành khoản thành công', NotiType.SUCCESS);
     } else {
       dispatch({ type: UserActionType.USER_ACTION_FAILURE });
-      renderNotification('Đã có lỗi khi tạo mới nhân sự', NotiType.ERROR);
+      renderNotification('Đã có lỗi khi tạo tài khoản', NotiType.ERROR);
     }
   };
 
 const updateUser =
-  (payload: ChangeProfilePayload, id: string | undefined, cb?: Callback) =>
+  (payload: RegisterPayload, id: string | undefined, cb?: Callback) =>
   async (dispatch: AppDispatch) => {
     if (!id) return;
     dispatch({
@@ -65,36 +68,11 @@ const updateUser =
         type: UserActionType.UPDATE_USER_SUCCESS
       });
       cb?.onSuccess?.();
-      renderNotification(
-        'Cập nhật thông tin nhân sự thành công',
-        NotiType.SUCCESS
-      );
+      renderNotification('Cập nhật thông tin  thành công', NotiType.SUCCESS);
     } else {
       dispatch({ type: UserActionType.USER_ACTION_FAILURE });
-      renderNotification('Cập nhật thông tin nhân sự thất bại', NotiType.ERROR);
+      renderNotification('Cập nhật thông tin thất bại', NotiType.ERROR);
     }
   };
 
-const getUserById =
-  (id: string | undefined, cb?: Callback) => async (dispatch: AppDispatch) => {
-    if (!id) return;
-    dispatch({
-      type: UserActionType.USER_ACTION_PENDING
-    });
-
-    const api = API_URLS.User.getUserById(id);
-
-    const { response, error } = await useCallApi({ ...api });
-    if (!error && response?.status === 200) {
-      const { data } = response.data;
-
-      cb?.onSuccess?.(data);
-    } else {
-      dispatch({ type: UserActionType.USER_ACTION_FAILURE });
-      renderNotification(
-        'Lấy thông tin chi tiết nhân sự thất bại',
-        NotiType.ERROR
-      );
-    }
-  };
-export const UserActions = { getAllUser, createUser, updateUser, getUserById };
+export const UserActions = { getAllUser, createUser, updateUser };

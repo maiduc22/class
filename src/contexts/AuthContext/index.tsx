@@ -3,9 +3,9 @@
 import { useCallApi } from '@/configs/api';
 import { API_URLS } from '@/configs/api/endpoint';
 import {
-  ChangeProfilePayload,
   ChangePwdPayload,
-  LoginPayload
+  LoginPayload,
+  RegisterPayload
 } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
 import { NotiType, renderNotification } from '@/utils/notifications';
@@ -73,43 +73,6 @@ function useAuthReducer(_state = initialState) {
     }
   };
 
-  const logout = async () => {
-    dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
-
-    const api = API_URLS.Auth.logout();
-
-    const { response, error } = await useCallApi({ ...api });
-
-    if (!error && response?.status === 200) {
-      dispatch({ type: AuthAction.LOGOUT });
-      localStorage.removeItem('token');
-      localStorage.removeItem('authUser');
-      renderNotification('Đăng xuất thành công', NotiType.SUCCESS);
-    } else {
-      dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
-      renderNotification('Đăng xuất thất bại', NotiType.ERROR);
-    }
-  };
-
-  const getAuthorities = useCallback(async (cb?: Callback) => {
-    dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
-
-    const api = API_URLS.Auth.getAuthorities();
-
-    const { response, error } = await useCallApi({ ...api });
-
-    if (!error && response?.status === 200) {
-      dispatch({
-        type: AuthAction.GET_AUTHORITIES,
-        payload: response.data.data
-      });
-      cb?.onSuccess?.(response.data.data);
-    } else {
-      dispatch({ type: AuthAction.AUTH_ACTION_FAILURE });
-      cb?.onError?.();
-    }
-  }, []);
-
   const getProfile = useCallback(async (cb?: Callback) => {
     dispatch({ type: AuthAction.AUTH_ACTION_PENDING });
 
@@ -131,7 +94,7 @@ function useAuthReducer(_state = initialState) {
   }, []);
 
   const updateProfile = async (
-    payload: ChangeProfilePayload,
+    payload: RegisterPayload,
     id: string | undefined,
     cb?: Callback
   ) => {
@@ -175,8 +138,6 @@ function useAuthReducer(_state = initialState) {
   return {
     state,
     login,
-    logout,
-    getAuthorities,
     getProfile,
     updateProfile,
     changePwd
@@ -186,8 +147,6 @@ function useAuthReducer(_state = initialState) {
 export const AuthContext = createContext<ReturnType<typeof useAuthReducer>>({
   state: initialState,
   login: async () => {},
-  logout: async () => {},
-  getAuthorities: async () => {},
   getProfile: async () => {},
   updateProfile: async () => {},
   changePwd: async () => {}

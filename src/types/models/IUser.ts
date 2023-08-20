@@ -1,31 +1,19 @@
 import { BaseModel } from '.';
-import { IRole } from './IRole';
 
 export interface IUser extends BaseModel {
   username: string;
   fullName: string;
   password: string;
-  avatar: string;
   dob: string;
   dayOfBirth: string;
-  description: string;
-  email: string;
-  employeeCode: string;
-  gender: IUserGender;
   phoneNumber: string;
-  status: IUserStatus;
-  title: string;
-  avatarFileId?: string;
-  departmentId: string;
-  roles: IRole[];
-  roleIds: string[];
+  role: IUserRole;
 }
 
-export enum IUserRole {}
-
-export enum IUserGender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE'
+export enum IUserRole {
+  ADMIN = 'ROLE_ADMIN',
+  TEACHER = 'ROLE_TEACHER',
+  STUDENT = 'ROLE_STUDENT'
 }
 
 export enum IUserStatus {
@@ -47,16 +35,20 @@ export const IUserStatusDict: Record<
   }
 };
 
-export const IUserGenderDict: Record<
-  IUserGender,
+export const IUserRoleDict: Record<
+  IUserRole,
   { label: string; color: string }
 > = {
-  [IUserGender.FEMALE]: {
-    label: 'Nữ',
+  [IUserRole.ADMIN]: {
+    label: 'Admin',
+    color: 'orange'
+  },
+  [IUserRole.TEACHER]: {
+    label: 'Giáo viên',
     color: 'blue'
   },
-  [IUserGender.MALE]: {
-    label: 'Nam',
-    color: 'orange'
+  [IUserRole.STUDENT]: {
+    label: 'Học sinh',
+    color: 'green'
   }
 };

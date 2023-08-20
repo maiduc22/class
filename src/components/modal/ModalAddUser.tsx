@@ -1,24 +1,19 @@
 import { RegisterPayload } from '@/configs/api/payload';
 import { useAppDispatch } from '@/hooks/redux';
+import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
-import { IUserRole, IUserRoleDict } from '@/types/models/IUser';
-import {
-  Button,
-  Group,
-  ScrollArea,
-  Select,
-  Stack,
-  TextInput
-} from '@mantine/core';
+import { IUserRole } from '@/types/models/IUser';
+import { Button, Group, Stack, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import dayjs from 'dayjs';
 
 interface Props {
   closeModal: () => void;
+  role: IUserRole;
 }
 
-export const ModalAddUser = ({ closeModal }: Props) => {
+export const ModalAddUser = ({ closeModal, role }: Props) => {
   const dispatch = useAppDispatch();
 
   const form = useForm<RegisterPayload>({
@@ -28,7 +23,7 @@ export const ModalAddUser = ({ closeModal }: Props) => {
       fullName: '',
       phoneNumber: '',
       dayOfBirth: undefined,
-      role: IUserRole.STUDENT
+      role: role
     },
     validate: {
       username: isNotEmpty('Tên đăng nhập không được bỏ trống'),
@@ -49,53 +44,52 @@ export const ModalAddUser = ({ closeModal }: Props) => {
         dispatch(
           UserActions.createUser(values, {
             onSuccess: () => {
-              dispatch(UserActions.getAllUser());
+              dispatch(TeacherActions.getAllTeacher());
               closeModal();
             }
           })
         )
       )}
     >
-      <ScrollArea h={500}>
-        <Stack spacing={'sm'}>
-          <TextInput
-            withAsterisk
-            label="Tên đăng nhập"
-            placeholder="Nhập tên đăng nhập"
-            {...form.getInputProps('username')}
-          />
-          <TextInput
-            withAsterisk
-            label="Họ tên"
-            placeholder="Nhập họ tên"
-            {...form.getInputProps('fullName')}
-          />
-          <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="Nhập email"
-            type={'email'}
-            {...form.getInputProps('email')}
-          />
-          <TextInput
-            withAsterisk
-            label="Mật khẩu"
-            placeholder="Nhập mật khẩu"
-            {...form.getInputProps('password')}
-          />
-          <TextInput
-            withAsterisk
-            label="Số điện thoại"
-            placeholder="Nhập số điện thoại"
-            {...form.getInputProps('phoneNumber')}
-          />
-          <DatePickerInput
-            label="Ngày sinh"
-            placeholder="Nhập ngày sinh"
-            {...form.getInputProps('dayOfBirth')}
-          />
+      <Stack spacing={'sm'}>
+        <TextInput
+          withAsterisk
+          label="Tên đăng nhập"
+          placeholder="Nhập tên đăng nhập"
+          {...form.getInputProps('username')}
+        />
+        <TextInput
+          withAsterisk
+          label="Họ tên"
+          placeholder="Nhập họ tên"
+          {...form.getInputProps('fullName')}
+        />
+        <TextInput
+          withAsterisk
+          label="Email"
+          placeholder="Nhập email"
+          type={'email'}
+          {...form.getInputProps('email')}
+        />
+        <TextInput
+          withAsterisk
+          label="Mật khẩu"
+          placeholder="Nhập mật khẩu"
+          {...form.getInputProps('password')}
+        />
+        <TextInput
+          withAsterisk
+          label="Số điện thoại"
+          placeholder="Nhập số điện thoại"
+          {...form.getInputProps('phoneNumber')}
+        />
+        <DatePickerInput
+          label="Ngày sinh"
+          placeholder="Nhập ngày sinh"
+          {...form.getInputProps('dayOfBirth')}
+        />
 
-          <Select
+        {/* <Select
             data={[
               {
                 value: IUserRole.ADMIN,
@@ -113,9 +107,9 @@ export const ModalAddUser = ({ closeModal }: Props) => {
             label="Vai trò"
             placeholder="Chọn chọn vai trò"
             {...form.getInputProps('role')}
-          />
-        </Stack>
-      </ScrollArea>
+          /> */}
+      </Stack>
+
       <Group position="right" mt={'md'}>
         <Button type="submit">Thêm mới</Button>
       </Group>

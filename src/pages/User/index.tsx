@@ -1,16 +1,9 @@
-import CustomLoader from '@/components/custom/CustomLoader';
-import { api } from '@/configs/api';
-import { API_URLS } from '@/configs/api/endpoint';
-import { ROUTER } from '@/configs/router';
-import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { UserActions } from '@/redux/reducers/user/user.action';
-import { IUser, IUserGenderDict, IUserStatusDict } from '@/types/models/IUser';
-import { RESOURCES, SCOPES, isGrantedPermission } from '@/utils/permissions';
+import { IUser } from '@/types/models/IUser';
 import {
-  Badge,
   Button,
   Group,
   Input,
@@ -20,23 +13,14 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { IconDownload, IconInfoCircle } from '@tabler/icons-react';
+import { IconEdit } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { ModalAddUser } from './components/ModalAddUser';
+import { ModalEditUser } from './components/ModalEditUser';
 
 export const User = () => {
-  const { state } = useAuthContext();
-  const { authorities } = state;
-  const [_authorities, setAuthorities] = useState(authorities);
-
-  useEffect(() => {
-    setAuthorities(authorities);
-  }, [authorities]);
-
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     dispatch(UserActions.getAllUser());
@@ -54,12 +38,7 @@ export const User = () => {
         users.filter((user) => {
           if (debounceQuery !== '') {
             if (
-              user.fullName
-                .toLowerCase()
-                .includes(debounceQuery.toLowerCase()) ||
-              user.employeeCode
-                .toLowerCase()
-                .includes(debounceQuery.toLowerCase())
+              user.fullName.toLowerCase().includes(debounceQuery.toLowerCase())
             ) {
               return true;
             }
@@ -70,46 +49,32 @@ export const User = () => {
       ),
     [users, debounceQuery]
   );
-
+  const [_selectedUser, SetSelectedUser] = useState<IUser>();
   const [openedAddModal, { open: openAddModal, close: closeAddModal }] =
+    useDisclosure();
+  const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
     useDisclosure();
 
   const columns: DataTableColumn<IUser>[] = [
-    { accessor: 'employeeCode', title: 'Mã nhân sự' },
+    { accessor: 'username', title: 'Tên tài khoản' },
     { accessor: 'fullName', title: 'Họ tên' },
-    { accessor: 'email', title: 'Email' },
     { accessor: 'phoneNumber', title: 'Số điện thoại' },
     { accessor: 'dayOfBirth', title: 'Ngày sinh' },
-    {
-      accessor: 'gender',
-      title: 'Giới tính',
-      render: ({ gender }) => {
-        return IUserGenderDict[gender].label;
-      }
-    },
-    {
-      accessor: 'status',
-      title: 'Trạng thái',
-      render: ({ status }) => {
-        return (
-          <Badge color={IUserStatusDict[status].color}>
-            {IUserStatusDict[status].label}
-          </Badge>
-        );
-      }
-    },
     {
       accessor: '',
       title: '',
       textAlignment: 'center',
       width: '100px',
-      render: ({ id }) => (
+      render: (record) => (
         <Group position="center">
-          <Tooltip label="Xem thông tin chi tiết">
-            <IconInfoCircle
+          <Tooltip label="Sửa thông tin tài khoản">
+            <IconEdit
               cursor={'pointer'}
               size={'1rem'}
-              onClick={() => navigate(`${ROUTER.USER}/${id}`)}
+              onClick={() => {
+                SetSelectedUser(record);
+                openEditModal();
+              }}
             />
           </Tooltip>
         </Group>
@@ -130,30 +95,6 @@ export const User = () => {
     }
   });
 
-  if (!_authorities) {
-    return <CustomLoader />;
-  }
-
-  if (!isGrantedPermission(_authorities, RESOURCES.USER, SCOPES.VIEW)) {
-    return <Navigate to={ROUTER.UNAUTHORIZE} />;
-  }
-
-  const handleDownloadExcel = async () => {
-    const url = API_URLS.User.download();
-    const fileName = 'Danh_sách_nhân_viên.xlsx';
-
-    await api
-      .get(url.endPoint, { ...url, responseType: 'blob' })
-      .then((res) => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', fileName);
-        document.body.appendChild(link);
-        link.click();
-      });
-  };
-
   return (
     <>
       <Stack>
@@ -162,25 +103,12 @@ export const User = () => {
         </Text>
         <Group position="apart">
           <Input
-            placeholder="Tìm kiếm theo tên hoặc mã nhân sư"
+            placeholder="Tìm kiếm theo họ tên"
             miw={300}
             onChange={(e) => setQuery(e.currentTarget.value)}
           />
           <Group>
-            {isGrantedPermission(
-              _authorities,
-              RESOURCES.USER,
-              SCOPES.CREATE
-            ) ? (
-              <Button onClick={openAddModal}>Thêm nhân sự</Button>
-            ) : null}
-            <Button
-              variant="outline"
-              leftIcon={<IconDownload />}
-              onClick={handleDownloadExcel}
-            >
-              Excel
-            </Button>
+            <Button onClick={openAddModal}>Tạo tài khoản</Button>
           </Group>
         </Group>
         <DataTable
@@ -201,12 +129,22 @@ export const User = () => {
 
       <Modal
         centered
-        title="Tạo mới nhân sự"
+        title="Tạo tài khoản"
         opened={openedAddModal}
         onClose={closeAddModal}
         size={'lg'}
       >
         <ModalAddUser closeModal={closeAddModal} />
+      </Modal>
+
+      <Modal
+        centered
+        title="Cập nhật tài khoản"
+        opened={openedEditModal}
+        onClose={closeEditModal}
+        size={'lg'}
+      >
+        <ModalEditUser closeModal={closeEditModal} user={_selectedUser} />
       </Modal>
     </>
   );
