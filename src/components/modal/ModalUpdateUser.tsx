@@ -23,7 +23,7 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
   };
 
   const validateEmail = (email: string | undefined) => {
-    if (!email) return true ;
+    if (!email) return true;
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   };
@@ -37,7 +37,7 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
     },
     validate: {
       phoneNumber: (value) => {
-        if (validatePhone(value)) {
+        if (!validatePhone(value)) {
           return 'Số điện thoại phải có 10 chữ số và bắt đầu bằng số không';
         }
       },
