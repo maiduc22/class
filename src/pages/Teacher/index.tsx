@@ -1,9 +1,11 @@
 import { ModalAddUser } from '@/components/modal/ModalAddUser';
 import { ModalUpdateUser } from '@/components/modal/ModalUpdateUser';
+import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
+import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserRole } from '@/types/models/IUser';
 import {
   Button,
@@ -15,19 +17,11 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import {
-  IconDeviceTabletExclamation,
-  IconEditCircle,
-  IconHttpDelete,
-  IconInfoCircle,
-  IconTrash
-} from '@tabler/icons-react';
+import { IconEditCircle, IconInfoCircle, IconTrash } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherDetails } from '../TeacherDetails';
-import { UserActions } from '@/redux/reducers/user/user.action';
-import { ROUTER } from '@/configs/router';
 
 const Teacher: React.FC = () => {
   const navigate = useNavigate();
@@ -191,7 +185,7 @@ const Teacher: React.FC = () => {
         onClose={closeDetailsModal}
         title={<Text fw={'bold'}>Chi tiết thông tin giáo viên</Text>}
       >
-        <TeacherDetails courses={selectedRecord?.courses || []} />
+        <TeacherDetails />
       </Modal>
       <Modal
         centered

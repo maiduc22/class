@@ -4,7 +4,7 @@ import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
 import { Button, Group, Stack, TextInput } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
+import { DateInput, DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
 
@@ -17,13 +17,13 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
   const dispatch = useAppDispatch();
 
   const validatePhone = (phone: string | undefined) => {
-    if (!phone) return false;
+    if (!phone) return true;
     const passwordPattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
     return passwordPattern.test(phone);
   };
 
   const validateEmail = (email: string | undefined) => {
-    if (!email) return true;
+    if (!email) return true ;
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   };
@@ -65,26 +65,24 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
         )
       )}
     >
-      <Stack spacing={'sm'}>
+      <Stack spacing={'xl'}>
         <TextInput
-          withAsterisk
           label="Họ tên"
           placeholder="Nhập họ tên"
           {...form.getInputProps('fullName')}
         />
         <TextInput
-          withAsterisk
           label="Số điện thoại"
           placeholder="Nhập số điện thoại"
           {...form.getInputProps('phoneNumber')}
         />
         <TextInput
-          withAsterisk
           label="Email"
           placeholder="Nhập email"
           {...form.getInputProps('email')}
         />
-        <DatePickerInput
+        <DateInput
+          size="sm"
           label="Ngày sinh"
           placeholder="Nhập ngày sinh"
           value={form.values.dob ? dayjs(form.values.dob).toDate() : undefined}
@@ -98,7 +96,7 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
       </Stack>
 
       <Group position="right" mt={'md'}>
-        <Button type="submit">Thêm mới</Button>
+        <Button type="submit">Cập nhật</Button>
       </Group>
     </form>
   );
