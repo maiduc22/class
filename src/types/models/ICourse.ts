@@ -1,30 +1,26 @@
 import { BaseModel } from '.';
+import { IRoom } from './IRoom';
+import { IUser } from './IUser';
 
 export interface ICourse extends BaseModel {
   name: string;
   description: string;
   roomId?: string;
+  room?: IRoom;
   teacherId?: string;
   members?: number;
-  timeTables: TimeTable[];
+  students?: IUser[];
+  timeTableList: TimeTable[];
 }
 
 export type TimeTable = {
   inDate: string;
-  hourStart: number;
-  minuteStart: number;
-  hourEnd: number;
-  minuteEnd: number;
-};
-
-type Date = {
-  MONDAY: 'MONDAY';
-  TUESDAY: 'TUESDAY';
-  WEDNESDAY: 'WEDNESDAY';
-  THURSDAY: 'THURSDAY';
-  FRIDAY: 'FRIDAY';
-  SATURDAY: 'SATURDAY';
-  SUNDAY: 'SUNDAY';
+  // hourStart: number;
+  // minuteStart: number;
+  // hourEnd: number;
+  // minuteEnd: number;
+  start: string;
+  end: string;
 };
 
 export const DateParser = (date: string) => {

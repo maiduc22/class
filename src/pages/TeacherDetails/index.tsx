@@ -1,64 +1,30 @@
-import { IClass } from '@/types/models/IClass';
-import { Col, Grid, Stack, Text } from '@mantine/core';
+import { ICourse } from '@/types/models/ICourse';
+import { Center, Col, Grid, Stack, Text } from '@mantine/core';
 import { CardClass } from './components/CardClass';
 
-const fakeData: IClass[] = [
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  },
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  },
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  },
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  },
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  },
-  {
-    id: '1',
-    name: 'Lớp Giải Tích',
-    day: ['Thứ 3', 'Thứ 5'],
-    room: 'P401',
-    students: []
-  }
-];
-export const TeacherDetails = () => {
+interface Props {
+  courses: ICourse[];
+}
+
+export const TeacherDetails = ({ courses }: Props) => {
   return (
     <Stack>
-      <Text fw={'bold'} fz={'lg'}>
-        Danh sách lớp học
-      </Text>
+      <Text fw={'bold'}>Danh sách lớp học</Text>
 
       <Grid gutter={'lg'}>
-        {fakeData.map((classInfo) => (
-          <Col span={3} my={'xs'}>
-            <CardClass classInfo={classInfo} />
-          </Col>
-        ))}
+        {courses?.length > 0 ? (
+          courses.map((classInfo) => (
+            <Col span={6} my={'xs'}>
+              <CardClass classInfo={classInfo} />
+            </Col>
+          ))
+        ) : (
+          <Center mt={'lg'}>
+            <Text fw={500} fz={'lg'}>
+              Giáo viên này chưa có lớp nào.
+            </Text>
+          </Center>
+        )}
       </Grid>
     </Stack>
   );

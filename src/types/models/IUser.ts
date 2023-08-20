@@ -1,4 +1,5 @@
 import { BaseModel } from '.';
+import { ICourse } from './ICourse';
 
 export interface IUser extends BaseModel {
   username: string;
@@ -8,6 +9,7 @@ export interface IUser extends BaseModel {
   dayOfBirth: string;
   phoneNumber: string;
   role: IUserRole;
+  courses?: ICourse[];
 }
 
 export enum IUserRole {

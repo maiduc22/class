@@ -19,6 +19,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TeacherDetails } from '../TeacherDetails';
 
 const Teacher: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Teacher: React.FC = () => {
   const { teachers } = useAppSelector((state: RootState) => state.teacher);
   console.log(teachers);
   const [_records, setRecords] = useState<IUser[]>([]);
-
+  const [selectedRecord, setSelectedRecord] = useState<IUser>();
   const [_query, setQuery] = useState('');
   const [debounceQuery] = useDebouncedValue(_query, 200);
 
@@ -57,6 +58,11 @@ const Teacher: React.FC = () => {
   const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
     useDisclosure();
 
+  const [
+    openedDetailsModal,
+    { close: closeDetailsModal, open: openDetailsModal }
+  ] = useDisclosure();
+
   const columns: DataTableColumn<IUser>[] = [
     { accessor: 'userName', title: 'Tên tài khoản' },
     { accessor: 'fullName', title: 'Họ tên' },
@@ -74,7 +80,9 @@ const Teacher: React.FC = () => {
               cursor={'pointer'}
               size={'1rem'}
               onClick={() => {
-                navigate(`${ROUTER.TEACHER}/${record.id}`);
+                // navigate(`${ROUTER.TEACHER}/${record.id}`);
+                setSelectedRecord(record);
+                openDetailsModal();
               }}
             />
           </Tooltip>
@@ -137,6 +145,15 @@ const Teacher: React.FC = () => {
         <ModalAddUser closeModal={closeAddModal} role={IUserRole.TEACHER} />
       </Modal>
 
+      <Modal
+        centered
+        size={'xl'}
+        opened={openedDetailsModal}
+        onClose={closeDetailsModal}
+        title={<Text fw={'bold'}>Chi tiết thông tin giáo viên</Text>}
+      >
+        <TeacherDetails courses={selectedRecord?.courses || []} />
+      </Modal>
       {/* <Modal
         centered
         opened={openedUpdateModal}
