@@ -72,7 +72,7 @@ const Teacher: React.FC = () => {
 
   const handleDelete = (id: string) => {
     modals.openConfirmModal({
-      title: 'Xác nhận xoá tài khoản',
+      title: 'Xác nhận xoá giáo viên',
       labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
       onConfirm: () => {
         dispatch(
