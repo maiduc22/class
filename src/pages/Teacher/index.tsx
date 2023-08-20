@@ -22,6 +22,8 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherDetails } from '../TeacherDetails';
+import { Modals } from '@/utils/modals';
+import { modals } from '@mantine/modals';
 
 const Teacher: React.FC = () => {
   const navigate = useNavigate();
@@ -68,6 +70,22 @@ const Teacher: React.FC = () => {
     { close: closeDetailsModal, open: openDetailsModal }
   ] = useDisclosure();
 
+  const handleDelete = (id: string) => {
+    modals.openConfirmModal({
+      title: 'Xác nhận xoá phòng ban',
+      labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
+      onConfirm: () => {
+        dispatch(
+          UserActions.deleteUser(id, {
+            onSuccess: () => {
+              dispatch(TeacherActions.getAllTeacher());
+            }
+          })
+        );
+      }
+    });
+  };
+
   const columns: DataTableColumn<IUser>[] = [
     { accessor: 'userName', title: 'Tên tài khoản', textAlignment: 'center' },
     { accessor: 'fullName', title: 'Họ tên', textAlignment: 'center' },
@@ -110,13 +128,7 @@ const Teacher: React.FC = () => {
               cursor={'pointer'}
               size={'1rem'}
               onClick={() => {
-                dispatch(
-                  UserActions.deleteUser(record.id, {
-                    onSuccess: () => {
-                      dispatch(TeacherActions.getAllTeacher());
-                    }
-                  })
-                );
+                handleDelete(record.id);
               }}
             />
           </Tooltip>
