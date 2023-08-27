@@ -6,6 +6,7 @@ import { ROUTER } from '@/configs/router';
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
 import { FacilityActions } from '@/redux/reducers/facility/facility.action';
+import { RoomActions } from '@/redux/reducers/room/room.action';
 import { IUser } from '@/types/models/IUser';
 import {
   Anchor,
@@ -213,6 +214,7 @@ const ProtectedLayout = () => {
 
   useEffect(() => {
     dispatch(FacilityActions.getAllFacilities());
+    dispatch(RoomActions.getAllRooms());
   }, [dispatch]);
 
   const handleLogout = () => {

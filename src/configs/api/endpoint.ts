@@ -78,5 +78,27 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader()
     })
+  },
+  Room: {
+    getAllRooms: () => ({
+      endPoint: '/rooms',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    createRoom: () => ({
+      endPoint: `/rooms`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    updateRoom: (id: string) => ({
+      endPoint: `/rooms/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteRoom: (id: string) => ({
+      endPoint: `/rooms/${id}/delete`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    })
   }
 };

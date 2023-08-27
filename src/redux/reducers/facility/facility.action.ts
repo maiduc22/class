@@ -25,7 +25,7 @@ const getAllFacilities =
       dispatch({ type: FacilityActionType.FACILITY_ACTION_FAILURE });
       console.log(error);
       renderNotification(
-        'Đã có lỗi khi lấy danh sách giáo viên',
+        'Đã có lỗi khi lấy danh sách cơ sở vật chất',
         NotiType.ERROR
       );
     }

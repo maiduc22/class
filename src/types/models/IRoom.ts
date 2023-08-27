@@ -5,4 +5,10 @@ export interface IRoom extends BaseModel {
   description: string;
   capacity: number;
   image?: string;
+  facilities: SelectedFacilities[];
+}
+
+export interface SelectedFacilities {
+  id: string;
+  qty: number;
 }

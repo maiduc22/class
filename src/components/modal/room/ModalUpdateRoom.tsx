@@ -1,12 +1,13 @@
-import { CreateFacilityPayload } from '@/configs/api/payload';
+import { CreateRoomPayload } from '@/configs/api/payload';
 import { useAppDispatch } from '@/hooks/redux';
 import { useUploadFirebase } from '@/hooks/use-upload-firebase';
-import { FacilityActions } from '@/redux/reducers/facility/facility.action';
-import { IFacility } from '@/types/models/IFacility';
+import { RoomActions } from '@/redux/reducers/room/room.action';
+import { IRoom } from '@/types/models/IRoom';
 import {
   Button,
   Group,
   Image,
+  NumberInput,
   ScrollArea,
   Stack,
   Text,
@@ -20,15 +21,17 @@ import React, { useState } from 'react';
 
 interface Props {
   close: () => void;
-  facility: IFacility | undefined;
+  room: IRoom | undefined;
 }
 
-export const ModalUpdateFacility: React.FC<Props> = ({ close, facility }) => {
-  const form = useForm<CreateFacilityPayload>({
+export const ModalUpdateRoom: React.FC<Props> = ({ close, room }) => {
+  const form = useForm<CreateRoomPayload>({
     initialValues: {
-      name: facility?.name || '',
-      description: facility?.description || '',
-      image: facility?.image || ''
+      name: room?.name || '',
+      description: room?.description || '',
+      capacity: room?.capacity || 0,
+      image: room?.image || '',
+      facilities: room?.facilities || []
     },
     validate: {
       name: isNotEmpty('Không được để trống'),
@@ -42,11 +45,11 @@ export const ModalUpdateFacility: React.FC<Props> = ({ close, facility }) => {
   const theme = useMantineTheme();
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (value: CreateFacilityPayload) => {
+  const handleSubmit = (value: CreateRoomPayload) => {
     dispatch(
-      FacilityActions.updateFacility(facility?.id || '', value, {
+      RoomActions.updateRoom(room?.id || '', value, {
         onSuccess: () => {
-          dispatch(FacilityActions.getAllFacilities());
+          dispatch(RoomActions.getAllRooms());
           close();
         }
       })
@@ -56,8 +59,8 @@ export const ModalUpdateFacility: React.FC<Props> = ({ close, facility }) => {
     <form onSubmit={form.onSubmit((value) => handleSubmit(value))}>
       <Stack spacing={'md'}>
         <TextInput
-          label="Tên cơ sở vật chất"
-          placeholder="Tên"
+          label="Tên phòng học"
+          placeholder="Tên phòng học"
           {...form.getInputProps('name')}
         />
 
@@ -65,6 +68,12 @@ export const ModalUpdateFacility: React.FC<Props> = ({ close, facility }) => {
           label="Mô tả"
           placeholder="Mô tả"
           {...form.getInputProps('description')}
+        />
+
+        <NumberInput
+          label="Số chỗ ngồi"
+          placeholder=""
+          {...form.getInputProps('capacity')}
         />
 
         <Stack spacing={0}>
@@ -115,9 +124,9 @@ export const ModalUpdateFacility: React.FC<Props> = ({ close, facility }) => {
                 </ScrollArea>
               ) : (
                 <>
-                  {facility?.image ? (
+                  {room?.image ? (
                     <Stack spacing={0} align="center">
-                      <Image src={facility?.image} />
+                      <Image src={room?.image} />
                     </Stack>
                   ) : (
                     <>

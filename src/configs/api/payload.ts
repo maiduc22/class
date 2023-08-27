@@ -31,9 +31,17 @@ export type CreateFacilityPayload = {
   description: string;
   image?: string;
 };
+export type CreateRoomPayload = {
+  name: string;
+  description: string;
+  image?: string;
+  capacity: number;
+  facilities: { id: string; qty: number }[];
+};
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
   | string[]
   | UpdateUserPayload
-  | CreateFacilityPayload;
+  | CreateFacilityPayload
+  | CreateRoomPayload;
