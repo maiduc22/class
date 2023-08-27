@@ -28,7 +28,7 @@ export const CardClass: React.FC<Props> = ({ classInfo }) => {
   return (
     <Card withBorder radius={'md'} shadow="xs" p={'0'}>
       <Card.Section>
-        <Image height={'100px'} src={ClassImage} />
+        <Image height={'100px'} src={ClassImage} withPlaceholder />
       </Card.Section>
       <Stack p={'sm'} spacing={'xs'}>
         <Text fw={'bold'}>{name}</Text>

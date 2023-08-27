@@ -1,4 +1,5 @@
 import { ModalAddRoom } from '@/components/modal/room/ModalAddRoom';
+import { ModalDetailsRoom } from '@/components/modal/room/ModalDetailsRoom';
 import { ModalUpdateRoom } from '@/components/modal/room/ModalUpdateRoom';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
@@ -17,7 +18,12 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconEditCircle, IconPlus, IconTrash } from '@tabler/icons-react';
+import {
+  IconEditCircle,
+  IconInfoCircle,
+  IconPlus,
+  IconTrash
+} from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 
@@ -32,6 +38,11 @@ export const Room = () => {
     useDisclosure();
   const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
     useDisclosure();
+  const [
+    openedDetailsModal,
+    { open: openDetailsModal, close: closeDetailsModal }
+  ] = useDisclosure();
+
   const [selectedRoom, setSelectedRoom] = useState<IRoom>();
 
   const handleDelete = (id: string) => {
@@ -72,7 +83,12 @@ export const Room = () => {
       textAlignment: 'center',
       render: (record) => (
         <Center>
-          <Image src={record.image || ''} width={150} height={150} />
+          <Image
+            src={record.image || ''}
+            width={150}
+            height={150}
+            withPlaceholder
+          />
         </Center>
       )
     },
@@ -83,6 +99,16 @@ export const Room = () => {
       width: '',
       render: (record) => (
         <Group position="center">
+          <Tooltip label="Thông tin chi tiết">
+            <IconInfoCircle
+              cursor={'pointer'}
+              size={'1rem'}
+              onClick={() => {
+                setSelectedRoom(record);
+                openDetailsModal();
+              }}
+            />
+          </Tooltip>
           <Tooltip label="Sửa thông tin">
             <IconEditCircle
               cursor={'pointer'}
@@ -164,6 +190,15 @@ export const Room = () => {
         size={'lg'}
       >
         <ModalUpdateRoom close={closeEditModal} room={selectedRoom} />
+      </Modal>
+      <Modal
+        centered
+        title={<Text fw={500}>Thông tin phòng học</Text>}
+        opened={openedDetailsModal}
+        onClose={closeDetailsModal}
+        size={'lg'}
+      >
+        <ModalDetailsRoom close={closeDetailsModal} id={selectedRoom?.id} />
       </Modal>
     </>
   );

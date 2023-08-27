@@ -10,12 +10,14 @@ interface Props {
   setSelectedFacilities: React.Dispatch<
     React.SetStateAction<SelectedFacilities[]>
   >;
+  viewOnly: boolean;
 }
 
 export const FacilityCard: React.FC<Props> = ({
   facility,
   selectedFacilities,
-  setSelectedFacilities
+  setSelectedFacilities,
+  viewOnly
 }) => {
   const [_quantity, setQuantity] = useState(0);
   useEffect(() => {
@@ -57,16 +59,20 @@ export const FacilityCard: React.FC<Props> = ({
         </Grid.Col>
         <Grid.Col span={3}>
           <Group grow>
-            <ActionIcon
-              disabled={_quantity <= 0}
-              onClick={() => setQuantity((prev) => prev - 1)}
-            >
-              <IconMinus />
-            </ActionIcon>
+            {viewOnly && (
+              <ActionIcon
+                disabled={_quantity <= 0}
+                onClick={() => setQuantity((prev) => prev - 1)}
+              >
+                <IconMinus />
+              </ActionIcon>
+            )}
             <Text align="center">{_quantity}</Text>
-            <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
-              <IconPlus />
-            </ActionIcon>
+            {viewOnly && (
+              <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
+                <IconPlus />
+              </ActionIcon>
+            )}
           </Group>
         </Grid.Col>
       </Grid>

@@ -67,7 +67,12 @@ export const Facility = () => {
       textAlignment: 'center',
       render: (record) => (
         <Center>
-          <Image src={record.image || ''} width={150} height={150} />
+          <Image
+            src={record.image || ''}
+            width={150}
+            height={150}
+            withPlaceholder
+          />
         </Center>
       )
     },

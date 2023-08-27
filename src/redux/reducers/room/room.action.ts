@@ -90,9 +90,30 @@ const deleteRoom =
       renderNotification(error?.response?.data.errors, NotiType.ERROR);
     }
   };
+
+const getRoomById =
+  (id: string, cb?: Callback): RoomThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: RoomActionType.ROOM_ACTION_PENDING });
+
+    const api = API_URLS.Room.getRoomByID(id);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      const { data } = response;
+      dispatch({
+        type: RoomActionType.CREATE_ROOM_SUCCESS
+      });
+      cb?.onSuccess?.(data.data);
+    } else {
+      dispatch({ type: RoomActionType.ROOM_ACTION_FAILURE });
+      renderNotification(error?.response?.data.errors, NotiType.ERROR);
+    }
+  };
 export const RoomActions = {
   getAllRooms,
   createRoom,
   updateRoom,
-  deleteRoom
+  deleteRoom,
+  getRoomById
 };

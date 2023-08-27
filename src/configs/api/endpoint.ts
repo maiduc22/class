@@ -85,6 +85,11 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader()
     }),
+    getRoomByID: (id: string) => ({
+      endPoint: `/rooms/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
     createRoom: () => ({
       endPoint: `/rooms`,
       method: 'POST',
