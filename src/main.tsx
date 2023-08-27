@@ -59,20 +59,18 @@ dayjs.extend(duration);
 // });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <I18nextProvider i18n={i18next}>
-      <ReduxProvider store={store}>
-        <MantineProvider theme={customTheme} withGlobalStyles withNormalizeCSS>
-          <AuthProvider>
-            <ModalsProvider>
-              <DatesProvider settings={{ locale: 'vi', weekendDays: [0] }}>
-                <NotificationsProvider />
-                <RouterProvider router={router()} />
-              </DatesProvider>
-            </ModalsProvider>
-          </AuthProvider>
-        </MantineProvider>
-      </ReduxProvider>
-    </I18nextProvider>
-  </React.StrictMode>
+  <I18nextProvider i18n={i18next}>
+    <ReduxProvider store={store}>
+      <MantineProvider theme={customTheme} withGlobalStyles withNormalizeCSS>
+        <AuthProvider>
+          <ModalsProvider>
+            <DatesProvider settings={{ locale: 'vi', weekendDays: [0] }}>
+              <NotificationsProvider />
+              <RouterProvider router={router()} />
+            </DatesProvider>
+          </ModalsProvider>
+        </AuthProvider>
+      </MantineProvider>
+    </ReduxProvider>
+  </I18nextProvider>
 );

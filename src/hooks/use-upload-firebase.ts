@@ -15,7 +15,7 @@ export const useUploadFirebase = (): [
   const handleUploadImageOnFirebase = async (file: File, cb?: Callback) => {
     setIsLoading(true);
 
-    const imageRef = ref(storage, `images/${file.name} + ${uuidv4()}`);
+    const imageRef = ref(storage, `edu/${file.name} + ${uuidv4()}`);
     try {
       const snapshot = await uploadBytes(imageRef, file);
       const downloadUrl = await getDownloadURL(snapshot.ref);

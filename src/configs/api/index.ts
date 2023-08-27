@@ -17,7 +17,8 @@ interface UseCallApiProps {
 
 interface UseCallApiResponse {
   response: AxiosResponse | null;
-  error: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any;
 }
 
 export const useCallApi = async (

@@ -5,6 +5,7 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
+import { FacilityActions } from '@/redux/reducers/facility/facility.action';
 import { IUser } from '@/types/models/IUser';
 import {
   Anchor,
@@ -29,13 +30,13 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBrandAsana,
-  IconGitPullRequest,
   IconLicense,
   IconLogout,
   IconPassword,
+  IconPencil,
   IconUser
 } from '@tabler/icons-react';
-import { ReactNode, Suspense, useLayoutEffect, useState } from 'react';
+import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -207,8 +208,12 @@ const User = ({ profile }: UserProps) => {
 
 const ProtectedLayout = () => {
   const navigate = useNavigate();
-  const { getProfile } = useAuthContext();
+
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(FacilityActions.getAllFacilities());
+  }, [dispatch]);
 
   const handleLogout = () => {
     navigate(ROUTER.LOGIN);
@@ -235,6 +240,12 @@ const ProtectedLayout = () => {
       color: 'yellow',
       label: 'Quản Lý Phòng Học',
       to: ROUTER.ROOM
+    },
+    {
+      icon: <IconPencil size={'1rem'} />,
+      color: 'blue',
+      label: 'Quản Lý Cơ Sở Vật Chất',
+      to: ROUTER.FACILITY
     },
     {
       icon: <IconBrandAsana size="1rem" />,

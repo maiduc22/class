@@ -4,12 +4,10 @@ import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
 import { Button, Group, Stack, TextInput } from '@mantine/core';
-import { DateInput, DatePickerInput } from '@mantine/dates';
+import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-
-import DatePicker from 'react-date-picker';
 
 type ValuePiece = Date | null;
 

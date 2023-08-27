@@ -17,19 +17,17 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import { IconEditCircle, IconInfoCircle, IconTrash } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TeacherDetails } from '../TeacherDetails';
-import { Modals } from '@/utils/modals';
-import { modals } from '@mantine/modals';
 
 const Teacher: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { teachers } = useAppSelector((state: RootState) => state.teacher);
-  console.log(teachers);
+
   const [_records, setRecords] = useState<IUser[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<IUser>();
   const [_query, setQuery] = useState('');
@@ -65,10 +63,6 @@ const Teacher: React.FC = () => {
     openedUpdateModal,
     { close: closeUpdateModal, open: openUpdateModal }
   ] = useDisclosure();
-  const [
-    openedDetailsModal,
-    { close: closeDetailsModal, open: openDetailsModal }
-  ] = useDisclosure();
 
   const handleDelete = (id: string) => {
     modals.openConfirmModal({
@@ -94,6 +88,11 @@ const Teacher: React.FC = () => {
       title: 'Số điện thoại',
       textAlignment: 'center'
     },
+    {
+      accessor: 'email',
+      title: 'Email',
+      textAlignment: 'center'
+    },
     { accessor: 'dob', title: 'Ngày sinh', textAlignment: 'center' },
     {
       accessor: '',
@@ -108,8 +107,6 @@ const Teacher: React.FC = () => {
               size={'1rem'}
               onClick={() => {
                 navigate(`${ROUTER.TEACHER}/${record.id}`);
-                // setSelectedRecord(record);
-                // openDetailsModal();
               }}
             />
           </Tooltip>
@@ -191,15 +188,6 @@ const Teacher: React.FC = () => {
         <ModalAddUser closeModal={closeAddModal} role={IUserRole.TEACHER} />
       </Modal>
 
-      <Modal
-        centered
-        size={'xl'}
-        opened={openedDetailsModal}
-        onClose={closeDetailsModal}
-        title={<Text fw={'bold'}>Chi tiết thông tin giáo viên</Text>}
-      >
-        <TeacherDetails />
-      </Modal>
       <Modal
         centered
         opened={openedUpdateModal}

@@ -18,6 +18,7 @@ import Login from '../pages/Login';
 import { User } from '../pages/User';
 import { Room } from '@/pages/Room';
 import { Course } from '@/pages/Course';
+import { Facility } from '@/pages/Facility';
 
 const router = () => {
   return createBrowserRouter(
@@ -33,6 +34,7 @@ const router = () => {
           <Route path={ROUTER.TEACHER_DETAILS} element={<TeacherDetails />} />
           <Route path={ROUTER.USER} element={<User />} />
           <Route path={ROUTER.ROOM} element={<Room />} />
+          <Route path={ROUTER.FACILITY} element={<Facility />} />
           <Route path={ROUTER.COURSE} element={<Course />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path="*" element={<Page404 />} />

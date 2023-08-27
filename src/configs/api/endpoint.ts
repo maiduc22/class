@@ -56,5 +56,27 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader()
     })
+  },
+  Facility: {
+    getAllFacility: () => ({
+      endPoint: '/facilities',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    createFacility: () => ({
+      endPoint: `/facilities`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    updateFacility: (id: string) => ({
+      endPoint: `/facilities/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteFacility: (id: string) => ({
+      endPoint: `/facilities/${id}/delete`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    })
   }
 };

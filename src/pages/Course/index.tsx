@@ -1,6 +1,6 @@
 import usePagination from '@/hooks/use-pagination';
-import { DateParser, ICourse } from '@/types/models/ICourse';
-import { Badge, Button, Group, Stack, Text } from '@mantine/core';
+import { ICourse } from '@/types/models/ICourse';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useState } from 'react';
 
@@ -23,22 +23,22 @@ export const Course = () => {
     {
       accessor: 'room',
       title: 'Phòng học'
-    },
-    {
-      accessor: '',
-      title: 'Lịch học',
-      render: (record) => (
-        <Group>
-          {record.timeTables.map((timeTable) => (
-            <Badge>
-              {DateParser(timeTable.inDate)}: {timeTable.hourStart}:
-              {timeTable.minuteStart} - {timeTable.hourEnd}:
-              {timeTable.minuteEnd}
-            </Badge>
-          ))}
-        </Group>
-      )
     }
+    // {
+    //   accessor: '',
+    //   title: 'Lịch học',
+    //   render: (record) => (
+    //     <Group>
+    //       {record.timeTables.map((timeTable) => (
+    //         <Badge>
+    //           {DateParser(timeTable.inDate)}: {timeTable.hourStart}:
+    //           {timeTable.minuteStart} - {timeTable.hourEnd}:
+    //           {timeTable.minuteEnd}
+    //         </Badge>
+    //       ))}
+    //     </Group>
+    //   )
+    // }
   ];
 
   const {

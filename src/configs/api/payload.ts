@@ -26,9 +26,14 @@ export type CreateCoursePayload = {
   teacherId?: string;
   timeTables: TimeTable[];
 };
-
+export type CreateFacilityPayload = {
+  name: string;
+  description: string;
+  image?: string;
+};
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
   | string[]
-  | UpdateUserPayload;
+  | UpdateUserPayload
+  | CreateFacilityPayload;
