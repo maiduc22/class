@@ -1,11 +1,23 @@
 import { UpdateUserPayload } from '@/configs/api/payload';
 import { useAppDispatch } from '@/hooks/redux';
+import { useUploadFirebase } from '@/hooks/use-upload-firebase';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
-import { Button, Group, Stack, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Image,
+  ScrollArea,
+  Stack,
+  Text,
+  TextInput,
+  useMantineTheme
+} from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useForm } from '@mantine/form';
+import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -39,7 +51,9 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
       fullName: user?.fullName || '',
       dob: user?.dob || '',
       email: user?.email || '',
-      phoneNumber: user?.phoneNumber || ''
+      phoneNumber: user?.phoneNumber || '',
+      description: user?.description || '',
+      image: user?.image || ''
     },
     validate: {
       phoneNumber: (value) => {
@@ -58,6 +72,9 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
     })
   });
 
+  const [previewImage, setPreviewImage] = useState<FileWithPath>();
+  const [isLoadingUpload, , handleUploadImageOnFirebase] = useUploadFirebase();
+  const theme = useMantineTheme();
   return (
     <form
       onSubmit={form.onSubmit((values) =>
@@ -77,16 +94,6 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
           placeholder="Nhập họ tên"
           {...form.getInputProps('fullName')}
         />
-        <TextInput
-          label="Số điện thoại"
-          placeholder="Nhập số điện thoại"
-          {...form.getInputProps('phoneNumber')}
-        />
-        <TextInput
-          label="Email"
-          placeholder="Nhập email"
-          {...form.getInputProps('email')}
-        />
         <DateInput
           size="sm"
           label="Ngày sinh"
@@ -99,6 +106,93 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
             });
           }}
         />
+        <TextInput
+          label="Số điện thoại"
+          placeholder="Nhập số điện thoại"
+          {...form.getInputProps('phoneNumber')}
+        />
+        <TextInput
+          label="Email"
+          placeholder="Nhập email"
+          {...form.getInputProps('email')}
+        />
+        <TextInput
+          label="Mô tả"
+          placeholder="Nhập mô tả"
+          {...form.getInputProps('description')}
+        />
+        <Stack spacing={0}>
+          <Text fw={600} fz="sm">
+            Ảnh
+          </Text>
+          <Dropzone
+            onDrop={(files) => {
+              setPreviewImage(files[0]);
+              handleUploadImageOnFirebase(files[0], {
+                onSuccess: (imageURL) => {
+                  console.log(imageURL);
+                  form.setFieldValue('image', imageURL);
+                }
+              });
+            }}
+            onReject={(files) => console.log('rejected files', files)}
+            maxSize={3 * 1024 ** 2}
+            accept={IMAGE_MIME_TYPE}
+            multiple={false}
+            {...form.getInputProps(`image`)}
+          >
+            <Group
+              position="center"
+              spacing="xs"
+              style={{ pointerEvents: 'none' }}
+            >
+              <Dropzone.Accept>
+                <IconUpload
+                  size="2rem"
+                  stroke={1.5}
+                  color={theme.colors[theme.primaryColor][6]}
+                />
+              </Dropzone.Accept>
+              <Dropzone.Reject>
+                <IconX size="2rem" stroke={1.5} color={theme.colors.red[6]} />
+              </Dropzone.Reject>
+
+              {previewImage ? (
+                <ScrollArea h={300} w={300}>
+                  <Image
+                    src={URL.createObjectURL(previewImage)}
+                    imageProps={{
+                      onLoad: () =>
+                        URL.revokeObjectURL(URL.createObjectURL(previewImage))
+                    }}
+                  />
+                </ScrollArea>
+              ) : (
+                <>
+                  {user?.image ? (
+                    <Stack spacing={0} align="center">
+                      <Image src={user?.image} />
+                    </Stack>
+                  ) : (
+                    <>
+                      <Dropzone.Idle>
+                        <IconPhoto size="3.2rem" stroke={1.5} />
+                      </Dropzone.Idle>
+                      <Stack spacing={0} align="center">
+                        <Text size="sm" inline>
+                          Kéo thả hoặc nhấn để chọn file ảnh
+                        </Text>
+                        <Text size="xs" color="dimmed" inline mt={7}>
+                          Chọn 1 ảnh duy nhất, kích cỡ không quá 5MB
+                        </Text>
+                      </Stack>
+                    </>
+                  )}
+                </>
+              )}
+            </Group>
+          </Dropzone>
+        </Stack>
       </Stack>
 
       <Group position="right" mt={'xl'}>

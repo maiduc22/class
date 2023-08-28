@@ -1,11 +1,11 @@
-import { ICourse } from '@/types/models/ICourse';
-import { Center, Col, Grid, Stack, Text } from '@mantine/core';
-import { CardClass } from './components/CardClass';
-import { useParams } from 'react-router-dom';
-import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '@/hooks/redux';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
+import { ICourse } from '@/types/models/ICourse';
 import { IUser } from '@/types/models/IUser';
+import { Center, Col, Grid, Group, Image, Stack, Text } from '@mantine/core';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { CardClass } from './components/CardClass';
 
 export const TeacherDetails = () => {
   const { id } = useParams();
@@ -50,8 +50,14 @@ export const TeacherDetails = () => {
           {renderLabelandValue('Số điện thoại', teacher?.phoneNumber)}
         </Col>
         <Col span={4}>{renderLabelandValue('Email', teacher?.email)}</Col>
+        <Col span={4}>{renderLabelandValue('Mô tả', teacher?.description)}</Col>
       </Grid>
-
+      <Group align="start">
+        <Text fw={600} mr={'md'}>
+          Ảnh:
+        </Text>
+        <Image src={teacher?.image} width={150} height={150} />
+      </Group>
       <Text fw={'bold'} mt={'lg'}>
         Danh sách lớp học
       </Text>
@@ -64,7 +70,7 @@ export const TeacherDetails = () => {
           ))
         ) : (
           <Center mt={'lg'}>
-            <Text fw={500} fz={'lg'}>
+            <Text fw={500} fz={'lg'} ml={'sm'}>
               Giáo viên này chưa có lớp nào.
             </Text>
           </Center>

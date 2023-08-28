@@ -11,6 +11,8 @@ export interface IUser extends BaseModel {
   role: IUserRole;
   courses?: ICourse[];
   email: string;
+  description?: string;
+  image?: string;
 }
 
 export enum IUserRole {

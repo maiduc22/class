@@ -19,6 +19,8 @@ export type UpdateUserPayload = {
   dob: string;
   email: string;
   phoneNumber: string;
+  description?: string;
+  image?: string;
 };
 export type CreateCoursePayload = {
   name: string;
