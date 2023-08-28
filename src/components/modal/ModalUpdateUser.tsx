@@ -196,7 +196,9 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
       </Stack>
 
       <Group position="right" mt={'xl'}>
-        <Button type="submit">Cập nhật</Button>
+        <Button type="submit" loading={isLoadingUpload}>
+          Cập nhật
+        </Button>
       </Group>
     </form>
   );
