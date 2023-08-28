@@ -19,6 +19,7 @@ import { User } from '../pages/User';
 import { Room } from '@/pages/Room';
 import { Course } from '@/pages/Course';
 import { Facility } from '@/pages/Facility';
+import { RoomDetails } from '@/pages/RoomDetails';
 
 const router = () => {
   return createBrowserRouter(
@@ -34,6 +35,7 @@ const router = () => {
           <Route path={ROUTER.TEACHER_DETAILS} element={<TeacherDetails />} />
           <Route path={ROUTER.USER} element={<User />} />
           <Route path={ROUTER.ROOM} element={<Room />} />
+          <Route path={ROUTER.ROOM_DETAILS} element={<RoomDetails />} />
           <Route path={ROUTER.FACILITY} element={<Facility />} />
           <Route path={ROUTER.COURSE} element={<Course />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />

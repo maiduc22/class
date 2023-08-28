@@ -1,4 +1,5 @@
 import { TimeTable } from '@/types/models/ICourse';
+import { SelectedFacilities } from '@/types/models/IRoom';
 import { IUserRole } from '@/types/models/IUser';
 
 export type LoginPayload = {
@@ -36,7 +37,7 @@ export type CreateRoomPayload = {
   description: string;
   image?: string;
   capacity: number;
-  facilities: { id: string; qty: number }[];
+  facilities?: SelectedFacilities[];
 };
 export type ApiEndPointPayload =
   | LoginPayload

@@ -1,6 +1,6 @@
 import { ModalAddRoom } from '@/components/modal/room/ModalAddRoom';
-import { ModalDetailsRoom } from '@/components/modal/room/ModalDetailsRoom';
 import { ModalUpdateRoom } from '@/components/modal/room/ModalUpdateRoom';
+import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
@@ -26,6 +26,7 @@ import {
 } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Room = () => {
   const dispatch = useAppDispatch();
@@ -38,10 +39,6 @@ export const Room = () => {
     useDisclosure();
   const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
     useDisclosure();
-  const [
-    openedDetailsModal,
-    { open: openDetailsModal, close: closeDetailsModal }
-  ] = useDisclosure();
 
   const [selectedRoom, setSelectedRoom] = useState<IRoom>();
 
@@ -60,6 +57,8 @@ export const Room = () => {
       }
     });
   };
+
+  const navigate = useNavigate();
 
   const column: DataTableColumn<IRoom>[] = [
     {
@@ -104,8 +103,7 @@ export const Room = () => {
               cursor={'pointer'}
               size={'1rem'}
               onClick={() => {
-                setSelectedRoom(record);
-                openDetailsModal();
+                navigate(`${ROUTER.ROOM}/${record.id}`);
               }}
             />
           </Tooltip>
@@ -190,15 +188,6 @@ export const Room = () => {
         size={'lg'}
       >
         <ModalUpdateRoom close={closeEditModal} room={selectedRoom} />
-      </Modal>
-      <Modal
-        centered
-        title={<Text fw={500}>Thông tin phòng học</Text>}
-        opened={openedDetailsModal}
-        onClose={closeDetailsModal}
-        size={'lg'}
-      >
-        <ModalDetailsRoom close={closeDetailsModal} id={selectedRoom?.id} />
       </Modal>
     </>
   );

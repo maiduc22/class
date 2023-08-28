@@ -186,7 +186,6 @@ export const ModalAddRoom: React.FC<Props> = ({ close }) => {
                   facility={item}
                   selectedFacilities={selectedFacilities}
                   setSelectedFacilities={setSelectedFacilities}
-                  viewOnly={false}
                 />
               ))
             ) : (

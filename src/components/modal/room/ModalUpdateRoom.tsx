@@ -17,7 +17,7 @@ import {
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface Props {
   close: () => void;
@@ -25,13 +25,36 @@ interface Props {
 }
 
 export const ModalUpdateRoom: React.FC<Props> = ({ close, room }) => {
+  const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
+
+  const getRoomByID = useCallback(() => {
+    if (room) {
+      dispatch(
+        RoomActions.getRoomById(room.id, {
+          onSuccess: (data: IRoom) => {
+            const facilities = data.facilities
+              .filter((item) => item.qty && item.qty > 0)
+              .map((item) => {
+                return { id: item.id, qty: item.qty };
+              });
+            form.setFieldValue('facilities', facilities);
+          }
+        })
+      );
+    }
+  }, [dispatch, room]);
+
+  useEffect(() => {
+    getRoomByID();
+  }, [getRoomByID]);
+
   const form = useForm<CreateRoomPayload>({
     initialValues: {
       name: room?.name || '',
       description: room?.description || '',
       capacity: room?.capacity || 0,
-      image: room?.image || '',
-      facilities: room?.facilities || []
+      image: room?.image || ''
     },
     validate: {
       name: isNotEmpty('Không được để trống'),
@@ -41,9 +64,6 @@ export const ModalUpdateRoom: React.FC<Props> = ({ close, room }) => {
 
   const [previewImage, setPreviewImage] = useState<FileWithPath>();
   const [isLoadingUpload, , handleUploadImageOnFirebase] = useUploadFirebase();
-
-  const theme = useMantineTheme();
-  const dispatch = useAppDispatch();
 
   const handleSubmit = (value: CreateRoomPayload) => {
     dispatch(

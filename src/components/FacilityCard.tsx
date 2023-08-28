@@ -10,16 +10,19 @@ interface Props {
   setSelectedFacilities: React.Dispatch<
     React.SetStateAction<SelectedFacilities[]>
   >;
-  viewOnly: boolean;
 }
 
 export const FacilityCard: React.FC<Props> = ({
   facility,
   selectedFacilities,
-  setSelectedFacilities,
-  viewOnly
+  setSelectedFacilities
 }) => {
+  // const index = selectedFacilities.findIndex((item) => item.id === facility.id);
+  // const [_quantity, setQuantity] = useState(
+  //   index == -1 ? 0 : selectedFacilities[index].qty
+  // );
   const [_quantity, setQuantity] = useState(0);
+  
   useEffect(() => {
     const index = selectedFacilities.findIndex(
       (item) => item.id === facility.id
@@ -59,20 +62,16 @@ export const FacilityCard: React.FC<Props> = ({
         </Grid.Col>
         <Grid.Col span={3}>
           <Group grow>
-            {viewOnly && (
-              <ActionIcon
-                disabled={_quantity <= 0}
-                onClick={() => setQuantity((prev) => prev - 1)}
-              >
-                <IconMinus />
-              </ActionIcon>
-            )}
+            <ActionIcon
+              disabled={_quantity <= 0}
+              onClick={() => setQuantity((prev) => prev - 1)}
+            >
+              <IconMinus />
+            </ActionIcon>
             <Text align="center">{_quantity}</Text>
-            {viewOnly && (
-              <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
-                <IconPlus />
-              </ActionIcon>
-            )}
+            <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
+              <IconPlus />
+            </ActionIcon>
           </Group>
         </Grid.Col>
       </Grid>

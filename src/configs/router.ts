@@ -6,6 +6,7 @@ export const ROUTER = {
   TEACHER: '/teacher',
   TEACHER_DETAILS: '/teacher/:id',
   ROOM: '/room',
+  ROOM_DETAILS: '/room/:id',
   FACILITY: '/facility',
   USER: '/user',
   COURSE: '/course'
