@@ -3,12 +3,14 @@ import userReducer from './user/user.reducer';
 import teacherReducer from './teacher/teacher.reducer';
 import facilityReducer from './facility/facility.reducer';
 import roomReducer from './room/room.reducer';
+import newsReducer from './news/news.reducer';
 
 const rootReducer = combineReducers({
   teacher: teacherReducer,
   user: userReducer,
   facility: facilityReducer,
-  room: roomReducer
+  room: roomReducer,
+  news: newsReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

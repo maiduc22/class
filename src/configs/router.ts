@@ -9,5 +9,7 @@ export const ROUTER = {
   ROOM_DETAILS: '/room/:id',
   FACILITY: '/facility',
   USER: '/user',
-  COURSE: '/course'
+  COURSE: '/course',
+  NEWS: '/news',
+  NEWS_DETAILS: '/news/:id'
 };

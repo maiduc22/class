@@ -5,7 +5,9 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
+import { News } from '@/pages/News';
 import { FacilityActions } from '@/redux/reducers/facility/facility.action';
+import { NewsActions } from '@/redux/reducers/news/news.action';
 import { RoomActions } from '@/redux/reducers/room/room.action';
 import { IUser } from '@/types/models/IUser';
 import {
@@ -33,6 +35,7 @@ import {
   IconBrandAsana,
   IconLicense,
   IconLogout,
+  IconNews,
   IconPassword,
   IconPencil,
   IconUser
@@ -215,6 +218,7 @@ const ProtectedLayout = () => {
   useEffect(() => {
     dispatch(FacilityActions.getAllFacilities());
     dispatch(RoomActions.getAllRooms());
+    dispatch(NewsActions.getAllNews());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -260,6 +264,12 @@ const ProtectedLayout = () => {
       color: 'pink',
       label: 'Quản Lý Khoá Học',
       to: ROUTER.COURSE
+    },
+    {
+      icon: <IconNews size={'1rem'} />,
+      color: 'green',
+      label: 'Quản Lý Tin Tức',
+      to: ROUTER.NEWS
     }
   ];
   return (

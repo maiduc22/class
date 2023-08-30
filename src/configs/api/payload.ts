@@ -41,10 +41,17 @@ export type CreateRoomPayload = {
   capacity: number;
   facilities?: SelectedFacilities[];
 };
+
+export type CreateNewsPayload = {
+  title: string;
+  content: string;
+};
+
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
   | string[]
   | UpdateUserPayload
   | CreateFacilityPayload
-  | CreateRoomPayload;
+  | CreateRoomPayload
+  | CreateNewsPayload;

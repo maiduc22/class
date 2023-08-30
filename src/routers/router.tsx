@@ -20,6 +20,8 @@ import { Room } from '@/pages/Room';
 import { Course } from '@/pages/Course';
 import { Facility } from '@/pages/Facility';
 import { RoomDetails } from '@/pages/RoomDetails';
+import { News } from '@/pages/News';
+import { NewsDetails } from '@/pages/NewsDetails';
 
 const router = () => {
   return createBrowserRouter(
@@ -38,6 +40,8 @@ const router = () => {
           <Route path={ROUTER.ROOM_DETAILS} element={<RoomDetails />} />
           <Route path={ROUTER.FACILITY} element={<Facility />} />
           <Route path={ROUTER.COURSE} element={<Course />} />
+          <Route path={ROUTER.NEWS} element={<News />} />
+          <Route path={ROUTER.NEWS_DETAILS} element={<NewsDetails />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path="*" element={<Page404 />} />
         </Route>

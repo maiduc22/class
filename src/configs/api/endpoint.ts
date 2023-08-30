@@ -105,5 +105,32 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader()
     })
+  },
+  News: {
+    getAllNews: () => ({
+      endPoint: '/news',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getNewsByID: (id: string) => ({
+      endPoint: `/news/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    createNews: () => ({
+      endPoint: `/news`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    updateNews: (id: string) => ({
+      endPoint: `/news/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteNews: (id: string) => ({
+      endPoint: `/news/${id}/delete`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    })
   }
 };
