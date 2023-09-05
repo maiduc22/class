@@ -155,5 +155,12 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader()
     })
+  },
+  Feedback: {
+    getAllFeedbacks: () => ({
+      endPoint: '/feedback',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
   }
 };

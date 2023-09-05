@@ -5,8 +5,8 @@ import { ROUTER } from '@/configs/router';
 
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
-import { News } from '@/pages/News';
 import { FacilityActions } from '@/redux/reducers/facility/facility.action';
+import { FeedbackActions } from '@/redux/reducers/feedback/feedback.action';
 import { NewsActions } from '@/redux/reducers/news/news.action';
 import { RoomActions } from '@/redux/reducers/room/room.action';
 import { IUser } from '@/types/models/IUser';
@@ -219,6 +219,7 @@ const ProtectedLayout = () => {
     dispatch(FacilityActions.getAllFacilities());
     dispatch(RoomActions.getAllRooms());
     dispatch(NewsActions.getAllNews());
+    dispatch(FeedbackActions.getAllFeedbacks());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -276,6 +277,12 @@ const ProtectedLayout = () => {
       color: 'green',
       label: 'Quản Lý Tin Tức',
       to: ROUTER.NEWS
+    },
+    {
+      icon: <IconNews size={'1rem'} />,
+      color: 'red',
+      label: 'Quản Lý Đánh Giá',
+      to: ROUTER.FEEDBACK
     }
   ];
   return (

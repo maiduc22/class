@@ -215,7 +215,7 @@ const Student: React.FC = () => {
       <Group position="apart">
         <Group>
           <FileInput
-            placeholder="Import danh sách giáo viên"
+            placeholder="Import danh sách học viên"
             value={importedFile}
             onChange={(e) => setImportedFile(e)}
           />

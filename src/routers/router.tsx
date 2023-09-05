@@ -23,6 +23,7 @@ import { RoomDetails } from '@/pages/RoomDetails';
 import { News } from '@/pages/News';
 import { NewsDetails } from '@/pages/NewsDetails';
 import Student from '@/pages/Student';
+import { Feedback } from '@/pages/Feedback';
 
 const router = () => {
   return createBrowserRouter(
@@ -45,6 +46,7 @@ const router = () => {
           <Route path={ROUTER.NEWS_DETAILS} element={<NewsDetails />} />
           <Route path={ROUTER.STUDENT} element={<Student />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
+          <Route path={ROUTER.FEEDBACK} element={<Feedback />} />
           <Route path="*" element={<Page404 />} />
         </Route>
       </Route>

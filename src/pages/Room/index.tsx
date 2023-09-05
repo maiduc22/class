@@ -77,21 +77,6 @@ export const Room = () => {
       textAlignment: 'center'
     },
     {
-      accessor: 'image',
-      title: 'Hình ảnh',
-      textAlignment: 'center',
-      render: (record) => (
-        <Center>
-          <Image
-            src={record.image || ''}
-            width={150}
-            height={150}
-            withPlaceholder
-          />
-        </Center>
-      )
-    },
-    {
       accessor: '',
       title: '',
       textAlignment: 'center',
