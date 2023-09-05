@@ -1,6 +1,7 @@
 import { UpdateUserPayload } from '@/configs/api/payload';
 import { useAppDispatch } from '@/hooks/redux';
 import { useUploadFirebase } from '@/hooks/use-upload-firebase';
+import { StudentActions } from '@/redux/reducers/student/student.action';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser } from '@/types/models/IUser';
@@ -21,10 +22,6 @@ import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 interface Props {
   closeModal: () => void;
   user: IUser | null;
@@ -32,7 +29,6 @@ interface Props {
 
 export const ModalUpdateUser = ({ closeModal, user }: Props) => {
   const dispatch = useAppDispatch();
-  const [value, onChange] = useState<Value>(new Date());
 
   const validatePhone = (phone: string | undefined) => {
     if (!phone) return true;
@@ -82,6 +78,7 @@ export const ModalUpdateUser = ({ closeModal, user }: Props) => {
           UserActions.updateUser(values, user?.id, {
             onSuccess: () => {
               dispatch(TeacherActions.getAllTeacher());
+              dispatch(StudentActions.getAllStudent());
               closeModal();
             }
           })

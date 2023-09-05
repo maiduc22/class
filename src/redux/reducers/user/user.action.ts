@@ -5,6 +5,7 @@ import { useCallApi } from '@/configs/api';
 import { NotiType, renderNotification } from '@/utils/notifications';
 import { RegisterPayload, UpdateUserPayload } from '@/configs/api/payload';
 import { Callback } from '@/types/others/callback';
+import { IUserRole } from '@/types/models/IUser';
 
 const getAllUser = (): UserThunkAction => async (dispatch: AppDispatch) => {
   dispatch({
@@ -97,4 +98,30 @@ const deleteUser =
     }
   };
 
-export const UserActions = { getAllUser, createUser, updateUser, deleteUser };
+const importUser =
+  (role: IUserRole, cb?: Callback) => async (dispatch: AppDispatch) => {
+    dispatch({
+      type: UserActionType.USER_ACTION_PENDING
+    });
+
+    const api = API_URLS.User.importUser(role);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: UserActionType.DELETE_USER_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification('Import file thành công', NotiType.SUCCESS);
+    } else {
+      dispatch({ type: UserActionType.USER_ACTION_FAILURE });
+      renderNotification(error?.response?.data.errors, NotiType.ERROR);
+    }
+  };
+export const UserActions = {
+  getAllUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  importUser
+};

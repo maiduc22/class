@@ -1,3 +1,4 @@
+import { IUserRole } from '@/types/models/IUser';
 import { HEADERS } from './header';
 
 export const API_URLS = {
@@ -43,6 +44,16 @@ export const API_URLS = {
       endPoint: `/users/${id}/delete`,
       method: 'POST',
       headers: HEADERS.authHeader()
+    }),
+    importUser: (role: IUserRole) => ({
+      endPoint: `/users/import?role=${role}`,
+      method: 'POST',
+      headers: HEADERS.fileHeader()
+    }),
+    exportUser: (role: IUserRole) => ({
+      endPoint: `/users/export?role=${role}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
     })
   },
   Teacher: {
@@ -53,6 +64,18 @@ export const API_URLS = {
     }),
     getTeacherById: (id: string) => ({
       endPoint: `/teachers/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
+  },
+  Student: {
+    getAll: () => ({
+      endPoint: '/students',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getStudentById: (id: string) => ({
+      endPoint: `/students/${id}`,
       method: 'GET',
       headers: HEADERS.authHeader()
     })

@@ -5,6 +5,7 @@ import { Stack, Text } from '@mantine/core';
 import Markdown from 'markdown-to-jsx';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 export const NewsDetails: React.FC = () => {
   const { id } = useParams();
   const [news, setNews] = useState<INews>();

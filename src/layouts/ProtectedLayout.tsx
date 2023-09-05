@@ -260,6 +260,12 @@ const ProtectedLayout = () => {
       to: ROUTER.TEACHER
     },
     {
+      icon: <IconUser size="1rem" />,
+      color: 'gray',
+      label: 'Quản Lý Học Viên',
+      to: ROUTER.STUDENT
+    },
+    {
       icon: <IconLicense size={'1rem'} />,
       color: 'pink',
       label: 'Quản Lý Khoá Học',

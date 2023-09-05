@@ -6,9 +6,10 @@ import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
-import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
+import { StudentActions } from '@/redux/reducers/student/student.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUser, IUserRole } from '@/types/models/IUser';
+import { NotiType, renderNotification } from '@/utils/notifications';
 import {
   Button,
   FileInput,
@@ -31,10 +32,10 @@ import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Teacher: React.FC = () => {
+const Student: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { teachers } = useAppSelector((state: RootState) => state.teacher);
+  const { students } = useAppSelector((state: RootState) => state.student);
 
   const [_records, setRecords] = useState<IUser[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<IUser>();
@@ -43,10 +44,10 @@ const Teacher: React.FC = () => {
 
   useEffect(() => {
     setRecords(
-      teachers.filter((teacher) => {
+      students.filter((student) => {
         if (debounceQuery !== '') {
           if (
-            teacher.fullName
+            student.fullName
               .toLocaleLowerCase()
               .includes(debounceQuery.toLocaleLowerCase())
           ) {
@@ -57,13 +58,13 @@ const Teacher: React.FC = () => {
         }
       })
     );
-  }, [teachers, debounceQuery]);
+  }, [students, debounceQuery]);
 
   useLayoutEffect(() => {
-    dispatch(TeacherActions.getAllTeacher());
+    dispatch(StudentActions.getAllStudent());
   }, [dispatch]);
 
-  useEffect(() => setRecords(teachers), [teachers]);
+  useEffect(() => setRecords(students), [students]);
 
   const [openedAddModal, { close: closeAddModal, open: openAddModal }] =
     useDisclosure();
@@ -74,13 +75,13 @@ const Teacher: React.FC = () => {
 
   const handleDelete = (id: string) => {
     modals.openConfirmModal({
-      title: 'Xác nhận xoá giáo viên',
+      title: 'Xác nhận xoá học viên',
       labels: { confirm: 'Xác nhận', cancel: 'Huỷ' },
       onConfirm: () => {
         dispatch(
           UserActions.deleteUser(id, {
             onSuccess: () => {
-              dispatch(TeacherActions.getAllTeacher());
+              dispatch(StudentActions.getAllStudent());
             }
           })
         );
@@ -161,19 +162,27 @@ const Teacher: React.FC = () => {
     if (importedFile) {
       const formData = new FormData();
       formData.append('file', importedFile);
-      const apiConfig = API_URLS.User.importUser(IUserRole.TEACHER);
-      api.request({
-        method: apiConfig.method,
-        url: apiConfig.endPoint,
-        headers: apiConfig.headers,
-        data: formData
-      });
+      const apiConfig = API_URLS.User.importUser(IUserRole.STUDENT);
+      api
+        .request({
+          method: apiConfig.method,
+          url: apiConfig.endPoint,
+          headers: apiConfig.headers,
+          data: formData
+        })
+        .then(() => {
+          renderNotification(
+            'Import danh sách học viên thành công',
+            NotiType.SUCCESS
+          );
+          dispatch(StudentActions.getAllStudent());
+        });
     }
   };
 
   const handleDownloadExcel = async () => {
-    const url = API_URLS.User.exportUser(IUserRole.TEACHER);
-    const fileName = 'Danh_sách_giáo_viên.xlsx';
+    const url = API_URLS.User.exportUser(IUserRole.STUDENT);
+    const fileName = 'Danh_sách_học_viên.xlsx';
 
     await api
       .get(url.endPoint, { ...url, responseType: 'blob' })
@@ -186,11 +195,10 @@ const Teacher: React.FC = () => {
         link.click();
       });
   };
-
   return (
     <Stack>
       <Text fw={600} size={'lg'}>
-        Danh sách giáo viên
+        Danh sách học sinh
       </Text>
       <Group position={'apart'}>
         <Input
@@ -200,11 +208,10 @@ const Teacher: React.FC = () => {
         />
         <Group>
           <Button onClick={openAddModal} hidden>
-            Thêm giáo viên
+            Thêm học sinh
           </Button>
         </Group>
       </Group>
-
       <Group position="apart">
         <Group>
           <FileInput
@@ -241,9 +248,9 @@ const Teacher: React.FC = () => {
         centered
         opened={openedAddModal}
         onClose={closeAddModal}
-        title="Thêm giáo viên"
+        title="Thêm học sinh"
       >
-        <ModalAddUser closeModal={closeAddModal} role={IUserRole.TEACHER} />
+        <ModalAddUser closeModal={closeAddModal} role={IUserRole.STUDENT} />
       </Modal>
 
       <Modal
@@ -261,4 +268,4 @@ const Teacher: React.FC = () => {
   );
 };
 
-export default Teacher;
+export default Student;

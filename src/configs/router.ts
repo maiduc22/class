@@ -11,5 +11,7 @@ export const ROUTER = {
   USER: '/user',
   COURSE: '/course',
   NEWS: '/news',
-  NEWS_DETAILS: '/news/:id'
+  NEWS_DETAILS: '/news/:id',
+  STUDENT: '/student',
+  STUDENT_DETAILS: '/student/:id'
 };

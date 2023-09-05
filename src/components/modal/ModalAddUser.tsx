@@ -1,10 +1,10 @@
 import { RegisterPayload } from '@/configs/api/payload';
 import { useAppDispatch } from '@/hooks/redux';
+import { StudentActions } from '@/redux/reducers/student/student.action';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { UserActions } from '@/redux/reducers/user/user.action';
 import { IUserRole } from '@/types/models/IUser';
 import { Button, Group, Stack, TextInput } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 
 interface Props {
@@ -39,6 +39,7 @@ export const ModalAddUser = ({ closeModal, role }: Props) => {
           UserActions.createUser(values, {
             onSuccess: () => {
               dispatch(TeacherActions.getAllTeacher());
+              dispatch(StudentActions.getAllStudent());
               closeModal();
             }
           })
@@ -64,26 +65,6 @@ export const ModalAddUser = ({ closeModal, role }: Props) => {
           placeholder="Nhập mật khẩu"
           {...form.getInputProps('password')}
         />
-
-        {/* <Select
-            data={[
-              {
-                value: IUserRole.ADMIN,
-                label: IUserRoleDict.ROLE_ADMIN['label']
-              },
-              {
-                value: IUserRole.TEACHER,
-                label: IUserRoleDict.ROLE_TEACHER['label']
-              },
-              {
-                value: IUserRole.STUDENT,
-                label: IUserRoleDict.ROLE_STUDENT['label']
-              }
-            ]}
-            label="Vai trò"
-            placeholder="Chọn chọn vai trò"
-            {...form.getInputProps('role')}
-          /> */}
       </Stack>
 
       <Group position="right" mt={'md'}>
