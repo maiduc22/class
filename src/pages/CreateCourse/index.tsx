@@ -29,6 +29,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { ModalAddStudent } from './components/ModalAddStudent';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '@/configs/router';
+import { RoomActions } from '@/redux/reducers/room/room.action';
 
 const DateData: { label: string; value: string }[] = [
   { label: 'Thứ 2', value: 'MONDAY' },
@@ -92,6 +93,7 @@ export const CreateCourse = () => {
         {
           onSuccess: () => {
             dispatch(CourseActions.getAllCourses());
+            dispatch(RoomActions.getAllRooms());
             navigate(ROUTER.COURSE);
           }
         }
@@ -112,19 +114,6 @@ export const CreateCourse = () => {
     }
   });
 
-  const getTimetableSelectedRoom = () => {
-    if (roomId) return 'asdsa';
-    const index = rooms.findIndex((r) => r.id === roomId);
-    const timetables = rooms[index].timeTables;
-    return timetables.map((t, index) => (
-      <Badge key={index}>
-        <Group align="center">
-          <IconCalendar size={'1rem'} />
-          {DateParser(t.inDate)}: {t.start?.slice(0, 5)}-{t.end?.slice(0, 5)}
-        </Group>
-      </Badge>
-    ));
-  };
   return (
     <Stack>
       <Text>Tạo khoá học mới</Text>
@@ -169,59 +158,57 @@ export const CreateCourse = () => {
         />
       </Group>
       <Group>
-        {selectedRoomTimetable
-          ? selectedRoomTimetable.map((t, index) => (
+        {selectedRoomTimetable ? (
+          <Group>
+            <Text fw={500} fz={14}>
+              Các khung giờ đã có lớp
+            </Text>
+            {selectedRoomTimetable.map((t, index) => (
               <Badge key={index}>
-                <Group align="center">
+                <Group align="center" spacing={2}>
                   <IconCalendar size={'1rem'} />
                   {DateParser(t.inDate)}: {t.start?.slice(0, 5)}-
                   {t.end?.slice(0, 5)}
                 </Group>
               </Badge>
-            ))
-          : null}
-      </Group>
-      <Group mt={'md'} align="start">
-        <Text fw={500} fz={14}>
-          Lịch học
-        </Text>
-        <Stack>
-          <Group>
-            {timetableList.length > 0
-              ? timetableList.map((timetable) => (
-                  <Card withBorder p={'xs'} w={180}>
-                    <Stack spacing={2} py={0}>
-                      <Group spacing={'xs'} align="center" position="apart">
-                        <Group spacing={'xs'} align="center">
-                          <IconCalendarCheck size={'1.2rem'} color="blue" />
-                          <Text fw={500}>{DateParser(timetable.inDate)}</Text>
-                        </Group>
-                        <IconX size={'1rem'} />
-                      </Group>
-                      <Group spacing={'xs'} align="center">
-                        <IconClock size={'1.2rem'} color="blue" />
-                        <Text
-                          fw={500}
-                        >{`Từ ${timetable.hourStart}:${timetable.hourEnd} tới ${timetable.hourEnd}:${timetable.minuteEnd}`}</Text>
-                      </Group>
-                    </Stack>
-                  </Card>
-                ))
-              : null}
+            ))}
           </Group>
-          <Group>
-            <Button
-              leftIcon={<IconPlus size={'1rem'} />}
-              variant="outline"
-              onClick={() => open()}
-              w={180}
-              size="xs"
-            >
-              Thêm lịch học
-            </Button>
-          </Group>
-        </Stack>
+        ) : null}
       </Group>
+      {roomId && (
+        <Group mt={'md'} align="start">
+          <Text fw={500} fz={14}>
+            Lịch học
+          </Text>
+          <Stack>
+            <Group>
+              {timetableList.length > 0
+                ? timetableList.map((t, index) => (
+                    <Badge key={index}>
+                      <Group align="center" spacing={2}>
+                        <IconCalendar size={'1rem'} />
+                        {DateParser(t.inDate)}: {t.hourStart}:
+                        {t.minuteStart || '00'}-{t.hourEnd}:
+                        {t.minuteEnd || '00'}
+                      </Group>
+                    </Badge>
+                  ))
+                : null}
+            </Group>
+            <Group>
+              <Button
+                leftIcon={<IconPlus size={'1rem'} />}
+                variant="outline"
+                onClick={() => open()}
+                w={180}
+                size="xs"
+              >
+                Thêm lịch học
+              </Button>
+            </Group>
+          </Stack>
+        </Group>
+      )}
 
       <Stack>
         <Group position="apart">
@@ -293,12 +280,12 @@ export const ModalAddTimetable = ({
   timetableList
 }: ModalProps) => {
   const [date, setDate] = useState<string>();
-  const [timeStart, setTimeStart] = useState<string>();
-  const [timeEnd, setTimeEnd] = useState<string>();
+  const [start, setTimeStart] = useState<string>();
+  const [end, setTimeEnd] = useState<string>();
   const handleAdd = () => {
-    if (timeEnd && timeStart) {
-      const [hourStart, minuteStart] = timeStart.split(':').map(Number);
-      const [hourEnd, minuteEnd] = timeEnd.split(':').map(Number);
+    if (end && start) {
+      const [hourStart, minuteStart] = start.split(':').map(Number);
+      const [hourEnd, minuteEnd] = end.split(':').map(Number);
       const newTimetableList = [...timetableList];
       setTimetableList([
         ...newTimetableList,
@@ -307,6 +294,8 @@ export const ModalAddTimetable = ({
       close();
     }
   };
+
+  const handleRemove = () => {};
   return (
     <>
       <Stack h={300}>
@@ -323,14 +312,14 @@ export const ModalAddTimetable = ({
             style={{ width: '45%' }}
             label="Bắt đầu"
             onChange={(e) => setTimeStart(e.currentTarget.value)}
-            value={timeStart}
+            value={start}
           />
           <TimeInput
             withSeconds={false}
             style={{ width: '45%' }}
             label="Kết thúc"
             onChange={(e) => setTimeEnd(e.currentTarget.value)}
-            value={timeEnd}
+            value={end}
           />
         </Group>
       </Stack>

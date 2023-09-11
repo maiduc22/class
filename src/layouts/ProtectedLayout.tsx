@@ -9,6 +9,7 @@ import { FacilityActions } from '@/redux/reducers/facility/facility.action';
 import { FeedbackActions } from '@/redux/reducers/feedback/feedback.action';
 import { NewsActions } from '@/redux/reducers/news/news.action';
 import { RoomActions } from '@/redux/reducers/room/room.action';
+import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
 import { IUser } from '@/types/models/IUser';
 import {
   Anchor,
@@ -220,6 +221,7 @@ const ProtectedLayout = () => {
     dispatch(RoomActions.getAllRooms());
     dispatch(NewsActions.getAllNews());
     dispatch(FeedbackActions.getAllFeedbacks());
+    dispatch(TeacherActions.getAllTeacher());
   }, [dispatch]);
 
   const handleLogout = () => {
