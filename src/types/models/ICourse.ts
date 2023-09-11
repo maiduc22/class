@@ -9,21 +9,24 @@ export interface ICourse extends BaseModel {
   room?: IRoom;
   teacherId?: string;
   members?: number;
+  studentIDs?: string[];
+  timeTable?: TimeTable[];
+  timeTableList?: TimeTable[];
   students?: IUser[];
-  timeTableList: TimeTable[];
+  teacher: IUser;
 }
 
 export type TimeTable = {
-  inDate: string;
-  // hourStart: number;
-  // minuteStart: number;
-  // hourEnd: number;
-  // minuteEnd: number;
-  start: string;
-  end: string;
+  inDate?: string;
+  hourStart: number;
+  minuteStart: number;
+  hourEnd: number;
+  minuteEnd: number;
+  start?: string;
+  end?: string;
 };
 
-export const DateParser = (date: string) => {
+export const DateParser = (date: string | undefined) => {
   switch (date) {
     case 'MONDAY':
       return 'Thứ 2';
@@ -39,5 +42,7 @@ export const DateParser = (date: string) => {
       return 'Thứ 7';
     case 'SUNDAY':
       return 'CN';
+    default:
+      return '';
   }
 };

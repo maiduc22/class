@@ -10,6 +10,8 @@ export const ROUTER = {
   FACILITY: '/facility',
   USER: '/user',
   COURSE: '/course',
+  CREATE_COURSE: '/create-course',
+  UPDATE_COURSE: '/course/:id',
   NEWS: '/news',
   NEWS_DETAILS: '/news/:id',
   STUDENT: '/student',

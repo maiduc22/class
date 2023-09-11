@@ -28,6 +28,8 @@ export type CreateCoursePayload = {
   roomId?: string;
   teacherId?: string;
   timeTables: TimeTable[];
+  members: number;
+  studentIDs: string[];
 };
 export type CreateFacilityPayload = {
   name: string;

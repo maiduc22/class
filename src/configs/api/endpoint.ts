@@ -162,5 +162,22 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader()
     })
+  },
+  Course: {
+    getAllCourses: () => ({
+      endPoint: '/courses',
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    createCourse: () => ({
+      endPoint: '/courses',
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    getCourseById: (id: string) => ({
+      endPoint: `/course/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
   }
 };

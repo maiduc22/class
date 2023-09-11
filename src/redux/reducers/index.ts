@@ -6,6 +6,7 @@ import roomReducer from './room/room.reducer';
 import newsReducer from './news/news.reducer';
 import studentReducer from './student/student.reducer';
 import feedbackReducer from './feedback/feedback.reducer';
+import courseReducer from './course/course.reducer';
 
 const rootReducer = combineReducers({
   teacher: teacherReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   room: roomReducer,
   news: newsReducer,
   student: studentReducer,
-  feedback: feedbackReducer
+  feedback: feedbackReducer,
+  course: courseReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

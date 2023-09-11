@@ -24,6 +24,8 @@ import { News } from '@/pages/News';
 import { NewsDetails } from '@/pages/NewsDetails';
 import Student from '@/pages/Student';
 import { Feedback } from '@/pages/Feedback';
+import { CreateCourse } from '@/pages/CreateCourse';
+import { UpdateCourse } from '@/pages/UpdateCourse';
 
 const router = () => {
   return createBrowserRouter(
@@ -42,6 +44,8 @@ const router = () => {
           <Route path={ROUTER.ROOM_DETAILS} element={<RoomDetails />} />
           <Route path={ROUTER.FACILITY} element={<Facility />} />
           <Route path={ROUTER.COURSE} element={<Course />} />
+          <Route path={ROUTER.CREATE_COURSE} element={<CreateCourse />} />
+          <Route path={ROUTER.UPDATE_COURSE} element={<UpdateCourse />} />
           <Route path={ROUTER.NEWS} element={<News />} />
           <Route path={ROUTER.NEWS_DETAILS} element={<NewsDetails />} />
           <Route path={ROUTER.STUDENT} element={<Student />} />
