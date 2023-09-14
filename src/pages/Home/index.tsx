@@ -1,5 +1,18 @@
 import { Stack } from '@mantine/core';
+import { Timetable } from './components/Timetable';
+import jwt_decode from 'jwt-decode';
+import { IUserRole } from '@/types/models/IUser';
+import { StatsGrid } from './components/Statistic';
 
 export const Home = () => {
-  return <Stack>HOME</Stack>;
+  const decodedToken: { role: string; id: string } = jwt_decode(
+    localStorage.getItem('token') || ''
+  );
+  const { role, id } = decodedToken;
+  console.log({ role, id });
+  return (
+    <Stack>
+      {role === IUserRole.ADMIN ? <StatsGrid /> : <Timetable id={id} />}
+    </Stack>
+  );
 };

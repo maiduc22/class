@@ -19,12 +19,11 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import {
   IconCalendar,
   IconEdit,
-  IconEditCircle,
+  IconTrash,
   IconUser
 } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Props } from 'react-avatar-edit';
 import { useNavigate } from 'react-router-dom';
 
 export const Course = () => {
@@ -70,6 +69,7 @@ export const Course = () => {
     {
       accessor: 'lichhoc',
       title: 'Lịch học',
+      width: '400px',
       render: ({ timeTableList }) => {
         return timeTableList?.map((t) => (
           <Badge>
@@ -85,6 +85,7 @@ export const Course = () => {
     {
       accessor: '',
       title: '',
+      width: '150px',
       textAlignment: 'center',
       render: (record) => (
         <Group position="center">
@@ -99,11 +100,25 @@ export const Course = () => {
               cursor={'pointer'}
             />
           </Tooltip>
-          <Tooltip label="Cập nhật lớp">
+          <Tooltip label="Cập nhật ">
             <IconEdit
               size={'1rem'}
               color="blue"
               onClick={() => navigate(`${ROUTER.COURSE}/${record.id}`)}
+              cursor={'pointer'}
+            />
+          </Tooltip>
+          <Tooltip label="Xoá khóc học">
+            <IconTrash
+              size={'1rem'}
+              color="blue"
+              onClick={() =>
+                dispatch(
+                  CourseActions.deleteCourse(record.id, {
+                    onSuccess: () => dispatch(CourseActions.getAllCourses())
+                  })
+                )
+              }
               cursor={'pointer'}
             />
           </Tooltip>

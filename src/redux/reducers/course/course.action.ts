@@ -68,13 +68,64 @@ const getCourseById =
     } else {
       dispatch({ type: CourseActionType.COURSE_ACTION_FAILURE });
       renderNotification(
-        'Đã có lỗi khi lấy thông tin chi tiết giáo viên',
+        'Đã có lỗi khi lấy thông tin chi tiết lớp học',
         NotiType.ERROR
       );
+    }
+  };
+
+const updateCourse =
+  (
+    id: string,
+    payload: CreateCoursePayload,
+    cb?: Callback
+  ): CourseThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: CourseActionType.COURSE_ACTION_PENDING });
+
+    const api = API_URLS.Course.updateCourse(id);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+    if (!error && response?.status === 200) {
+      const { data } = response;
+      dispatch({
+        type: CourseActionType.GET_COURSE_BY_ID_SUCCESS
+      });
+      cb?.onSuccess?.();
+      renderNotification(
+        'Cập nhật thông tin khoá học thành công',
+        NotiType.SUCCESS
+      );
+    } else {
+      dispatch({ type: CourseActionType.COURSE_ACTION_FAILURE });
+      renderNotification(error?.response?.data.errors, NotiType.ERROR);
+    }
+  };
+
+const deleteCourse =
+  (id: string, cb?: Callback): CourseThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: CourseActionType.COURSE_ACTION_PENDING });
+
+    const api = API_URLS.Course.deleteCourse(id);
+
+    const { response, error } = await useCallApi({ ...api });
+    if (!error && response?.status === 200) {
+      const { data } = response;
+      dispatch({
+        type: CourseActionType.GET_COURSE_BY_ID_SUCCESS
+      });
+      renderNotification('Xoá khoá học thành công', NotiType.SUCCESS);
+      cb?.onSuccess?.();
+    } else {
+      dispatch({ type: CourseActionType.COURSE_ACTION_FAILURE });
+      renderNotification(error?.response?.data.errors, NotiType.ERROR);
     }
   };
 export const CourseActions = {
   getAllCourses,
   createCourse,
-  getCourseById
+  getCourseById,
+  deleteCourse,
+  updateCourse
 };

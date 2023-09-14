@@ -2,7 +2,7 @@
 import appIcon from '@/assets/imgs/logo.jpg';
 import CustomLoader from '@/components/custom/CustomLoader';
 import { ROUTER } from '@/configs/router';
-
+import jwt_decode from 'jwt-decode';
 import { useAuthContext } from '@/hooks/context';
 import { useAppDispatch } from '@/hooks/redux';
 import { FacilityActions } from '@/redux/reducers/facility/facility.action';
@@ -10,7 +10,7 @@ import { FeedbackActions } from '@/redux/reducers/feedback/feedback.action';
 import { NewsActions } from '@/redux/reducers/news/news.action';
 import { RoomActions } from '@/redux/reducers/room/room.action';
 import { TeacherActions } from '@/redux/reducers/teacher/teacher.action';
-import { IUser } from '@/types/models/IUser';
+import { IUser, IUserRole } from '@/types/models/IUser';
 import {
   Anchor,
   AppShell,
@@ -43,6 +43,7 @@ import {
 } from '@tabler/icons-react';
 import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { StudentActions } from '@/redux/reducers/student/student.action';
 
 interface NavLinkProps {
   icon: JSX.Element;
@@ -222,6 +223,7 @@ const ProtectedLayout = () => {
     dispatch(NewsActions.getAllNews());
     dispatch(FeedbackActions.getAllFeedbacks());
     dispatch(TeacherActions.getAllTeacher());
+    dispatch(StudentActions.getAllStudent());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -233,22 +235,18 @@ const ProtectedLayout = () => {
     return <Navigate to={ROUTER.LOGIN} />;
   }
 
-  // useLayoutEffect(() => {
-  //   getProfile();
-  // }, [dispatch, getProfile]);
+  const decodedToken: { role: string; id: string } = jwt_decode(
+    localStorage.getItem('token') || ''
+  );
+  const { role, id } = decodedToken;
 
   const navLinks: NavLinkProps[] = [
-    // {
-    //   icon: <IconUser size={'1rem'} />,
-    //   color: 'blue',
-    //   label: 'Quản Lý Tài Khoản',
-    //   to: ROUTER.USER
-    // },
     {
       icon: <IconLicense size={'1rem'} />,
       color: 'yellow',
       label: 'Quản Lý Phòng Học',
-      to: ROUTER.ROOM
+      to: ROUTER.ROOM,
+      auth: role === IUserRole.ADMIN
     },
     {
       icon: <IconPencil size={'1rem'} />,
@@ -260,31 +258,36 @@ const ProtectedLayout = () => {
       icon: <IconBrandAsana size="1rem" />,
       color: 'grape',
       label: 'Quản Lý Giáo Viên',
-      to: ROUTER.TEACHER
+      to: ROUTER.TEACHER,
+      auth: role === IUserRole.ADMIN
     },
     {
       icon: <IconUser size="1rem" />,
       color: 'gray',
       label: 'Quản Lý Học Viên',
-      to: ROUTER.STUDENT
-    },
-    {
-      icon: <IconLicense size={'1rem'} />,
-      color: 'pink',
-      label: 'Quản Lý Khoá Học',
-      to: ROUTER.COURSE
+      to: ROUTER.STUDENT,
+      auth: role === IUserRole.ADMIN
     },
     {
       icon: <IconNews size={'1rem'} />,
       color: 'green',
       label: 'Quản Lý Tin Tức',
-      to: ROUTER.NEWS
+      to: ROUTER.NEWS,
+      auth: role === IUserRole.ADMIN
     },
     {
       icon: <IconNews size={'1rem'} />,
       color: 'red',
       label: 'Quản Lý Đánh Giá',
-      to: ROUTER.FEEDBACK
+      to: ROUTER.FEEDBACK,
+      auth: role === IUserRole.ADMIN
+    },
+    {
+      icon: <IconLicense size={'1rem'} />,
+      color: 'pink',
+      label: 'Quản Lý Khoá Học',
+      to: ROUTER.COURSE,
+      auth: role === IUserRole.ADMIN || role == IUserRole.TEACHER
     }
   ];
   return (
@@ -306,14 +309,16 @@ const ProtectedLayout = () => {
           >
             <Navbar.Section grow mt="0">
               <div>
-                {navLinks.map((link) => (
-                  <NavLink {...link} key={link.label} />
-                ))}
+                {navLinks
+                  .filter((nav) => nav.auth === true)
+                  .map((link) => (
+                    <NavLink {...link} key={link.label} />
+                  ))}
               </div>
             </Navbar.Section>
-            <Navbar.Section>
+            {/* <Navbar.Section>
               <User />
-            </Navbar.Section>
+            </Navbar.Section> */}
           </Navbar>
         }
         header={

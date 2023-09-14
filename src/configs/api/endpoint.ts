@@ -174,8 +174,32 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader()
     }),
+    updateCourse: (id: string) => ({
+      endPoint: `/courses/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteCourse: (id: string) => ({
+      endPoint: `/courses/${id}`,
+      method: 'DELETE',
+      headers: HEADERS.authHeader()
+    }),
     getCourseById: (id: string) => ({
-      endPoint: `/course/${id}`,
+      endPoint: `/courses/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
+  },
+  Statistic: {
+    getStatistic: () => ({
+      endPoint: `users/statistic`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    })
+  },
+  Timetable: {
+    getTimetable: (id: string) => ({
+      endPoint: `users/${id}/schedule`,
       method: 'GET',
       headers: HEADERS.authHeader()
     })

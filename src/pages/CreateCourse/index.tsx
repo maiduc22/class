@@ -1,13 +1,14 @@
+import { ROUTER } from '@/configs/router';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { CourseActions } from '@/redux/reducers/course/course.action';
+import { RoomActions } from '@/redux/reducers/room/room.action';
 import { DateParser, TimeTable } from '@/types/models/ICourse';
 import { IUser } from '@/types/models/IUser';
 import {
   Badge,
   Button,
-  Card,
   Group,
   Modal,
   Select,
@@ -17,21 +18,13 @@ import {
 } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  IconCalendar,
-  IconCalendarCheck,
-  IconClock,
-  IconPlus,
-  IconX
-} from '@tabler/icons-react';
+import { IconCalendar, IconPlus } from '@tabler/icons-react';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { ModalAddStudent } from './components/ModalAddStudent';
 import { useNavigate } from 'react-router-dom';
-import { ROUTER } from '@/configs/router';
-import { RoomActions } from '@/redux/reducers/room/room.action';
+import { ModalAddStudent } from './components/ModalAddStudent';
 
-const DateData: { label: string; value: string }[] = [
+export const DateData: { label: string; value: string }[] = [
   { label: 'Thứ 2', value: 'MONDAY' },
   { label: 'Thứ 3', value: 'TUESDAY' },
   { label: 'Thứ 4', value: 'WEDNESDAY' },
@@ -116,7 +109,9 @@ export const CreateCourse = () => {
 
   return (
     <Stack>
-      <Text>Tạo khoá học mới</Text>
+      <Text fw={500} fz={'lg'}>
+        Tạo khoá học mới
+      </Text>
 
       <TextInput
         label="Tên khoá học"
@@ -295,7 +290,7 @@ export const ModalAddTimetable = ({
     }
   };
 
-  const handleRemove = () => {};
+  // const handleRemove = () => {};
   return (
     <>
       <Stack h={300}>

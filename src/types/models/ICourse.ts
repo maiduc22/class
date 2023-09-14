@@ -46,3 +46,24 @@ export const DateParser = (date: string | undefined) => {
       return '';
   }
 };
+
+export const DateColorParser = (date: string | undefined) => {
+  switch (date) {
+    case 'MONDAY':
+      return 'blue';
+    case 'TUESDAY':
+      return 'yellow';
+    case 'WEDNESDAY':
+      return 'orange';
+    case 'THURSDAY':
+      return 'pink';
+    case 'FRIDAY':
+      return 'green';
+    case 'SATURDAY':
+      return 'red';
+    case 'SUNDAY':
+      return 'gray';
+    default:
+      return '';
+  }
+};
