@@ -252,7 +252,8 @@ const ProtectedLayout = () => {
       icon: <IconPencil size={'1rem'} />,
       color: 'blue',
       label: 'Quản Lý Cơ Sở Vật Chất',
-      to: ROUTER.FACILITY
+      to: ROUTER.FACILITY,
+      auth: role === IUserRole.ADMIN
     },
     {
       icon: <IconBrandAsana size="1rem" />,
