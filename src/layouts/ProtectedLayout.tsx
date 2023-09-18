@@ -36,6 +36,7 @@ import {
   IconBrandAsana,
   IconLicense,
   IconLogout,
+  IconMail,
   IconNews,
   IconPassword,
   IconPencil,
@@ -44,6 +45,7 @@ import {
 import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { StudentActions } from '@/redux/reducers/student/student.action';
+import { CourseActions } from '@/redux/reducers/course/course.action';
 
 interface NavLinkProps {
   icon: JSX.Element;
@@ -216,14 +218,20 @@ const ProtectedLayout = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-
+  const decodedToken: { role: string; id: string } = jwt_decode(
+    localStorage.getItem('token') || ''
+  );
+  const { role, id } = decodedToken;
   useEffect(() => {
-    dispatch(FacilityActions.getAllFacilities());
-    dispatch(RoomActions.getAllRooms());
-    dispatch(NewsActions.getAllNews());
-    dispatch(FeedbackActions.getAllFeedbacks());
+    if (decodedToken.role === IUserRole.ADMIN) {
+      dispatch(FacilityActions.getAllFacilities());
+      dispatch(RoomActions.getAllRooms());
+      dispatch(NewsActions.getAllNews());
+      dispatch(FeedbackActions.getAllFeedbacks());
+    }
     dispatch(TeacherActions.getAllTeacher());
     dispatch(StudentActions.getAllStudent());
+    dispatch(CourseActions.getAllCourses());
   }, [dispatch]);
 
   const handleLogout = () => {
@@ -234,11 +242,6 @@ const ProtectedLayout = () => {
   if (!localStorage.getItem('token')) {
     return <Navigate to={ROUTER.LOGIN} />;
   }
-
-  const decodedToken: { role: string; id: string } = jwt_decode(
-    localStorage.getItem('token') || ''
-  );
-  const { role, id } = decodedToken;
 
   const navLinks: NavLinkProps[] = [
     {
@@ -288,6 +291,13 @@ const ProtectedLayout = () => {
       color: 'pink',
       label: 'Quản Lý Khoá Học',
       to: ROUTER.COURSE,
+      auth: role === IUserRole.ADMIN || role == IUserRole.TEACHER
+    },
+    {
+      icon: <IconMail size={'1rem'} />,
+      color: 'green',
+      label: 'Quản Lý Thông Báo',
+      to: ROUTER.NOTIFICATION,
       auth: role === IUserRole.ADMIN || role == IUserRole.TEACHER
     }
   ];

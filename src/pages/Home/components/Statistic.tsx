@@ -86,13 +86,13 @@ export function StatsGrid() {
   const { teachers } = useAppSelector((state: RootState) => state.teacher);
 
   const totalMembers = stat.reduce((sum, course) => sum + course.members, 0);
-  const averageMembers = totalMembers / stat.length;
+  const averageMembers = (totalMembers / stat.length).toFixed(0);
   const data = [
     {
-      title: 'Học viên',
+      title: 'Tổng số',
       icon: 'receipt',
-      value: students.length,
-      description: 'Đang học tại trung tâm'
+      value: totalMembers,
+      description: 'học viên đang học tại các lớp'
     },
     {
       title: 'Khoá học',

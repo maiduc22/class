@@ -2,7 +2,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { RootState } from '@/redux/reducers';
 import { CourseActions } from '@/redux/reducers/course/course.action';
 import { DateParser, ICourse, TimeTable } from '@/types/models/ICourse';
-import { IUser } from '@/types/models/IUser';
+import { IUser, IUserRole } from '@/types/models/IUser';
+import jwt_decode from 'jwt-decode';
 import {
   Badge,
   Button,
@@ -32,6 +33,9 @@ import { ROUTER } from '@/configs/router';
 import { ModalAddStudent } from '../CreateCourse/components/ModalAddStudent';
 
 export const UpdateCourse = () => {
+  const decodedToken: { role: string; id: string } = jwt_decode(
+    localStorage.getItem('token') || ''
+  );
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -178,22 +182,38 @@ export const UpdateCourse = () => {
         onChange={(e) => setDescription(e.currentTarget.value)}
       />
       <Group spacing={'md'}>
+        {decodedToken.role === IUserRole.ADMIN ? (
+          <Select
+            data={rooms.map((room) => ({
+              value: room.id,
+              label: room.name
+            }))}
+            label="Phòng học"
+            w={183}
+            value={roomId}
+            onChange={(value) => {
+              setRoomId(value || '');
+              setSelectedRoomTimetable(
+                rooms.find((r) => r.id === value)?.timeTables
+              );
+            }}
+          />
+        ) : (
+          <Select
+            disabled
+            data={[
+              {
+                value: course?.room?.id,
+                label: course?.room?.name
+              }
+            ]}
+            label="Phòng học"
+            w={183}
+            value={course?.room?.id}
+          />
+        )}
         <Select
-          data={rooms.map((room) => ({
-            value: room.id,
-            label: room.name
-          }))}
-          label="Phòng học"
-          w={183}
-          value={roomId}
-          onChange={(value) => {
-            setRoomId(value || '');
-            setSelectedRoomTimetable(
-              rooms.find((r) => r.id === value)?.timeTables
-            );
-          }}
-        />
-        <Select
+          disabled={decodedToken.role === IUserRole.TEACHER}
           data={teachers.map((teacher) => ({
             value: teacher.id,
             label: teacher.fullName
@@ -251,15 +271,17 @@ export const UpdateCourse = () => {
                 : null}
             </Group>
             <Group>
-              <Button
-                leftIcon={<IconPlus size={'1rem'} />}
-                variant="outline"
-                onClick={() => open()}
-                w={180}
-                size="xs"
-              >
-                Thêm lịch học
-              </Button>
+              {decodedToken.role === IUserRole.ADMIN && (
+                <Button
+                  leftIcon={<IconPlus size={'1rem'} />}
+                  variant="outline"
+                  onClick={() => open()}
+                  w={180}
+                  size="xs"
+                >
+                  Thêm lịch học
+                </Button>
+              )}
             </Group>
           </Stack>
         </Group>

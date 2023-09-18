@@ -7,6 +7,7 @@ import newsReducer from './news/news.reducer';
 import studentReducer from './student/student.reducer';
 import feedbackReducer from './feedback/feedback.reducer';
 import courseReducer from './course/course.reducer';
+import notificationReducer from './notification/notification.reducer';
 
 const rootReducer = combineReducers({
   teacher: teacherReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   news: newsReducer,
   student: studentReducer,
   feedback: feedbackReducer,
-  course: courseReducer
+  course: courseReducer,
+  notification: notificationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -2,7 +2,6 @@ export const ROUTER = {
   UNAUTHORIZE: '/unauthorize',
   BASE: '/',
   LOGIN: '/login',
-  PROFILE: '/profile',
   TEACHER: '/teacher',
   TEACHER_DETAILS: '/teacher/:id',
   ROOM: '/room',
@@ -16,5 +15,6 @@ export const ROUTER = {
   NEWS_DETAILS: '/news/:id',
   STUDENT: '/student',
   STUDENT_DETAILS: '/student/:id',
-  FEEDBACK: '/feedback'
+  FEEDBACK: '/feedback',
+  NOTIFICATION: '/notification'
 };

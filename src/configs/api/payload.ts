@@ -49,6 +49,15 @@ export type CreateNewsPayload = {
   content: string;
 };
 
+export type CreateNotificationPayload = {
+  title: string;
+  content: string;
+  fileUrls: string[];
+  senderId: string;
+  courseIds: string[] | null;
+  public: boolean;
+};
+
 export type ApiEndPointPayload =
   | LoginPayload
   | RegisterPayload
@@ -56,4 +65,5 @@ export type ApiEndPointPayload =
   | UpdateUserPayload
   | CreateFacilityPayload
   | CreateRoomPayload
-  | CreateNewsPayload;
+  | CreateNewsPayload
+  | CreateNotificationPayload;

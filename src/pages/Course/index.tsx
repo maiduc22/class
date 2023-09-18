@@ -4,7 +4,7 @@ import usePagination from '@/hooks/use-pagination';
 import { RootState } from '@/redux/reducers';
 import { CourseActions } from '@/redux/reducers/course/course.action';
 import { DateParser, ICourse } from '@/types/models/ICourse';
-import { IUser } from '@/types/models/IUser';
+import { IUser, IUserRole } from '@/types/models/IUser';
 import {
   Badge,
   Button,
@@ -25,10 +25,14 @@ import {
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import jwt_decode from 'jwt-decode';
 export const Course = () => {
+  const decodedToken: { role: string; id: string } = jwt_decode(
+    localStorage.getItem('token') || ''
+  );
+
   const { courses } = useAppSelector((state: RootState) => state.course);
-  console.log(courses);
+
   const [_records, setRecords] = useState<ICourse[]>(courses);
   const [selectedRecord, setSelectedRecord] = useState<ICourse>();
 
@@ -146,9 +150,11 @@ export const Course = () => {
         <Text fw={500} fz={'lg'}>
           Quản lý khoá học
         </Text>
-        <Button onClick={() => navigate(ROUTER.CREATE_COURSE)}>
-          Thêm khoá học
-        </Button>
+        {decodedToken.role === IUserRole.ADMIN && (
+          <Button onClick={() => navigate(ROUTER.CREATE_COURSE)}>
+            Thêm khoá học
+          </Button>
+        )}
       </Group>
       <DataTable
         minHeight={200}

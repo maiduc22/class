@@ -10,22 +10,23 @@ import {
   createRoutesFromElements
 } from 'react-router-dom';
 
+import { Course } from '@/pages/Course';
+import { CreateCourse } from '@/pages/CreateCourse';
+import { Facility } from '@/pages/Facility';
+import { Feedback } from '@/pages/Feedback';
+import { News } from '@/pages/News';
+import { NewsDetails } from '@/pages/NewsDetails';
+import { Notification } from '@/pages/Notification';
+import { Room } from '@/pages/Room';
+import { RoomDetails } from '@/pages/RoomDetails';
+import Student from '@/pages/Student';
 import Teacher from '@/pages/Teacher';
 import { TeacherDetails } from '@/pages/TeacherDetails';
+import { UpdateCourse } from '@/pages/UpdateCourse';
 import Page404 from '../pages/Error/404';
 import { Home } from '../pages/Home';
 import Login from '../pages/Login';
 import { User } from '../pages/User';
-import { Room } from '@/pages/Room';
-import { Course } from '@/pages/Course';
-import { Facility } from '@/pages/Facility';
-import { RoomDetails } from '@/pages/RoomDetails';
-import { News } from '@/pages/News';
-import { NewsDetails } from '@/pages/NewsDetails';
-import Student from '@/pages/Student';
-import { Feedback } from '@/pages/Feedback';
-import { CreateCourse } from '@/pages/CreateCourse';
-import { UpdateCourse } from '@/pages/UpdateCourse';
 
 const router = () => {
   return createBrowserRouter(
@@ -51,6 +52,7 @@ const router = () => {
           <Route path={ROUTER.STUDENT} element={<Student />} />
           <Route path={ROUTER.UNAUTHORIZE} element={<Page403 />} />
           <Route path={ROUTER.FEEDBACK} element={<Feedback />} />
+          <Route path={ROUTER.NOTIFICATION} element={<Notification />} />
           <Route path="*" element={<Page404 />} />
         </Route>
       </Route>

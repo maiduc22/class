@@ -203,5 +203,32 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader()
     })
+  },
+  Notification: {
+    getAllNotificationsBySenderId: (senderId: string) => ({
+      endPoint: `/notifications/${senderId}`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    getNotificationByID: (id: string) => ({
+      endPoint: `/notifications/${id}/detail`,
+      method: 'GET',
+      headers: HEADERS.authHeader()
+    }),
+    createNotification: () => ({
+      endPoint: `/notifications`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    updateNotification: (id: string) => ({
+      endPoint: `/notifications/${id}`,
+      method: 'POST',
+      headers: HEADERS.authHeader()
+    }),
+    deleteNotification: (id: string) => ({
+      endPoint: `/notifications/${id}`,
+      method: 'DELETE',
+      headers: HEADERS.authHeader()
+    })
   }
 };
