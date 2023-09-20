@@ -110,15 +110,6 @@ const Student: React.FC = () => {
       width: '',
       render: (record) => (
         <Group position="center">
-          <Tooltip label="Thông tin chi tiết">
-            <IconInfoCircle
-              cursor={'pointer'}
-              size={'1rem'}
-              onClick={() => {
-                navigate(`${ROUTER.TEACHER}/${record.id}`);
-              }}
-            />
-          </Tooltip>
           <Tooltip label="Sửa thông tin">
             <IconEditCircle
               cursor={'pointer'}
